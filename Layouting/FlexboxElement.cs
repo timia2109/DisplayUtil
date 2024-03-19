@@ -77,11 +77,32 @@ public class FlexboxElement : ElementCollection
 
     protected override SKSize CalculateSize(DrawContext drawContext)
     {
-        var sizes = Children.Select(child => child.GetSize(drawContext)).ToList();
-        var totalWidth = _direction == FlexDirection.Horizontal ? sizes.Sum(size => size.Width) + (_gap * (Children.Count - 1)) : sizes.Max(size => size.Width);
-        var totalHeight = _direction == FlexDirection.Vertical ? sizes.Sum(size => size.Height) + (_gap * (Children.Count - 1)) : sizes.Max(size => size.Height);
+        var containerSize = _direction == FlexDirection.Horizontal ? drawContext.Size.Width : drawContext.Size.Height;
+        var lineLength = 0f;
+        var totalCrossSize = 0f;
+        var maxLineCrossSize = 0f;
 
-        return new SKSize(totalWidth, totalHeight);
+        foreach (var child in Children.Select(child => child.GetSize(drawContext)))
+        {
+            var childMainSize = _direction == FlexDirection.Horizontal ? child.Width : child.Height;
+            var childCrossSize = _direction == FlexDirection.Horizontal ? child.Height : child.Width;
+
+            // If adding this child would exceed the container size, move to a new line
+            if (lineLength + childMainSize > containerSize && lineLength > 0)
+            {
+                totalCrossSize += maxLineCrossSize + _gap; // Add the largest item on the previous line and gap
+                lineLength = 0; // Reset line length for new line
+                maxLineCrossSize = 0; // Reset max height for new line
+            }
+
+            lineLength += childMainSize + (Children.Count > 1 ? _gap : 0); // Add child length and gap if not the first item
+            maxLineCrossSize = Math.Max(maxLineCrossSize, childCrossSize); // Update max height if this item is taller
+        }
+
+        totalCrossSize += maxLineCrossSize; // Add the last line's max height
+
+        // The total size is the larger of the total length of all lines and the container size, and the total cross size
+        return _direction == FlexDirection.Horizontal ? new SKSize(Math.Max(lineLength - _gap, containerSize), totalCrossSize) : new SKSize(totalCrossSize, Math.Max(lineLength - _gap, containerSize));
     }
 
     private float CalculateAlignmentOffset(float crossAxisSize, SKSize childSize, FlexDirection direction, AlignItems alignItems)
