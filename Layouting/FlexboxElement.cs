@@ -107,16 +107,12 @@ public class FlexboxElement : ElementCollection
 
     private float CalculateAlignmentOffset(float crossAxisSize, SKSize childSize, FlexDirection direction, AlignItems alignItems)
     {
-        switch (alignItems)
+        return alignItems switch
         {
-            case AlignItems.Start:
-                return 0;
-            case AlignItems.End:
-                return direction == FlexDirection.Horizontal ? crossAxisSize - childSize.Height : crossAxisSize - childSize.Width;
-            case AlignItems.Center:
-                return (crossAxisSize - (direction == FlexDirection.Horizontal ? childSize.Height : childSize.Width)) / 2;
-            default:
-                return 0;
-        }
+            AlignItems.Start => 0,
+            AlignItems.End => direction == FlexDirection.Horizontal ? crossAxisSize - childSize.Height : crossAxisSize - childSize.Width,
+            AlignItems.Center => (crossAxisSize - (direction == FlexDirection.Horizontal ? childSize.Height : childSize.Width)) / 2,
+            _ => 0,
+        };
     }
 }
