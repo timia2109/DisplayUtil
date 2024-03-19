@@ -11,5 +11,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY build/ .
+RUN mkdir Resources
+COPY Resources/ ./Resources
 
 ENTRYPOINT ["dotnet", "DisplayUtil.dll"]
