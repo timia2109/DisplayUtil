@@ -1,6 +1,7 @@
 using DisplayUtil;
 using DisplayUtil.Scenes;
 using DisplayUtil.Serializing;
+using DisplayUtil.Template;
 using DisplayUtil.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,13 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(FontProvider.Create());
-builder.Services.AddSingleton<XmlLayoutDeserializer>();
+builder.Services.AddSingleton(FontProvider.Create())
+    .AddSingleton<XmlLayoutDeserializer>()
+    .AddSingleton<TemplateRenderer>();
 builder.Services.AddTransient<FaIconDrawer>();
 builder.Services.AddScreenProvider(o => o
     .Add<TestProvider>("test")
     .Add<TestLayoutProvider>("layout")
-    .Add<TestXmlProvider>("xml")
+    .AddScribanFiles()
 );
 
 var app = builder.Build();
