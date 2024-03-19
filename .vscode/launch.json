@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "C#: DisplayUtil [https]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\DisplayUtil.csproj",
+            "launchConfigurationId": "TargetFramework=;https",
+            "logging": {
+                "moduleLoad": false
+            }
+        }
+    ]
+}
