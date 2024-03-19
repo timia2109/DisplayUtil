@@ -3,20 +3,16 @@ using SkiaSharp;
 namespace DisplayUtil.Scenes;
 
 public class ScreenRepository(
-    IReadOnlyDictionary<string, Type> screenProviders,
-    IServiceProvider serviceProvider
+    IReadOnlyDictionary<string, IScreenProvider> screenProviders
 )
 {
     public Task<SKBitmap> GetImageAsync(string screenProviderId)
     {
-        if (!screenProviders.TryGetValue(screenProviderId, out var screenProviderType))
+        if (!screenProviders.TryGetValue(screenProviderId, out var storedScreenProvider))
         {
             throw new Exception($"ScreenProvider with Id {screenProviderId} not found");
         }
 
-        var screenProvider = (IScreenProvider)
-            serviceProvider.GetRequiredService(screenProviderType);
-
-        return screenProvider.GetImageAsync();
+        return storedScreenProvider.GetImageAsync();
     }
 }
