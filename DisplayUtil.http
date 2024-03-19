@@ -1,6 +1,6 @@
 @DisplayUtil_HostAddress = http://localhost:5296
 
 GET {{DisplayUtil_HostAddress}}/preview/test
-Accept: image/jpeg
+Accept: image/png
 
 ###
