@@ -7,10 +7,11 @@ namespace DisplayUtil.Serializing;
 
 public class XmlLayoutDeserializer
 {
-
+    private readonly FaIconDrawer _iconDrawer;
+    private readonly FontProvider _fontProvider;
     private readonly XmlSerializer _serializer;
 
-    public XmlLayoutDeserializer()
+    public XmlLayoutDeserializer(FaIconDrawer iconDrawer, FontProvider fontProvider)
     {
         var subtypes = GetType().Assembly
             .DefinedTypes
@@ -32,17 +33,18 @@ public class XmlLayoutDeserializer
         attrOverrides.Add(typeof(IXmlModel), nameof(IXmlModel.Children), attrs);
 
         _serializer = new XmlSerializer(typeof(Screen), attrOverrides);
+        _iconDrawer = iconDrawer;
+        _fontProvider = fontProvider;
     }
 
-    public Element DeserializeXml(Stream xmlStream, FaIconDrawer iconDrawer,
-        FontProvider fontProvider)
+    public Element DeserializeXml(Stream xmlStream)
     {
         if (_serializer.Deserialize(xmlStream) is not Screen model)
         {
             throw new Exception("Unable to parse!");
         }
 
-        return model.AsElement(iconDrawer, fontProvider);
+        return model.AsElement(_iconDrawer, _fontProvider);
     }
 
 }
