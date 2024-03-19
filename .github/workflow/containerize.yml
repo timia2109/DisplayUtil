@@ -1,0 +1,61 @@
+name: Containerize
+on:
+    push:
+        branches:
+            - main
+env:
+    REGISTRY: ghcr.io
+jobs:
+    build-backend:
+        runs-on: ubuntu-22.04
+        env:
+            NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+        steps:
+            - uses: actions/checkout@v4
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v3.2.0
+              with:
+                  dotnet-version: "8"
+                  cache: true
+                  cache-dependency-path: DisplayUtil.csproj
+            - name: Restore NuGet dependencies
+              run: dotnet restore --locked-mode
+            - name: Build server
+              run: dotnet publish -c Release --no-restore
+            - name: Upload a Build Artifact
+              uses: actions/upload-artifact@v3.1.3
+              with:
+                  name: backend-artifacts
+                  path: bin/Release/net8.0/publish/
+    build-docker-image:
+        runs-on: ubuntu-22.04
+        permissions:
+            contents: read
+            packages: write
+        needs:
+            - build-backend
+        steps:
+            - uses: actions/checkout@v4
+            - name: Download build artifacts
+              uses: actions/download-artifact@v3.0.2
+              with:
+                  name: backend-artifacts
+                  path: build/
+            - name: Docker Login
+              uses: docker/login-action@v3.0.0
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Docker Metadata action
+              id: docker_metadata
+              uses: docker/metadata-action@v5.0.0
+              with:
+                  images: ${{ env.REGISTRY }}/${{ github.repository }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5.1.0
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ steps.docker_metadata.outputs.tags }}
+                  labels: ${{ steps.docker_metadata.outputs.labels }}
