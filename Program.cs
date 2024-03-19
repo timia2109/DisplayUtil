@@ -1,5 +1,6 @@
 using DisplayUtil;
 using DisplayUtil.Scenes;
+using DisplayUtil.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScreenProvider(o => o.Add<TestProvider>("test"));
+builder.Services.AddTransient<FaIconDrawer>();
+builder.Services.AddScreenProvider(o => o
+    .Add<TestProvider>("test")
+    .Add<TestLayoutProvider>("layout")
+);
 
 var app = builder.Build();
 
@@ -32,8 +37,3 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
