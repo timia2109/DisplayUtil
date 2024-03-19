@@ -47,7 +47,8 @@ public class FlexboxElement : ElementCollection
         var totalSize = _direction == FlexDirection.Horizontal ? sizes.Sum(size => size.Width) : sizes.Sum(size => size.Height);
         var totalGapSize = _gap * (Children.Count - 1);
         var containerSize = _direction == FlexDirection.Horizontal ? drawContext.Size.Width : drawContext.Size.Height;
-        var crossAxisSize = _direction == FlexDirection.Horizontal ? drawContext.Size.Height : drawContext.Size.Width;
+        //var crossAxisSize = _direction == FlexDirection.Horizontal ? drawContext.Size.Height : drawContext.Size.Width;
+        var crossAxisSize = _direction == FlexDirection.Horizontal ? sizes.Max(e => e.Height) : sizes.Max(e => e.Width);
         var remainingSpace = containerSize - totalSize;
         var spaceBetween = _justifyContent == JustifyContent.Between && Children.Count > 1 ? remainingSpace / (Children.Count - 1) + _gap : _gap;
 
