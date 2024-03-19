@@ -24,8 +24,8 @@ app.UseHttpsRedirection();
 app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository repo) =>
 {
     var image = await repo.GetImageAsync(providerId);
-    var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, 100);
-    return Results.File(data.AsStream(), "image/jpeg");
+    var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
+    return Results.File(data.ToArray(), "image/png");
 
 })
 .WithName("Preview Image")
