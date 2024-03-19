@@ -22,4 +22,10 @@ public class TextElement(string content, SKPaint paint) : Element
         var width = paint.MeasureText(content);
         return new SKSize(width, paint.TextSize);
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        paint.Dispose();
+    }
 }

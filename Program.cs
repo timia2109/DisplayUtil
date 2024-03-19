@@ -28,8 +28,8 @@ app.UseSwaggerUI();
 
 app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository repo) =>
 {
-    var image = await repo.GetImageAsync(providerId);
-    var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
+    using var image = await repo.GetImageAsync(providerId);
+    using var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
     return Results.File(data.ToArray(), "image/png");
 
 })

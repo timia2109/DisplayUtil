@@ -13,7 +13,7 @@ public record struct DrawContext(
 /// <summary>
 /// Abstract base Element. Elements are designed to be used only one time!
 /// </summary>
-public abstract class Element
+public abstract class Element : IDisposable
 {
     /// <summary>
     /// Caching calculated size
@@ -45,4 +45,7 @@ public abstract class Element
     /// </summary>
     /// <param name="drawContext">Context</param>
     public abstract void Draw(DrawContext drawContext);
+
+    public virtual void Dispose()
+    { }
 }

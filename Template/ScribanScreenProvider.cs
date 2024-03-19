@@ -16,7 +16,7 @@ public class ScribanScreenProvider(
     {
         var fileContent = await File.ReadAllTextAsync(path);
         using var xml = await renderer.RenderToStreamAsync(fileContent);
-        var element = layoutDeserializer.DeserializeXml(xml);
+        using var element = layoutDeserializer.DeserializeXml(xml);
 
         return DrawManager.Draw(
             Constants.EPaperDisplaySize,

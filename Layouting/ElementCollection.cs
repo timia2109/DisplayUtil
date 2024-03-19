@@ -49,4 +49,13 @@ public abstract class ElementCollection : Element
             };
         }
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        foreach (var child in Children)
+        {
+            child.Dispose();
+        }
+    }
 }

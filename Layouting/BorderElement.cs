@@ -49,7 +49,7 @@ public class BorderElement(Padding border, Element child) : Element
     {
         if (width == 0) return;
 
-        var paint = new SKPaint
+        using var paint = new SKPaint
         {
             Color = SKColors.Black,
             StrokeWidth = width,
