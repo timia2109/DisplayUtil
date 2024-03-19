@@ -21,7 +21,7 @@ public class ScreenRepoBuilder(
 
     public ScreenRepoBuilder AddScribanFiles(string? path = null)
     {
-        path ??= @".\Resources\screens";
+        path ??= @"./Resources/screens";
 
         var files = Directory.EnumerateFiles(path, "*.sbntxt")
             .Select(p => new { Path = p, Name = Path.GetFileNameWithoutExtension(p) })
