@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
 WORKDIR /app
 
+ENV TZ=Europe/Berlin
+ENV LANG de_DE.UTF-8
+ENV LANGUAGE ${LANG}
+ENV LC_ALL ${LANG}
 EXPOSE 5000
 
 ENV ASPNETCORE_HTTP_PORTS 5000
