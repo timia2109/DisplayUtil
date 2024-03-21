@@ -24,6 +24,7 @@ builder.Services.AddTransient<FaIconDrawer>();
 builder.Services.AddScreenProvider(o => o
     .AddSingleton<TestProvider>("test")
     .AddSingleton<TestLayoutProvider>("layout")
+    .AddSingleton<TestFontSizeProvider>("testFont")
     .AddScribanFiles()
 );
 
