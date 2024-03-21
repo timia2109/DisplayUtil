@@ -7,15 +7,15 @@ namespace DisplayUtil.Layouting;
 /// An FontAwesome Icon Element
 /// </summary>
 /// <param name="iconName">Name of the Icon</param>
-/// <param name="width">Width of the Icon</param>
+/// <param name="height">Width of the Icon</param>
 /// <param name="iconDrawer">The Icon Drawer</param>
-public class IconElement(string iconName, int width, FaIconDrawer iconDrawer) : Element
+public class IconElement(string iconName, int height, FaIconDrawer iconDrawer) : Element
 {
     public override void Draw(DrawContext drawContext)
     {
         iconDrawer.DrawIcon(
             iconName,
-            width,
+            height,
             drawContext.StartPoint,
             drawContext.Canvas
         );
@@ -23,7 +23,7 @@ public class IconElement(string iconName, int width, FaIconDrawer iconDrawer) : 
 
     protected override SKSize CalculateSize(DrawContext drawContext)
     {
-        var size = iconDrawer.GetSize(iconName, width);
+        var size = iconDrawer.GetSize(iconName, height);
         return size.GetValueOrDefault();
     }
 }
