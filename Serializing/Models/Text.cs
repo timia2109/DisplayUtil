@@ -21,13 +21,12 @@ public class Text : IXmlModel
 
     public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
     {
-        var font = fontProvider.GetFont(Font ?? "ProductSansRegular");
+        var font = fontProvider.GetFont(Font ?? "Roboto-Medium");
 
         var paint = new SKPaint
         {
             IsAntialias = true,
             TextSize = Size,
-            TextAlign = SKTextAlign.Left,
             Color = SKColors.Black,
             Style = SKPaintStyle.Fill,
             Typeface = font
