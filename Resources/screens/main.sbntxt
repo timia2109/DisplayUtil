@@ -16,7 +16,7 @@
         <!-- Header Bar -->
         <VBox Gap="3">
             <!-- Date Flexbox -->
-            <Border>
+            <Box>
                 <Flexbox AlignItems="Center">
                     <VBox>
                         {{ icon_data "calendar" (now_format "%A")}}
@@ -24,10 +24,10 @@
                     </VBox>
                     <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="80" />
                 </Flexbox>
-                <Padding>
-                    <Bottom>2</Bottom>
-                </Padding>
-            </Border>
+                <Padding Bottom="2" />
+                <Margin Bottom="2" />
+                <Border Bottom="2" />
+            </Box>
 
             <Flexbox AlignItems="Center">
                 {{ icon_data "couch" (hass_get_state "sensor.ble_temperature_dc1e00000998" | string.slice 0 5)}}
