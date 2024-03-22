@@ -32,7 +32,7 @@ public abstract class IXmlModel
     /// <param name="iconDrawer">Icon Drawer</param>
     /// <param name="fontProvider">FontProvider</param>
     /// <returns>The ElementCollection</returns>
-    protected ElementCollection FillWithChildren(
+    protected virtual ElementCollection FillWithChildren(
         ElementCollection collection,
         FaIconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
     )

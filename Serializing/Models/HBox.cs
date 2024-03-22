@@ -6,7 +6,7 @@ using SkiaSharp;
 
 namespace DisplayUtil.Serializing.Models;
 
-public class HBox : IXmlModel
+public class HBox : ICollectionXmlModel
 {
     [XmlAttribute]
     public int Gap = 0;

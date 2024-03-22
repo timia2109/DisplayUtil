@@ -7,7 +7,7 @@ using SkiaSharp;
 namespace DisplayUtil.Serializing.Models;
 
 [XmlType(nameof(VBox))]
-public class VBox : IXmlModel
+public class VBox : ICollectionXmlModel
 {
     [XmlAttribute]
     public int Gap = 0;

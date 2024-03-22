@@ -15,7 +15,7 @@ public class XmlLayoutDeserializer
     {
         var subtypes = GetType().Assembly
             .DefinedTypes
-            .Where(e => e.IsAssignableTo(typeof(IXmlModel)) && e != typeof(IXmlModel))
+            .Where(e => e.IsAssignableTo(typeof(IXmlModel)) && !e.IsAbstract)
             .ToArray();
 
         var attrOverrides = new XmlAttributeOverrides();

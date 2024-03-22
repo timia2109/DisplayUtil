@@ -4,7 +4,7 @@ using DisplayUtil.Utils;
 
 namespace DisplayUtil.Serializing.Models;
 
-public class Flexbox : IXmlModel
+public class Flexbox : ICollectionXmlModel
 {
 
     [XmlAttribute]
