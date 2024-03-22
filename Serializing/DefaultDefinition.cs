@@ -11,7 +11,7 @@ public record struct DefaultDefinition()
     /// Textsize
     /// </summary>
     [XmlAttribute]
-    public int? TextSize;
+    public int TextSize;
 
     /// <summary>
     /// Font
@@ -23,7 +23,7 @@ public record struct DefaultDefinition()
     /// Icon Height
     /// </summary>
     [XmlAttribute]
-    public int? IconHeight;
+    public int IconHeight;
 
     /// <summary>
     /// Overrides the defaults
@@ -33,12 +33,13 @@ public record struct DefaultDefinition()
     public DefaultDefinition MergeWith(DefaultDefinition? other)
     {
         if (other == null) return this;
+        var o = other.Value;
 
         return new DefaultDefinition
         {
-            TextSize = other.Value.TextSize ?? TextSize,
-            Font = other.Value.Font ?? Font,
-            IconHeight = other.Value.IconHeight ?? IconHeight
+            TextSize = o.TextSize != 0 ? o.TextSize : TextSize,
+            Font = o.Font ?? Font,
+            IconHeight = o.IconHeight != 0 ? o.IconHeight : IconHeight
         };
     }
 
@@ -49,7 +50,7 @@ public record struct DefaultDefinition()
          new()
          {
              TextSize = 20,
-             Font = "Roboto-Mono",
+             Font = "Roboto-Medium",
              IconHeight = 20
          };
 

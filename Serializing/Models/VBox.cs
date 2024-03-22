@@ -15,6 +15,6 @@ public class VBox : IXmlModel
     public override Element AsElement(FaIconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
     {
-        return FillWithChildren(new VBoxElement(Gap), iconDrawer, fontProvider, defaults.MergeWith(defaults));
+        return FillWithChildren(new VBoxElement(Gap), iconDrawer, fontProvider, defaults.MergeWith(Defaults));
     }
 }

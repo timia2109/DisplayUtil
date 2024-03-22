@@ -4,13 +4,13 @@
 
 {{ func icon_data(sIconName, sText) }}
 <HBox Gap="2">
-    <Icon IconName="{{sIconName}}" Height="20" />
-    <Text Content="{{sText}}" Size="20" />
+    <Icon IconName="{{sIconName}}" />
+    <Text Content="{{sText}}" />
 </HBox>
 {{ end }}
 
 <Screen>
-    <Defaults TextSize="60" />
+    <Defaults TextSize="40" IconHeight="40" />
     <Flexbox Direction="Vertical">
 
         <!-- Header Bar -->
@@ -22,7 +22,7 @@
                         {{ icon_data "calendar" (now_format "%A")}}
                         <Text Content="{{now_format "%d %B %Y"}}" />
                     </VBox>
-                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="120" />
+                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="80" />
                 </Flexbox>
                 <Padding>
                     <Bottom>2</Bottom>

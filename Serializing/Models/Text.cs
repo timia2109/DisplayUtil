@@ -17,7 +17,7 @@ public class Text : IXmlModel
     public string? Font;
 
     [XmlAttribute]
-    public int? Size;
+    public int Size;
 
     public override Element AsElement(FaIconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
@@ -27,7 +27,7 @@ public class Text : IXmlModel
         var paint = new SKPaint
         {
             IsAntialias = true,
-            TextSize = Size ?? defaults.TextSize!.Value,
+            TextSize = Size == 0 ? defaults.TextSize : Size,
             Color = SKColors.Black,
             Style = SKPaintStyle.Fill,
             Typeface = font
