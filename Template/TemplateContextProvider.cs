@@ -19,8 +19,13 @@ public class TemplateContextProvider(IHaContext haContext)
     public TemplateContext GetTemplateContext()
     {
         var scriptObject = new ScriptObject();
-        scriptObject.Import("hass_get_state", GetState);
-        scriptObject.Import("hass_get_attribute", GetAttribute);
+
+        // Hass Functions
+        var hassObject = new ScriptObject();
+        hassObject.Import("get_state", GetState);
+        hassObject.Import("get_attribute", GetAttribute);
+        hassObject.Import("get_float_state", GetFloatState);
+        scriptObject.Add("hass", hassObject);
 
         var context = new TemplateContext();
         context.PushCulture(CultureInfo.GetCultureInfo("de-DE"));
@@ -48,14 +53,12 @@ public class TemplateContextProvider(IHaContext haContext)
         return value?.ToString();
     }
 
-    private bool MemberFilter(MemberInfo member)
+    private float GetFloatState(string entityId)
     {
-        return member switch
-        {
-            MethodInfo m => m.IsPublic,
-            PropertyInfo p => p.IsPubliclyReadable(),
-            _ => false
-        };
+        var state = GetState(entityId);
+        if (state == null) return 0f;
+
+        return float.Parse(state, CultureInfo.InvariantCulture);
     }
 
 }
