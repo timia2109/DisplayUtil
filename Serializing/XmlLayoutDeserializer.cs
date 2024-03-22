@@ -44,7 +44,7 @@ public class XmlLayoutDeserializer
             throw new Exception("Unable to parse!");
         }
 
-        return model.AsElement(_iconDrawer, _fontProvider);
+        return model.AsElement(_iconDrawer, _fontProvider, DefaultDefinition.Default);
     }
 
 }

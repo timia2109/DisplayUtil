@@ -6,8 +6,12 @@ namespace DisplayUtil.Serializing.Models;
 
 public class Screen : IXmlModel
 {
-    public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public override Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider, DefaultDefinition defaults)
     {
-        return Children.First().AsElement(iconDrawer, fontProvider);
+        var useDefaults = Defaults ?? defaults;
+        return Children.First().AsElement(
+            iconDrawer, fontProvider, useDefaults
+        );
     }
 }

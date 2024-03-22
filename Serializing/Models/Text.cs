@@ -17,16 +17,17 @@ public class Text : IXmlModel
     public string? Font;
 
     [XmlAttribute]
-    public int Size = 20;
+    public int? Size;
 
-    public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public override Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider, DefaultDefinition defaults)
     {
-        var font = fontProvider.GetFont(Font ?? "Roboto-Medium");
+        var font = fontProvider.GetFont(Font ?? defaults.Font!);
 
         var paint = new SKPaint
         {
             IsAntialias = true,
-            TextSize = Size,
+            TextSize = Size ?? defaults.TextSize!.Value,
             Color = SKColors.Black,
             Style = SKPaintStyle.Fill,
             Typeface = font

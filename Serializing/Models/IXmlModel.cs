@@ -9,12 +9,21 @@ public abstract class IXmlModel
     public IXmlModel[] Children = null!;
 
     /// <summary>
+    /// Defaults
+    /// </summary>
+    public DefaultDefinition? Defaults = null;
+
+    /// <summary>
     /// Returns the corrosponding Element
     /// </summary>
     /// <param name="iconDrawer">Icon Drawer</param>
     /// <param name="fontProvider">Font Provider</param>
+    /// <param name="defaults">Defaults for the children</param>
     /// <returns>Element</returns>
-    public abstract Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider);
+    public abstract Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider,
+        DefaultDefinition defaults
+    );
 
     /// <summary>
     /// Fills the <see cref="ElementCollection"/> with the children of this Model
@@ -25,12 +34,12 @@ public abstract class IXmlModel
     /// <returns>The ElementCollection</returns>
     protected ElementCollection FillWithChildren(
         ElementCollection collection,
-        FaIconDrawer iconDrawer, FontProvider fontProvider
+        FaIconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
     )
     {
         foreach (var child in Children)
         {
-            collection.Append(child.AsElement(iconDrawer, fontProvider));
+            collection.Append(child.AsElement(iconDrawer, fontProvider, defaults));
         }
         return collection;
     }

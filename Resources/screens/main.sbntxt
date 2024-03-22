@@ -10,6 +10,7 @@
 {{ end }}
 
 <Screen>
+    <Defaults TextSize="60" />
     <Flexbox Direction="Vertical">
 
         <!-- Header Bar -->
@@ -21,7 +22,7 @@
                         {{ icon_data "calendar" (now_format "%A")}}
                         <Text Content="{{now_format "%d %B %Y"}}" />
                     </VBox>
-                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="64" />
+                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="120" />
                 </Flexbox>
                 <Padding>
                     <Bottom>2</Bottom>

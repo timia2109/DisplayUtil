@@ -19,11 +19,13 @@ public class Flexbox : IXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public override Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider, DefaultDefinition defaults)
     {
         return FillWithChildren(
             new FlexboxElement(Gap, Direction, JustifyContent, AlignItems),
-            iconDrawer, fontProvider
+            iconDrawer, fontProvider,
+            defaults.MergeWith(Defaults)
         );
     }
 }

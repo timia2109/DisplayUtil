@@ -13,10 +13,11 @@ public class Icon : IXmlModel
     public string IconName = null!;
 
     [XmlAttribute]
-    public int Height = 20;
+    public int? Height = null;
 
-    public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public override Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider, DefaultDefinition defaults)
     {
-        return new IconElement(IconName, Height, iconDrawer);
+        return new IconElement(IconName, Height ?? defaults.IconHeight!.Value, iconDrawer);
     }
 }

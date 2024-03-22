@@ -12,8 +12,9 @@ public class VBox : IXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public override Element AsElement(FaIconDrawer iconDrawer,
+        FontProvider fontProvider, DefaultDefinition defaults)
     {
-        return FillWithChildren(new VBoxElement(Gap), iconDrawer, fontProvider);
+        return FillWithChildren(new VBoxElement(Gap), iconDrawer, fontProvider, defaults.MergeWith(defaults));
     }
 }
