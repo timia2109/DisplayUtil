@@ -1,0 +1,43 @@
+{{ include "_icon_data" }}
+
+{{ func media_player(sPlayer) }}
+    {{ state = hass.get_state sPlayer }}
+    {{ if state == "playing" || state == "paused" }}
+        {{
+            content_type = hass.get_attribute sPlayer "media_content_type"
+            if content_type == "video"
+                media_icon = "film"
+            else if content_type == "music"
+                media_icon = "list-music"
+            else 
+                media_icon = "tv-music"
+            end
+        }}
+        <VBox Gap="2">
+            <Defaults TextSize="30" IconHeight="30" />
+            <Border Y="2" />
+            <Padding All="2" />
+
+            {{ icon_data "airplay" (hass.get_attribute sPlayer "app_name") }}
+            {{ icon_data "user-music" (hass.get_attribute sPlayer "media_artist") }}
+            {{ icon_data "album" (hass.get_attribute sPlayer "media_album_name" ) }}
+            {{ icon_data media_icon (hass.get_attribute sPlayer "media_title") }}
+
+            {{ if state == "playing"
+                media_position = hass.get_attribute sPlayer "media_position" | to_float
+                media_duration = hass.get_attribute sPlayer "media_duration" | to_float
+                media_updated = hass.get_attribute sPlayer "media_position_updated_at" | date.parse
+        
+                media_start = media_updated | date.add_seconds (-media_position)
+                media_end = media_start | date.add_seconds media_duration
+            }}
+                <Flexbox>
+                    <Text Content="{{ media_updated | date.to_string "%T" }}" />
+                    <Text Content="{{ media_end | date.to_string "%T" }}" />
+                </Flexbox>
+            {{ else if state == "paused" 
+                icon_data "pause" " -&gt; Pausiert &lt;- " 
+                end }}
+        </VBox>
+    {{ end }}
+{{ end }}

@@ -1,13 +1,16 @@
+{{ 
+    include "_media_player" 
+    include "_icon_data" 
+
+    media_players = [
+        "media_player.buro",
+        "media_player.wohnzimmer_2",
+        "media_player.googlehome5731"
+    ]
+}}
 {{ func now_format(sFormat)
         ret date.to_string date.now sFormat
     end }}
-
-{{ func icon_data(sIconName, sText) }}
-<HBox Gap="2">
-    <Icon IconName="{{sIconName}}" />
-    <Text Content="{{sText}}" />
-</HBox>
-{{ end }}
 
 <Screen>
     <Defaults TextSize="40" IconHeight="40" />
@@ -16,25 +19,32 @@
         <!-- Header Bar -->
         <VBox Gap="3">
             <!-- Date Flexbox -->
-            <Box>
-                <Flexbox AlignItems="Center">
-                    <VBox>
-                        {{ icon_data "calendar" (now_format "%A")}}
-                        <Text Content="{{now_format "%d %B %Y"}}" />
-                    </VBox>
-                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="80" />
-                </Flexbox>
+            
+            <Flexbox AlignItems="Center">
+                <VBox>
+                    {{ icon_data "calendar" (now_format "%A")}}
+                    <Text Content="{{now_format "%d %B %Y"}}" />
+                </VBox>
+                <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="85" />
                 <Padding Bottom="2" />
                 <Margin Bottom="2" />
                 <Border Bottom="2" />
-            </Box>
+            </Flexbox>
 
             <Flexbox AlignItems="Center">
-                {{ icon_data "couch" (hass_get_state "sensor.ble_temperature_dc1e00000998" | string.slice 0 5)}}
-                {{ icon_data "cloud-sun" (hass_get_state "sensor.hue_outdoor_motion_sensor_1_temperature" | string.slice 0 5)}}
+                {{ icon_data "couch" (hass.get_float_state "sensor.smart_hygrometer_0998_temperature" | math.round 2) + " °C"}}
+                {{ icon_data "cloud-sun" (hass.get_float_state "sensor.hue_outdoor_motion_sensor_1_temperature" | math.round 2) + " °C"}}
             </Flexbox>
 
         </VBox>
 
+        {{  for player in media_players
+                media_player player
+            end
+        }}
+
+        <Text Content="Placeholder" />
+
+        <Margin All="1" />
     </Flexbox>
 </Screen>
