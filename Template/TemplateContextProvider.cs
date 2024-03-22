@@ -14,18 +14,27 @@ namespace DisplayUtil.Template;
 /// Provides the default template objects.
 /// Scoped
 /// </summary>
-public class TemplateContextProvider(IHaContext haContext)
+public class TemplateContextProvider(IHaContext haContext, TemplateLoader templateLoader)
 {
     public TemplateContext GetTemplateContext()
     {
         var scriptObject = new ScriptObject();
-        scriptObject.Import("hass_get_state", GetState);
-        scriptObject.Import("hass_get_attribute", GetAttribute);
+        scriptObject.Import("to_float", ToFloat);
 
-        var context = new TemplateContext();
+        // Hass Functions
+        var hassObject = new ScriptObject();
+        hassObject.Import("get_state", GetState);
+        hassObject.Import("get_attribute", GetAttribute);
+        hassObject.Import("get_float_state", GetFloatState);
+        scriptObject.Add("hass", hassObject);
+
+        var context = new TemplateContext
+        {
+            TemplateLoader = templateLoader
+        };
+
         context.PushCulture(CultureInfo.GetCultureInfo("de-DE"));
         context.PushGlobal(scriptObject);
-        //context.MemberFilter = MemberFilter;
 
         return context;
     }
@@ -39,7 +48,7 @@ public class TemplateContextProvider(IHaContext haContext)
     private string? GetAttribute(string entityId, string attribute)
     {
         var entity = haContext.GetState(entityId);
-        var attributes = entity.Attributes as Dictionary<string, object?>;
+        var attributes = entity?.Attributes as Dictionary<string, object?>;
         object? value = null;
 
         if (!attributes?.TryGetValue(attribute, out value) ?? true)
@@ -48,14 +57,17 @@ public class TemplateContextProvider(IHaContext haContext)
         return value?.ToString();
     }
 
-    private bool MemberFilter(MemberInfo member)
+    private float GetFloatState(string entityId)
     {
-        return member switch
-        {
-            MethodInfo m => m.IsPublic,
-            PropertyInfo p => p.IsPubliclyReadable(),
-            _ => false
-        };
+        var state = GetState(entityId);
+        if (state == null) return 0f;
+        return ToFloat(state);
+    }
+
+    private float ToFloat(string? content)
+    {
+        if (content == null) return 0;
+        return float.Parse(content, CultureInfo.InvariantCulture);
     }
 
 }

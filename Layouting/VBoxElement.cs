@@ -8,7 +8,7 @@ namespace DisplayUtil.Layouting;
 /// <param name="gap">Gap between Items</param>
 public class VBoxElement(int gap = 0) : ElementCollection
 {
-    public override void Draw(DrawContext drawContext)
+    protected override void DrawCollection(DrawContext drawContext)
     {
         var point = drawContext.StartPoint;
         foreach (var child in Children)
@@ -24,7 +24,7 @@ public class VBoxElement(int gap = 0) : ElementCollection
         }
     }
 
-    protected override SKSize CalculateSize(DrawContext drawContext)
+    protected override SKSize CalculateCollectionSize(DrawContext drawContext)
     {
         var childrenSize = GetChildrenSizes(drawContext);
         return new SKSize(

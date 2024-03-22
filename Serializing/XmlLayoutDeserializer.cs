@@ -15,7 +15,7 @@ public class XmlLayoutDeserializer
     {
         var subtypes = GetType().Assembly
             .DefinedTypes
-            .Where(e => e.IsAssignableTo(typeof(IXmlModel)) && e != typeof(IXmlModel))
+            .Where(e => e.IsAssignableTo(typeof(IXmlModel)) && !e.IsAbstract)
             .ToArray();
 
         var attrOverrides = new XmlAttributeOverrides();
@@ -44,7 +44,7 @@ public class XmlLayoutDeserializer
             throw new Exception("Unable to parse!");
         }
 
-        return model.AsElement(_iconDrawer, _fontProvider);
+        return model.AsElement(_iconDrawer, _fontProvider, DefaultDefinition.Default);
     }
 
 }
