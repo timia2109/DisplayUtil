@@ -40,7 +40,7 @@ public class FlexboxElement : ElementCollection
         _alignItems = alignItems;
     }
 
-    public override void Draw(DrawContext drawContext)
+    protected override void DrawCollection(DrawContext drawContext)
     {
         var point = drawContext.StartPoint;
         var sizes = Children.Select(child => child.GetSize(drawContext)).ToList();
@@ -76,7 +76,7 @@ public class FlexboxElement : ElementCollection
         }
     }
 
-    protected override SKSize CalculateSize(DrawContext drawContext)
+    protected override SKSize CalculateCollectionSize(DrawContext drawContext)
     {
         var containerSize = _direction == FlexDirection.Horizontal ? drawContext.Size.Width : drawContext.Size.Height;
         var lineLength = 0f;
