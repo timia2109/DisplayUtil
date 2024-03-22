@@ -2,16 +2,17 @@ using DisplayUtil.Layouting;
 using DisplayUtil.Scenes;
 using DisplayUtil.Serializing;
 using DisplayUtil.Utils;
+using Scriban.Parsing;
+using Scriban.Runtime;
 using SkiaSharp;
 
 namespace DisplayUtil.Template;
 
-internal class ScibanScreenProviderSource(IServiceProvider serviceProvider)
+internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
+    TemplateLoader templateLoader
+)
     : IScreenProviderSource
 {
-
-    private const string TemplatePath = "./Resources/screens";
-
     private static readonly ObjectFactory<ScribanScreenProvider>
         factory = ActivatorUtilities.CreateFactory<ScribanScreenProvider>([
             typeof(string)
@@ -19,9 +20,7 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider)
 
     public IScreenProvider? GetScreenProvider(string id)
     {
-        var path = Path.GetFullPath(
-            Path.Combine(TemplatePath, $"{id}.sbntxt")
-        );
+        var path = templateLoader.GetPath(id);
 
         if (!File.Exists(path)) return null;
 
@@ -30,6 +29,7 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider)
 }
 
 internal class ScribanScreenProvider(
+    TemplateLoader templateLoader,
     TemplateRenderer renderer,
     XmlLayoutDeserializer layoutDeserializer,
     string path)
@@ -37,7 +37,7 @@ internal class ScribanScreenProvider(
 {
     public async Task<SKBitmap> GetImageAsync()
     {
-        var fileContent = await File.ReadAllTextAsync(path);
+        var fileContent = await templateLoader.LoadAsync(path);
         using var xml = await renderer.RenderToStreamAsync(fileContent);
         using var element = layoutDeserializer.DeserializeXml(xml);
 

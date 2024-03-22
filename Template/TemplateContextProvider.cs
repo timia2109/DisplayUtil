@@ -14,11 +14,12 @@ namespace DisplayUtil.Template;
 /// Provides the default template objects.
 /// Scoped
 /// </summary>
-public class TemplateContextProvider(IHaContext haContext)
+public class TemplateContextProvider(IHaContext haContext, TemplateLoader templateLoader)
 {
     public TemplateContext GetTemplateContext()
     {
         var scriptObject = new ScriptObject();
+        scriptObject.Import("to_float", ToFloat);
 
         // Hass Functions
         var hassObject = new ScriptObject();
@@ -27,10 +28,13 @@ public class TemplateContextProvider(IHaContext haContext)
         hassObject.Import("get_float_state", GetFloatState);
         scriptObject.Add("hass", hassObject);
 
-        var context = new TemplateContext();
+        var context = new TemplateContext
+        {
+            TemplateLoader = templateLoader
+        };
+
         context.PushCulture(CultureInfo.GetCultureInfo("de-DE"));
         context.PushGlobal(scriptObject);
-        //context.MemberFilter = MemberFilter;
 
         return context;
     }
@@ -57,8 +61,13 @@ public class TemplateContextProvider(IHaContext haContext)
     {
         var state = GetState(entityId);
         if (state == null) return 0f;
+        return ToFloat(state);
+    }
 
-        return float.Parse(state, CultureInfo.InvariantCulture);
+    private float ToFloat(string? content)
+    {
+        if (content == null) return 0;
+        return float.Parse(content, CultureInfo.InvariantCulture);
     }
 
 }

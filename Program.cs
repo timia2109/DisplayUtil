@@ -14,7 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.AddHassSupport();
 
 builder.Services.AddSingleton(FontProvider.Create())
-    .AddSingleton<XmlLayoutDeserializer>();
+    .AddSingleton<XmlLayoutDeserializer>()
+    .AddSingleton<TemplateLoader>();
 
 builder.Services.AddScoped<TemplateRenderer>()
     .AddScoped<TemplateContextProvider>();
