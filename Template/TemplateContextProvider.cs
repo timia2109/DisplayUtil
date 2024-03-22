@@ -48,7 +48,7 @@ public class TemplateContextProvider(IHaContext haContext, TemplateLoader templa
     private string? GetAttribute(string entityId, string attribute)
     {
         var entity = haContext.GetState(entityId);
-        var attributes = entity.Attributes as Dictionary<string, object?>;
+        var attributes = entity?.Attributes as Dictionary<string, object?>;
         object? value = null;
 
         if (!attributes?.TryGetValue(attribute, out value) ?? true)
