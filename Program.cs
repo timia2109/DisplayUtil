@@ -5,19 +5,26 @@ using DisplayUtil.Template;
 using DisplayUtil.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.AddHassSupport();
 
 builder.Services.AddSingleton(FontProvider.Create())
-    .AddSingleton<XmlLayoutDeserializer>()
-    .AddSingleton<TemplateRenderer>();
+    .AddSingleton<XmlLayoutDeserializer>();
+
+builder.Services.AddScoped<TemplateRenderer>()
+    .AddScoped<TemplateContextProvider>();
+
 builder.Services.AddTransient<FaIconDrawer>();
+
 builder.Services.AddScreenProvider(o => o
-    .Add<TestProvider>("test")
-    .Add<TestLayoutProvider>("layout")
+    .AddSingleton<TestProvider>("test")
+    .AddSingleton<TestLayoutProvider>("layout")
+    .AddSingleton<TestFontSizeProvider>("testFont")
     .AddScribanFiles()
 );
 

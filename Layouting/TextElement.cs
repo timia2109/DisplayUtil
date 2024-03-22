@@ -12,7 +12,7 @@ public class TextElement(string content, SKPaint paint) : Element
     public override void Draw(DrawContext drawContext)
     {
         var point = drawContext.StartPoint;
-        point.Y += paint.TextSize;
+        point.Y -= paint.FontMetrics.Ascent;
 
         drawContext.Canvas.DrawText(content, point, paint);
     }

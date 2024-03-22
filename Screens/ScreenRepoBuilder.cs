@@ -4,37 +4,29 @@ using DisplayUtil.Template;
 namespace DisplayUtil.Scenes;
 
 public class ScreenRepoBuilder(
-    Dictionary<string, Func<IServiceProvider, IScreenProvider>> screenProviders,
+    Dictionary<string, Type> staticScreenProviderTypes,
     IServiceCollection services
 )
 {
-    public ScreenRepoBuilder Add<TType>(string providerId)
+    public ScreenRepoBuilder AddSingleton<TType>(string providerId)
         where TType : class, IScreenProvider
     {
+        staticScreenProviderTypes.Add(providerId, typeof(TType));
         services.AddSingleton<TType>();
-        screenProviders.Add(
-            providerId,
-            e => (IScreenProvider)e.GetRequiredService(typeof(TType))
-        );
+        return this;
+    }
+
+    public ScreenRepoBuilder AddScoped<TType>(string providerId)
+        where TType : class, IScreenProvider
+    {
+        staticScreenProviderTypes.Add(providerId, typeof(TType));
+        services.AddScoped<TType>();
         return this;
     }
 
     public ScreenRepoBuilder AddScribanFiles(string? path = null)
     {
-        path ??= @"./Resources/screens";
-
-        var files = Directory.EnumerateFiles(path, "*.sbntxt")
-            .Select(p => new { Path = p, Name = Path.GetFileNameWithoutExtension(p) })
-            .Select(p => new KeyValuePair<string, Func<IServiceProvider, IScreenProvider>>(
-                p.Name,
-                e => ActivatorUtilities.CreateInstance<ScribanScreenProvider>(e, [p.Path])
-            ));
-
-        foreach (var (k, v) in files)
-        {
-            screenProviders.Add(k, v);
-        }
-
+        services.AddScoped<IScreenProviderSource, ScibanScreenProviderSource>();
         return this;
     }
 }
@@ -44,18 +36,20 @@ public static class ScreenRepoBuilderExtension
     public static IServiceCollection AddScreenProvider(
         this IServiceCollection services, Action<ScreenRepoBuilder> action)
     {
-        var dictionary = new Dictionary<string, Func<IServiceProvider, IScreenProvider>>();
+        var dictionary = new Dictionary<string, Type>();
         var builder = new ScreenRepoBuilder(dictionary, services);
         action(builder);
 
-        services.AddSingleton(o =>
+        // Add static
+        if (dictionary.Count != 0)
         {
-            var types = dictionary
-                .ToDictionary(k => k.Key, v => v.Value(o))
-                .ToFrozenDictionary();
+            services.AddSingleton<IScreenProviderSource>(s => new StaticScreenProviderSource(
+                s, dictionary.ToFrozenDictionary()
+            ));
+        }
 
-            return new ScreenRepository(types);
-        });
+        services.AddScoped<ScreenRepository>();
+
         return services;
     }
 

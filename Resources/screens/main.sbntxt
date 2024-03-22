@@ -2,27 +2,38 @@
         ret date.to_string date.now sFormat
     end }}
 
+{{ func icon_data(sIconName, sText) }}
+<HBox Gap="2">
+    <Icon IconName="{{sIconName}}" Height="20" />
+    <Text Content="{{sText}}" Size="20" />
+</HBox>
+{{ end }}
+
 <Screen>
     <Flexbox Direction="Vertical">
 
-        <!-- Date Flexbox -->
-        <Border>
-            <Flexbox AlignItems="Center">
-                <VBox>
-                    <HBox>
-                        <Icon IconName="calendar" />
-                        <Text Content="{{now_format "%A"}}" />
-                    </HBox>
-                    <Text Content="{{now_format "%d %B %Y"}}" />
-                </VBox>
-                <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="64" />
-            </Flexbox>
-            <Padding>
-                <Bottom>2</Bottom>
-            </Padding>
-        </Border>
+        <!-- Header Bar -->
+        <VBox Gap="3">
+            <!-- Date Flexbox -->
+            <Border>
+                <Flexbox AlignItems="Center">
+                    <VBox>
+                        {{ icon_data "calendar" (now_format "%A")}}
+                        <Text Content="{{now_format "%d %B %Y"}}" />
+                    </VBox>
+                    <Text Content="{{now_format "%H:%M"}}" Font="ProductSansBold" Size="64" />
+                </Flexbox>
+                <Padding>
+                    <Bottom>2</Bottom>
+                </Padding>
+            </Border>
 
-        <Text Content="WOW" />
+            <Flexbox AlignItems="Center">
+                {{ icon_data "couch" (hass_get_state "sensor.ble_temperature_dc1e00000998" | string.slice 0 5)}}
+                {{ icon_data "cloud-sun" (hass_get_state "sensor.hue_outdoor_motion_sensor_1_temperature" | string.slice 0 5)}}
+            </Flexbox>
+
+        </VBox>
 
     </Flexbox>
 </Screen>
