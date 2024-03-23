@@ -5,10 +5,10 @@ namespace DisplayUtil.MqttExport;
 /// <summary>
 /// Responsible to render the Bitmap to the two color stream
 /// </summary>
-public class BinaryImageStreamCreator
+public static class BinaryImageStreamCreator
 {
 
-    public Stream GetImageStream(SKBitmap bitmap)
+    public static Stream GetImageStream(SKBitmap bitmap)
     {
         var pixelWriter = new PixelWriter();
 
