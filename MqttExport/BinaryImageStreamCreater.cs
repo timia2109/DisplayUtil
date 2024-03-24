@@ -8,7 +8,7 @@ namespace DisplayUtil.MqttExport;
 public static class BinaryImageStreamCreator
 {
 
-    public static Stream GetImageStream(SKBitmap bitmap)
+    public static byte[] GetImageStream(SKBitmap bitmap)
     {
         var pixelWriter = new PixelWriter();
 
@@ -25,49 +25,56 @@ public static class BinaryImageStreamCreator
             }
         }
 
-        return pixelWriter.Stream;
+        return pixelWriter.ToArray();
     }
 
     private class PixelWriter
     {
-        public Stream Stream
-        {
-            get
-            {
-                Flush();
-                _stream.Position = 0;
-                return _stream;
-            }
-        }
-
-        private readonly Stream _stream = new MemoryStream();
-        private byte _currentBytePosition = 7;
-        private int _buffer = 0;
-
         public void WritePixel(SKColor color)
         {
-            WriteFilled(color == SKColors.Black);
+            WriteBit(color == SKColors.Black);
         }
 
-        public void WriteFilled(bool isFilled)
-        {
-            if (isFilled)
-                _buffer |= 1 << _currentBytePosition;
+        private readonly MemoryStream _stream;
+        private byte _currentByte;
+        private int _bitsFilled;
 
-            _currentBytePosition--;
-            if (_currentBytePosition < 0)
+        public PixelWriter()
+        {
+            _stream = new MemoryStream();
+            _currentByte = 0;
+            _bitsFilled = 0;
+        }
+
+        public void WriteBit(bool bit)
+        {
+            // Shift the current byte to the left by 1 and add the new bit on the end.
+            _currentByte = (byte)((_currentByte << 1) | (bit ? 1 : 0));
+            _bitsFilled++;
+
+            // If the current byte is full (contains 8 bits), write it to the stream.
+            if (_bitsFilled == 8)
             {
-                Flush();
+                _stream.WriteByte(_currentByte);
+                // Reset for the next byte.
+                _currentByte = 0;
+                _bitsFilled = 0;
             }
         }
 
-        public void Flush()
+        public byte[] ToArray()
         {
-            if (_buffer == 0) return;
+            // If there are any bits that haven't been written yet because they didn't make up a full byte,
+            // write them now. This will effectively pad the last byte with zeroes if it's not full.
+            if (_bitsFilled > 0)
+            {
+                _currentByte = (byte)(_currentByte << (8 - _bitsFilled));
+                _stream.WriteByte(_currentByte);
+                _currentByte = 0;
+                _bitsFilled = 0;
+            }
 
-            _stream.WriteByte((byte)_buffer);
-            _buffer = 0;
-            _currentBytePosition = 7;
+            return _stream.ToArray();
         }
     }
 

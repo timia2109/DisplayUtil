@@ -1,4 +1,5 @@
 using DisplayUtil;
+using DisplayUtil.MqttExport;
 using DisplayUtil.Scenes;
 using DisplayUtil.Serializing;
 using DisplayUtil.Template;
@@ -11,7 +12,8 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.AddHassSupport();
+builder.AddHassSupport()
+    .AddMqttWriter();
 
 builder.Services.AddSingleton(FontProvider.Create())
     .AddSingleton<XmlLayoutDeserializer>()
@@ -42,6 +44,14 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 
 })
 .WithName("Preview Image")
+.WithOpenApi();
+
+app.MapPost("/publish/{providerId}", async (string providerId, MqttExporter exporter) =>
+{
+    await exporter.ExportScreenToMqtt(providerId);
+    return Results.NoContent();
+})
+.WithName("Publish manual to MQTT")
 .WithOpenApi();
 
 app.Run();

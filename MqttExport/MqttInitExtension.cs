@@ -42,7 +42,9 @@ public static class MqttInitExtension
 
         builder.Services
             .AddSingleton(client)
-            .AddSingleton(clientOptions);
+            .AddSingleton(clientOptions)
+            .AddSingleton<ExportingMqttClient>()
+            .AddScoped<MqttExporter>();
 
         return true;
     }

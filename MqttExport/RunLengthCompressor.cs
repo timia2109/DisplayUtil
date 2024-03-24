@@ -20,19 +20,17 @@ public class RunLengthCompressor
 
     private ushort _sequenceCount = 0;
     private bool? _sequenceType;
-    private Stream Stream { get; } = new MemoryStream();
+    private MemoryStream _stream = new MemoryStream();
 
-
-    public void WriteStream(Stream stream)
+    public byte[] WriteStream(byte[] data)
     {
-        int readByte = stream.ReadByte();
-
-        do
+        for (var i = 0; i < data.Length; i++)
         {
-            HandleByte((byte)readByte);
-            readByte = stream.ReadByte();
-        } while (readByte != -1);
+            HandleByte(data[i]);
+        }
         Flush();
+
+        return _stream.ToArray();
     }
 
     private void HandleByte(byte b)
@@ -118,7 +116,7 @@ public class RunLengthCompressor
 
     private void WriteShort(ushort data)
     {
-        Stream.WriteByte((byte)(data >> 8));
-        Stream.WriteByte((byte)data);
+        _stream.WriteByte((byte)(data >> 8));
+        _stream.WriteByte((byte)data);
     }
 }
