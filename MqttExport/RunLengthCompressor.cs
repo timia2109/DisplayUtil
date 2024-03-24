@@ -20,7 +20,7 @@ public class RunLengthCompressor
 
     private ushort _sequenceCount = 0;
     private bool? _sequenceType;
-    private MemoryStream _stream = new MemoryStream();
+    private readonly MemoryStream _stream = new();
 
     public byte[] WriteStream(byte[] data)
     {
