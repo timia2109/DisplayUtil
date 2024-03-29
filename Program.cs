@@ -1,3 +1,4 @@
+using System.Text;
 using DisplayUtil;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Scenes;
@@ -53,6 +54,15 @@ app.MapPost("/publish/{providerId}", async (string providerId, MqttExporter expo
     return Results.NoContent();
 })
 .WithName("Publish manual to MQTT")
+.WithOpenApi();
+
+app.MapGet("/esp/{providerId}", async (string providerId, EspImageProvider espProvider) =>
+{
+    var data = await espProvider.GetAsRunLengthAsync(providerId);
+    var base64 = Convert.ToBase64String(data);
+    return Results.Text(base64, "text/plain", Encoding.ASCII);
+})
+.WithName("Get ESP Image")
 .WithOpenApi();
 
 app.Run();

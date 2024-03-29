@@ -44,6 +44,7 @@ public static class MqttInitExtension
             .AddSingleton(client)
             .AddSingleton(clientOptions)
             .AddSingleton<ExportingMqttClient>()
+            .AddScoped<EspImageProvider>()
             .AddScoped<MqttExporter>();
 
         return true;
