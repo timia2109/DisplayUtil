@@ -32,7 +32,11 @@ public static class BinaryImageStreamCreator
     {
         public void WritePixel(SKColor color)
         {
-            WriteBit(color == SKColors.Black);
+            var luma = 0.2126 * color.Red
+                + 0.7152 * color.Green
+                + 0.0722 * color.Blue;
+
+            WriteBit(luma < 40);
         }
 
         private readonly MemoryStream _stream;
