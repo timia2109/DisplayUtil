@@ -39,11 +39,11 @@ internal class ScribanScreenProvider(
     {
         var fileContent = await templateLoader.LoadAsync(path);
         using var xml = await renderer.RenderToStreamAsync(fileContent);
-        using var element = layoutDeserializer.DeserializeXml(xml);
+        using var result = layoutDeserializer.DeserializeXml(xml);
 
         return DrawManager.Draw(
-            Constants.EPaperDisplaySize,
-            element
+            result.Size,
+            result.Element
         );
     }
 }
