@@ -50,7 +50,6 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 app.MapPost("/publish/{providerId}", async (string providerId, MqttExporter exporter) =>
 {
     await exporter.ExportScreenToMqtt(providerId);
-    GC.Collect();
     return Results.NoContent();
 })
 .WithName("Publish manual to MQTT")
@@ -64,5 +63,7 @@ app.MapGet("/esp/{providerId}", async (string providerId, EspImageProvider espPr
 })
 .WithName("Get ESP Image")
 .WithOpenApi();
+
+app.UseStaticFiles();
 
 app.Run();
