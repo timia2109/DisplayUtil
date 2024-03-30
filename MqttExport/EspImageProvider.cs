@@ -8,7 +8,7 @@ namespace DisplayUtil.MqttExport;
 /// Scoped
 /// </summary>
 public partial class EspImageProvider(
-    ILogger<MqttExporter> logger,
+    ILogger<EspImageProvider> logger,
     ScreenRepository screenRepository
 )
 {
