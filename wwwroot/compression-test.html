@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTML Rendering Test</title>
+        <style>
+            .flex {
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flex">
+            <div>
+                <input type="text" id="targetScreen" />
+                <button onclick="loadImage()">Load Image</button>
+            </div>
+            <canvas id="canvas" width="480" height="800"></canvas>
+        </div>
+
+        <script>
+            function loadImage() {
+                const targetScreenId =
+                    document.getElementById("targetScreen").value;
+
+                fetch(`/esp/${targetScreenId}`)
+                    .then((e) => e.text())
+                    .then((out) => {
+                        const rawString = window.atob(out);
+                        const uint8Array = new Uint8Array(rawString.length);
+                        for (var i = 0; i < rawString.length; i++) {
+                            uint8Array[i] = rawString.charCodeAt(i);
+                        }
+                        const uint16Array = new Uint16Array(uint8Array.buffer);
+                        drawOnCanvas("canvas", uint16Array);
+                    })
+                    .catch((err) => {
+                        alert("Error fetching");
+                        throw err;
+                    });
+            }
+
+            function drawOnCanvas(canvasId, data) {
+                const canvas = document.getElementById(canvasId);
+                const ctx = canvas.getContext("2d");
+
+                // Assuming 'COLOR_OFF' is black and 'COLOR_ON' is white for simplicity.
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                console.log("Begin drawing");
+
+                const width = canvas.width;
+                const height = canvas.height;
+
+                let pixel = 0;
+
+                for (const plainData of data) {
+                    const mode = plainData >> 14;
+                    let payload = plainData & ~(1 << 14);
+                    payload = plainData & ~(1 << 13);
+
+                    let x, y;
+
+                    if (mode === 0) {
+                        // Plain
+                        for (let i = 13; i >= 0; i--) {
+                            const mask = 1 << i;
+                            if (payload & mask) {
+                                x = (pixel % width) + 1;
+                                y = Math.floor(pixel / width) + 1;
+                                drawPixelAt(ctx, x, y, "white");
+                            }
+                            pixel++;
+                        }
+                    } else if (mode === 1) {
+                        // White (nothing to draw)
+                        pixel += payload;
+                    } else if (mode === 2) {
+                        // Black
+                        for (let i = payload; i > 0; i--) {
+                            x = (pixel % width) + 1;
+                            y = Math.floor(pixel / width) + 1;
+                            drawPixelAt(ctx, x, y, "white");
+                            pixel++;
+                        }
+                    }
+                }
+
+                console.log("Finished drawing");
+            }
+
+            function drawPixelAt(ctx, x, y, color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, 1, 1); // Drawing a 1x1 rectangle for the pixel
+            }
+        </script>
+    </body>
+</html>
