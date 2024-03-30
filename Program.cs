@@ -64,6 +64,15 @@ app.MapGet("/esp/{providerId}", async (string providerId, EspImageProvider espPr
 .WithName("Get ESP Image")
 .WithOpenApi();
 
+app.MapGet("/esp/bits/{providerId}", async (string providerId, EspImageProvider espProvider) =>
+{
+    var data = await espProvider.GetAsPlainBytesAsync(providerId);
+    var base64 = Convert.ToBase64String(data);
+    return Results.Text(base64, "text/plain", Encoding.ASCII);
+})
+.WithName("Get ESP Bit Image")
+.WithOpenApi();
+
 app.UseStaticFiles();
 
 app.Run();
