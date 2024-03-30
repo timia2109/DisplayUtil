@@ -12,7 +12,7 @@
         ret date.to_string date.now sFormat
     end }}
 
-<Screen>
+<Screen Width="480" Height="800">
     <Defaults TextSize="40" IconHeight="40" />
     <Flexbox Direction="Vertical">
 
