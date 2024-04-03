@@ -4,9 +4,10 @@ using DisplayUtil.Layouting;
 using DisplayUtil.Utils;
 using SkiaSharp;
 
-namespace DisplayUtil.Serializing.Models;
+namespace DisplayUtil.XmlModel.Models;
 
-public class HBox : ICollectionXmlModel
+[XmlType(nameof(VBox))]
+public class VBox : ICollectionXmlModel
 {
     [XmlAttribute]
     public int Gap = 0;
@@ -14,7 +15,6 @@ public class HBox : ICollectionXmlModel
     public override Element AsElement(FaIconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
     {
-        return FillWithChildren(new HBoxElement(Gap), iconDrawer, fontProvider,
-            defaults.MergeWith(Defaults));
+        return FillWithChildren(new VBoxElement(Gap), iconDrawer, fontProvider, defaults.MergeWith(Defaults));
     }
 }

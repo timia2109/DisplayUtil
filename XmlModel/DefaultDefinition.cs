@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace DisplayUtil.Serializing;
+namespace DisplayUtil.XmlModel;
 
 /// <summary>
 /// Setting defaults for the child elements

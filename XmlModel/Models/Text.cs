@@ -4,7 +4,7 @@ using DisplayUtil.Layouting;
 using DisplayUtil.Utils;
 using SkiaSharp;
 
-namespace DisplayUtil.Serializing.Models;
+namespace DisplayUtil.XmlModel.Models;
 
 [XmlType(nameof(Text))]
 public class Text : IXmlModel

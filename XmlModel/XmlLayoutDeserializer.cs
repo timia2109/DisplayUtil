@@ -4,7 +4,7 @@ using DisplayUtil.Serializing.Models;
 using DisplayUtil.Utils;
 using SkiaSharp;
 
-namespace DisplayUtil.Serializing;
+namespace DisplayUtil.XmlModel;
 
 public class XmlLayoutDeserializer
 {

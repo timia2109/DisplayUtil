@@ -1,7 +1,7 @@
 using DisplayUtil.Layouting;
 using SkiaSharp;
 
-namespace DisplayUtil.Serializing;
+namespace DisplayUtil.XmlModel;
 
 public record SerializingResult(
     Element Element,
