@@ -9,6 +9,10 @@
                 display: flex;
                 flex-direction: column;
             }
+
+            #canvas {
+                border: black 1px solid;
+            }
         </style>
     </head>
     <body>
@@ -78,7 +82,7 @@
 
                 let pixel = 0;
                 for (const d of data) {
-                    for (let i = 8; i >= 0; i--) {
+                    for (let i = 7; i >= 0; i--) {
                         const x = (pixel % width) + 1;
                         const y = Math.floor(pixel / width) + 1;
                         const mask = 1 << i;
@@ -107,8 +111,7 @@
 
                 for (const plainData of data) {
                     const mode = plainData >> 14;
-                    let payload = plainData & ~(1 << 14);
-                    payload = plainData & ~(1 << 13);
+                    const payload = plainData & ~(3 << 14);
 
                     let x, y;
 
