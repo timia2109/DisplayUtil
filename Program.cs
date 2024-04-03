@@ -1,6 +1,7 @@
 using System.Text;
 using DisplayUtil;
 using DisplayUtil.EspUtilities;
+using DisplayUtil.HomeAssistant;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Scenes;
 using DisplayUtil.Template;
@@ -14,7 +15,8 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.AddHassSupport()
+builder
+    .AddHassSupport()
     .AddMqttWriter()
     .AddEspUtilities();
 
@@ -28,9 +30,6 @@ builder.Services.AddScoped<TemplateRenderer>()
 builder.Services.AddTransient<FaIconDrawer>();
 
 builder.Services.AddScreenProvider(o => o
-    .AddSingleton<TestProvider>("test")
-    .AddSingleton<TestLayoutProvider>("layout")
-    .AddSingleton<TestFontSizeProvider>("testFont")
     .AddScribanFiles()
 );
 
