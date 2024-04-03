@@ -1,4 +1,5 @@
 using System.Security.Cryptography.X509Certificates;
+using DisplayUtil.Utils;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -8,24 +9,25 @@ public static class MqttInitExtension
 {
     public static IHostApplicationBuilder AddMqttWriter(this IHostApplicationBuilder builder)
     {
-        builder.Services.Configure<MqttSettings>(
-            builder.Configuration.GetSection("Mqtt"));
+        var settings = builder.ConfigureAndGet<MqttSettings>("Mqtt");
+        if (settings is null) return builder;
 
-        builder.Services.AddScoped<MqttExporter>();
-
-        if (!CreateMqttClient(builder))
-        {
+        if (!CreateMqttClient(builder, settings))
             return builder;
-        }
+
+        if (settings.IncrementalUpdate)
+            builder.Services.AddScoped<MqttExporter, CachedMqttExporter>();
+        else
+            builder.Services.AddScoped<MqttExporter>();
 
         return builder;
     }
 
-    private static bool CreateMqttClient(IHostApplicationBuilder builder)
+    private static bool CreateMqttClient(
+        IHostApplicationBuilder builder,
+        MqttSettings settings
+    )
     {
-        var settings = builder.Configuration.GetSection("Mqtt")
-            .Get<MqttSettings>();
-
         if (settings is null || settings.Uri is null)
             return false;
 

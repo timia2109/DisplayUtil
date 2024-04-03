@@ -26,15 +26,16 @@ public partial class ExportingMqttClient(
         }
     }
 
-    public async Task SendAsync(byte[] data)
+    public async Task SendAsync(string payload)
     {
         await EnsureConnectedAsync();
 
-        await client.PublishBinaryAsync(
+        await client.PublishStringAsync(
             settings.Value.Topic
                 ?? throw new ArgumentNullException(nameof(settings.Value.Topic)),
-            data,
-            MqttQualityOfServiceLevel.AtLeastOnce
+            payload,
+            MqttQualityOfServiceLevel.AtLeastOnce,
+            true
         );
     }
 
