@@ -5,7 +5,7 @@ using MQTTnet.Protocol;
 namespace DisplayUtil.MqttExport;
 
 /// <summary>
-/// Responsible to export the Image to Mqtt
+/// Responsible to export the new URL to MQTT
 /// </summary>
 public partial class ExportingMqttClient(
     IMqttClient client,

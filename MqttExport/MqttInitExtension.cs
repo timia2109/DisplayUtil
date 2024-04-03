@@ -28,7 +28,10 @@ public static class MqttInitExtension
         MqttSettings settings
     )
     {
-        if (settings is null || settings.Uri is null)
+        if (settings is null
+            || settings.Uri is null
+            || settings.ServerHostName is null
+            )
             return false;
 
         var factory = new MqttFactory();
