@@ -35,8 +35,8 @@ internal class HassHostedService(
 
     private async Task OnConnection(IHomeAssistantConnection connection)
     {
-        logger.LogInformation("Hass Connection initialized");
         await cacheManager.InitializeAsync(_cancellationTokenSource.Token);
+        logger.LogInformation("Hass Connection initialized");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

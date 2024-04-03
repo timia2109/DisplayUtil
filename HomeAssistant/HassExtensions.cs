@@ -1,3 +1,4 @@
+using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
@@ -19,7 +20,7 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<HassTemplateExtender>();
+            .AddScoped<ITemplateExtender, HassTemplateExtender>();
 
         // Hack: Initialize Hass Model
         var extensionType = typeof(DependencyInjectionSetup);
