@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
-using DisplayUtil.Serializing.Models;
 using DisplayUtil.Utils;
+using DisplayUtil.XmlModel.Models;
 using SkiaSharp;
 
 namespace DisplayUtil.XmlModel;
