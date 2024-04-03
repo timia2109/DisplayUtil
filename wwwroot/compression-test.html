@@ -51,7 +51,13 @@
                     document.getElementById("targetScreen").value;
 
                 fetch(`/esp/${targetScreenId}`)
-                    .then((e) => e.text())
+                    .then((e) => {
+                        const width = parseInt(e.headers.get("X-Width"));
+                        const height = parseInt(e.headers.get("X-Height"));
+                        document.getElementById("canvas").width = width;
+                        document.getElementById("canvas").height = height;
+                        return e.text();
+                    })
                     .then((out) => {
                         const rawString = window.atob(out);
                         const uint8Array = new Uint8Array(rawString.length);

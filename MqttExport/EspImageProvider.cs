@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using DisplayUtil.Scenes;
+using SkiaSharp;
 
 namespace DisplayUtil.MqttExport;
 
@@ -19,7 +20,7 @@ public partial class EspImageProvider(
     /// </summary>
     /// <param name="providerId">Id of the provider</param>
     /// <returns>Byte Array</returns>
-    public async Task<byte[]> GetAsPlainBytesAsync(string providerId)
+    public async Task<(byte[], SKSize)> GetAsPlainBytesAsync(string providerId)
     {
         var stopwatch = new Stopwatch();
         LogRender(providerId);
@@ -33,7 +34,7 @@ public partial class EspImageProvider(
 
         var binaryData = BinaryImageStreamCreator.GetImageStream(image);
         LogPlainBytes(binaryData.Length);
-        return binaryData;
+        return (binaryData, new SKSize(image.Width, image.Height));
     }
 
     /// <summary>
@@ -41,9 +42,9 @@ public partial class EspImageProvider(
     /// </summary>
     /// <param name="providerId">Id of the provider</param>
     /// <returns>Compressed Data</returns>
-    public async Task<byte[]> GetAsRunLengthAsync(string providerId)
+    public async Task<(byte[], SKSize)> GetAsRunLengthAsync(string providerId)
     {
-        var plainBytes = await GetAsPlainBytesAsync(providerId);
+        var (plainBytes, size) = await GetAsPlainBytesAsync(providerId);
 
         var runLengthEncoder = new RunLengthCompressor();
         var compressedData = runLengthEncoder.WriteStream(plainBytes);
@@ -54,7 +55,7 @@ public partial class EspImageProvider(
             Math.Round((1 - compressedPercent) * 100, 2)
         );
 
-        return compressedData;
+        return (compressedData, size);
     }
 
 
