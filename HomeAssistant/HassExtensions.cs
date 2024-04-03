@@ -1,21 +1,25 @@
-using Microsoft.Extensions.Options;
-using NetDaemon.Client;
+using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
 using NetDaemon.HassModel;
 
-namespace DisplayUtil.Utils;
+namespace DisplayUtil.HomeAssistant;
 
 public static class HassExtension
 {
     public static IHostApplicationBuilder AddHassSupport(this IHostApplicationBuilder builder)
     {
-
-        builder.Services.Configure<HomeAssistantSettings>(
-            builder.Configuration.GetSection("HomeAssistant")
+        var settings = builder.ConfigureAndGet<HomeAssistantSettings>(
+            "HomeAssistant"
         );
 
-        builder.Services.AddHomeAssistantClient();
+        if (settings is null
+            || settings.Host is null
+        ) return builder;
+
+        builder.Services
+            .AddHomeAssistantClient()
+            .AddScoped<HassTemplateExtender>();
 
         // Hack: Initialize Hass Model
         var extensionType = typeof(DependencyInjectionSetup);

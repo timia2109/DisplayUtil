@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 using DisplayUtil.Layouting;
 using DisplayUtil.Utils;
 
-namespace DisplayUtil.Serializing.Models;
+namespace DisplayUtil.XmlModel.Models;
 
 public class Screen : IXmlModel
 {

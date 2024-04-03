@@ -4,7 +4,7 @@ using NetDaemon.Client;
 using NetDaemon.Client.Settings;
 using NetDaemon.HassModel;
 
-namespace DisplayUtil.Utils;
+namespace DisplayUtil.HomeAssistant;
 
 internal class HassHostedService(
     IOptions<HomeAssistantSettings> options,

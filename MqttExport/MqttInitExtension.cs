@@ -11,8 +11,7 @@ public static class MqttInitExtension
         builder.Services.Configure<MqttSettings>(
             builder.Configuration.GetSection("Mqtt"));
 
-        builder.Services.AddScoped<EspImageProvider>()
-            .AddScoped<MqttExporter>();
+        builder.Services.AddScoped<MqttExporter>();
 
         if (!CreateMqttClient(builder))
         {

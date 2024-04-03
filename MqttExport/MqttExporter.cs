@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using DisplayUtil.EspUtilities;
 using DisplayUtil.Scenes;
 using MQTTnet.Client;
 
@@ -15,7 +16,7 @@ public class MqttExporter(
 {
     public async Task ExportScreenToMqtt(string providerId)
     {
-        var (data, size) = await espImageProvider.GetAsRunLengthAsync(providerId);
+        var (data, _) = await espImageProvider.GetAsRunLengthAsync(providerId);
         await exportingMqttClient.SendAsync(data);
     }
 }
