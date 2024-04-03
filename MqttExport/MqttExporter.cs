@@ -19,14 +19,24 @@ public class MqttExporter(
     {
         var settings = options.Value;
 
+        var query = providerId.IndexOf('?');
+        var providerPath = query == -1
+            ? providerId
+            : providerId[0..(query - 1)];
+
         var uriBuilder = new UriBuilder
         {
+            Port = 80,
+            Scheme = "http",
             Host = settings.ServerHostName,
             Path = EspUtilitiesInitExtension.CompressedImageRoute
         };
 
         uriBuilder.Path = EspUtilitiesInitExtension.CompressedImageRoute
-            .Replace("{providerId}", providerId);
+            .Replace("{providerId}", providerPath);
+
+        if (query != -1)
+            uriBuilder.Query = providerId[query..];
 
         return SubmitAsync(uriBuilder.Uri);
     }
@@ -37,8 +47,10 @@ public class MqttExporter(
     }
 }
 
-internal partial class CachedMqttExporter(ExportingMqttClient exportingMqttClient,
-    IOptions<MqttSettings> options, ILogger<CachedMqttExporter> logger)
+internal partial class CachedMqttExporter(
+    ExportingMqttClient exportingMqttClient,
+    IOptions<MqttSettings> options,
+    ILogger<CachedMqttExporter> logger)
     : MqttExporter(exportingMqttClient, options)
 {
     private readonly ILogger _logger = logger;

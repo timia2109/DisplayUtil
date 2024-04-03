@@ -11,7 +11,12 @@ public enum EnrichScope
     /// <summary>
     /// This template will used for ScreenRendering
     /// </summary>
-    ScreenRendering
+    ScreenRendering,
+
+    /// <summary>
+    /// This template will used for Providing an other template
+    /// </summary>
+    TemplateProvider
 }
 
 /// <summary>

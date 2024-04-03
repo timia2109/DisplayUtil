@@ -37,8 +37,7 @@ internal class ScribanScreenProvider(
 {
     public async Task<SKBitmap> GetImageAsync()
     {
-        var fileContent = await templateLoader.LoadAsync(path);
-        using var xml = await renderer.RenderToStreamAsync(fileContent);
+        using var xml = await renderer.RenderToStreamAsync(path);
         using var result = layoutDeserializer.DeserializeXml(xml);
 
         return DrawManager.Draw(

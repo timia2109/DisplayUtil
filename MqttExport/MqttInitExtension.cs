@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using DisplayUtil.Utils;
 using MQTTnet;
 using MQTTnet.Client;
@@ -16,9 +15,16 @@ public static class MqttInitExtension
             return builder;
 
         if (settings.IncrementalUpdate)
-            builder.Services.AddScoped<MqttExporter, CachedMqttExporter>();
+            builder.Services.AddSingleton<MqttExporter, CachedMqttExporter>();
         else
-            builder.Services.AddScoped<MqttExporter>();
+            builder.Services.AddSingleton<MqttExporter>();
+
+        if (
+            settings.ScreenDetectTemplate is null
+            || settings.RefreshInterval is null
+        ) return builder;
+
+        builder.Services.AddHostedService<MqttExportJob>();
 
         return builder;
     }
@@ -50,7 +56,8 @@ public static class MqttInitExtension
         builder.Services
             .AddSingleton(client)
             .AddSingleton(clientOptions)
-            .AddSingleton<ExportingMqttClient>();
+            .AddSingleton<ExportingMqttClient>()
+            .AddScoped<MqttUrlRenderer>();
 
         return true;
     }
