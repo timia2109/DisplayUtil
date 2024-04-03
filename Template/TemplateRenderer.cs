@@ -14,7 +14,7 @@ public class TemplateRenderer(TemplateContextProvider contextProvider)
     {
         var template = Scriban.Template.Parse(content);
         var rendered = await template.RenderAsync(contextProvider
-            .GetTemplateContext());
+            .GetTemplateContext(EnrichScope.ScreenRendering));
 
         var memoryStream = new MemoryStream();
         memoryStream.Write(Encoding.UTF8.GetBytes(rendered));
