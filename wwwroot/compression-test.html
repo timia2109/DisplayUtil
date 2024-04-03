@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTML Rendering Test</title>
+        <style>
+            .flex {
+                display: flex;
+                flex-direction: column;
+            }
+
+            #canvas {
+                border: black 1px solid;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flex">
+            <div>
+                <input type="text" id="targetScreen" value="small" />
+                <button onclick="loadImage()">Load Image</button>
+                <button onclick="loadBitImage()">Load Bit Image</button>
+            </div>
+            <canvas id="canvas" width="64" height="32"></canvas>
+        </div>
+
+        <script>
+            function loadBitImage() {
+                const targetScreenId =
+                    document.getElementById("targetScreen").value;
+
+                fetch(`/esp/${targetScreenId}`)
+                    .then((e) => e.text())
+                    .then((out) => {
+                        const rawString = window.atob(out);
+                        const uint8Array = new Uint8Array(rawString.length);
+                        for (var i = 0; i < rawString.length; i++) {
+                            uint8Array[i] = rawString.charCodeAt(i);
+                        }
+                        drawOnCanvasBits("canvas", uint8Array);
+                    })
+                    .catch((err) => {
+                        alert("Error fetching");
+                        throw err;
+                    });
+            }
+
+            function loadImage() {
+                const targetScreenId =
+                    document.getElementById("targetScreen").value;
+
+                fetch(`/esp/${targetScreenId}`)
+                    .then((e) => {
+                        const width = parseInt(e.headers.get("X-Width"));
+                        const height = parseInt(e.headers.get("X-Height"));
+                        document.getElementById("canvas").width = width;
+                        document.getElementById("canvas").height = height;
+                        return e.text();
+                    })
+                    .then((out) => {
+                        const rawString = window.atob(out);
+                        const uint8Array = new Uint8Array(rawString.length);
+                        for (var i = 0; i < rawString.length; i++) {
+                            uint8Array[i] = rawString.charCodeAt(i);
+                        }
+                        const uint16Array = new Uint16Array(uint8Array.buffer);
+                        drawOnCanvas("canvas", uint16Array);
+                    })
+                    .catch((err) => {
+                        alert("Error fetching");
+                        throw err;
+                    });
+            }
+
+            function drawOnCanvasBits(canvasId, data) {
+                const canvas = document.getElementById(canvasId);
+                const ctx = canvas.getContext("2d");
+
+                // Assuming 'COLOR_OFF' is black and 'COLOR_ON' is white for simplicity.
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const width = canvas.width;
+                const height = canvas.height;
+
+                console.log("Begin drawing");
+
+                let pixel = 0;
+                for (const d of data) {
+                    for (let i = 7; i >= 0; i--) {
+                        const x = (pixel % width) + 1;
+                        const y = Math.floor(pixel / width) + 1;
+                        const mask = 1 << i;
+
+                        const color = mask & d ? "black" : "white";
+                        drawPixelAt(ctx, x, y, color);
+                        pixel++;
+                    }
+                }
+            }
+
+            function drawOnCanvas(canvasId, data) {
+                const canvas = document.getElementById(canvasId);
+                const ctx = canvas.getContext("2d");
+
+                // Assuming 'COLOR_OFF' is black and 'COLOR_ON' is white for simplicity.
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                console.log("Begin drawing");
+
+                const width = canvas.width;
+                const height = canvas.height;
+
+                let pixel = 0;
+
+                for (const plainData of data) {
+                    const mode = plainData >> 14;
+                    const payload = plainData & ~(3 << 14);
+
+                    let x, y;
+
+                    if (mode === 0) {
+                        // Plain
+                        for (let i = 13; i >= 0; i--) {
+                            const mask = 1 << i;
+                            if (payload & mask) {
+                                x = (pixel % width) + 1;
+                                y = Math.floor(pixel / width) + 1;
+                                drawPixelAt(ctx, x, y, "black");
+                            }
+                            pixel++;
+                        }
+                    } else if (mode === 1) {
+                        // White (nothing to draw)
+                        pixel += payload;
+                    } else if (mode === 2) {
+                        // Black
+                        for (let i = payload; i > 0; i--) {
+                            x = (pixel % width) + 1;
+                            y = Math.floor(pixel / width) + 1;
+                            drawPixelAt(ctx, x, y, "black");
+                            pixel++;
+                        }
+                    }
+                }
+
+                console.log("Finished drawing");
+            }
+
+            function drawPixelAt(ctx, x, y, color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, 1, 1); // Drawing a 1x1 rectangle for the pixel
+            }
+        </script>
+    </body>
+</html>

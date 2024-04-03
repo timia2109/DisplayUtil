@@ -87,8 +87,9 @@ public class RunLengthCompressor
         }
         else
         {
-            for (; _sequenceCount > 0; _sequenceCount--)
+            while (_sequenceCount > 0)
             {
+                _sequenceCount--;
                 if (AddBitToBuffer(_sequenceType.Value))
                 {
                     Flush();
@@ -116,7 +117,10 @@ public class RunLengthCompressor
 
     private void WriteShort(ushort data)
     {
-        _stream.WriteByte((byte)(data >> 8));
-        _stream.WriteByte((byte)data);
+        byte a = (byte)(data >> 8),
+             b = (byte)data;
+
+        _stream.WriteByte(b);
+        _stream.WriteByte(a);
     }
 }

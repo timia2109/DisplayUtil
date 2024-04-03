@@ -2,6 +2,7 @@ using System.Xml.Serialization;
 using DisplayUtil.Layouting;
 using DisplayUtil.Serializing.Models;
 using DisplayUtil.Utils;
+using SkiaSharp;
 
 namespace DisplayUtil.Serializing;
 
@@ -37,14 +38,17 @@ public class XmlLayoutDeserializer
         _fontProvider = fontProvider;
     }
 
-    public Element DeserializeXml(Stream xmlStream)
+    public SerializingResult DeserializeXml(Stream xmlStream)
     {
         if (_serializer.Deserialize(xmlStream) is not Screen model)
         {
             throw new Exception("Unable to parse!");
         }
 
-        return model.AsElement(_iconDrawer, _fontProvider, DefaultDefinition.Default);
+        return new(
+            model.AsElement(_iconDrawer, _fontProvider, DefaultDefinition.Default),
+            new SKSize(model.Width, model.Height)
+        );
     }
 
 }

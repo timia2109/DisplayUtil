@@ -15,7 +15,7 @@ internal class HassHostedService(
 {
     private CancellationTokenSource _cancellationTokenSource = new();
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         var haSettings = options.Value;
 
@@ -29,6 +29,8 @@ internal class HassHostedService(
              TimeSpan.FromSeconds(10),
              _cancellationTokenSource.Token
         );
+
+        return Task.CompletedTask;
     }
 
     private async Task OnConnection(IHomeAssistantConnection connection)

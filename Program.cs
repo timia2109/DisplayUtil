@@ -50,19 +50,33 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 app.MapPost("/publish/{providerId}", async (string providerId, MqttExporter exporter) =>
 {
     await exporter.ExportScreenToMqtt(providerId);
-    GC.Collect();
     return Results.NoContent();
 })
 .WithName("Publish manual to MQTT")
 .WithOpenApi();
 
-app.MapGet("/esp/{providerId}", async (string providerId, EspImageProvider espProvider) =>
+app.MapGet("/esp/{providerId}", async (string providerId, HttpContext ctx, EspImageProvider espProvider) =>
 {
-    var data = await espProvider.GetAsRunLengthAsync(providerId);
+    var (data, size) = await espProvider.GetAsRunLengthAsync(providerId);
     var base64 = Convert.ToBase64String(data);
+    ctx.Response.Headers.Append("X-Width", size.Width.ToString());
+    ctx.Response.Headers.Append("X-Height", size.Height.ToString());
     return Results.Text(base64, "text/plain", Encoding.ASCII);
 })
 .WithName("Get ESP Image")
 .WithOpenApi();
+
+app.MapGet("/esp/bits/{providerId}", async (string providerId, HttpContext ctx, EspImageProvider espProvider) =>
+{
+    var (data, size) = await espProvider.GetAsPlainBytesAsync(providerId);
+    var base64 = Convert.ToBase64String(data);
+    ctx.Response.Headers.Append("X-Width", size.Width.ToString());
+    ctx.Response.Headers.Append("X-Height", size.Height.ToString());
+    return Results.Text(base64, "text/plain", Encoding.ASCII);
+})
+.WithName("Get ESP Bit Image")
+.WithOpenApi();
+
+app.UseStaticFiles();
 
 app.Run();
