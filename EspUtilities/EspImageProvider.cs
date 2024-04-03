@@ -2,7 +2,7 @@ using System.Diagnostics;
 using DisplayUtil.Scenes;
 using SkiaSharp;
 
-namespace DisplayUtil.MqttExport;
+namespace DisplayUtil.EspUtilities;
 
 /// <summary>
 /// Responsible to provide the images in a form for the ESP.

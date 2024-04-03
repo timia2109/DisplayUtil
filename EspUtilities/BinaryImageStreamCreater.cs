@@ -1,6 +1,6 @@
 using SkiaSharp;
 
-namespace DisplayUtil.MqttExport;
+namespace DisplayUtil.EspUtilities;
 
 /// <summary>
 /// Responsible to render the Bitmap to the two color stream

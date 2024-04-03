@@ -1,8 +1,6 @@
 using System.IO.Pipelines;
 
-namespace DisplayUtil.MqttExport;
-
-
+namespace DisplayUtil.EspUtilities;
 
 /// <summary>
 /// Compresses the stream

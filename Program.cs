@@ -1,5 +1,6 @@
 using System.Text;
 using DisplayUtil;
+using DisplayUtil.EspUtilities;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Scenes;
 using DisplayUtil.Serializing;
@@ -14,7 +15,8 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.AddHassSupport()
-    .AddMqttWriter();
+    .AddMqttWriter()
+    .AddEspUtilities();
 
 builder.Services.AddSingleton(FontProvider.Create())
     .AddSingleton<XmlLayoutDeserializer>()
