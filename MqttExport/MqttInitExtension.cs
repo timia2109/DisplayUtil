@@ -1,4 +1,4 @@
-using System.Security.Cryptography.X509Certificates;
+using DisplayUtil.Utils;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -8,25 +8,36 @@ public static class MqttInitExtension
 {
     public static IHostApplicationBuilder AddMqttWriter(this IHostApplicationBuilder builder)
     {
-        builder.Services.Configure<MqttSettings>(
-            builder.Configuration.GetSection("Mqtt"));
+        var settings = builder.ConfigureAndGet<MqttSettings>("Mqtt");
+        if (settings is null) return builder;
 
-        builder.Services.AddScoped<MqttExporter>();
-
-        if (!CreateMqttClient(builder))
-        {
+        if (!CreateMqttClient(builder, settings))
             return builder;
-        }
+
+        if (settings.IncrementalUpdate)
+            builder.Services.AddSingleton<MqttExporter, CachedMqttExporter>();
+        else
+            builder.Services.AddSingleton<MqttExporter>();
+
+        if (
+            settings.ScreenDetectTemplate is null
+            || settings.RefreshInterval is null
+        ) return builder;
+
+        builder.Services.AddHostedService<MqttExportJob>();
 
         return builder;
     }
 
-    private static bool CreateMqttClient(IHostApplicationBuilder builder)
+    private static bool CreateMqttClient(
+        IHostApplicationBuilder builder,
+        MqttSettings settings
+    )
     {
-        var settings = builder.Configuration.GetSection("Mqtt")
-            .Get<MqttSettings>();
-
-        if (settings is null || settings.Uri is null)
+        if (settings is null
+            || settings.Uri is null
+            || settings.ServerHostName is null
+            )
             return false;
 
         var factory = new MqttFactory();
@@ -45,7 +56,8 @@ public static class MqttInitExtension
         builder.Services
             .AddSingleton(client)
             .AddSingleton(clientOptions)
-            .AddSingleton<ExportingMqttClient>();
+            .AddSingleton<ExportingMqttClient>()
+            .AddScoped<MqttUrlRenderer>();
 
         return true;
     }
