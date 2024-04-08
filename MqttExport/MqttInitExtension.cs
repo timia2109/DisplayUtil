@@ -61,4 +61,23 @@ public static class MqttInitExtension
 
         return true;
     }
+
+    public static WebApplication UseMqttWriter(this WebApplication app)
+    {
+        if (app.Services.GetService<MqttExporter>() is null) return app;
+
+        app.MapGet("/mqtt/uri", async (MqttUrlRenderer renderer) =>
+        {
+            return Results.Ok(await renderer.GetMqttTemplateUriAsync());
+        })
+        .WithName("Get MQTT URI")
+        .WithOpenApi();
+
+        app.MapGet("/mqtt/template", async (MqttUrlRenderer renderer)
+            => Results.Ok(await renderer.GetMqttTemplateAsync()))
+        .WithName("Get MQTT Template")
+        .WithOpenApi();
+
+        return app;
+    }
 }

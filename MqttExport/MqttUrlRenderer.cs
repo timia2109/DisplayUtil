@@ -1,3 +1,4 @@
+using DisplayUtil.EspUtilities;
 using DisplayUtil.Template;
 using Microsoft.Extensions.Options;
 
@@ -9,6 +10,43 @@ public class MqttUrlRenderer(
     IOptionsSnapshot<MqttSettings> options
 )
 {
+    public async Task<Uri> GetMqttTemplateUriAsync()
+    {
+        var providerId = await GetMqttTemplateAsync();
+
+        var settings = options.Value;
+
+        var query = providerId.IndexOf('?');
+        var providerPath = query == -1
+            ? providerId
+            : providerId[0..query];
+
+        var uriBuilder = new UriBuilder
+        {
+            Port = 80,
+            Scheme = "http",
+            Host = settings.ServerHostName,
+            Path = EspUtilitiesInitExtension.CompressedImageRoute
+        };
+
+        uriBuilder.Path = EspUtilitiesInitExtension.CompressedImageRoute
+            .Replace("{providerId}", providerPath);
+
+        if (query != -1)
+            uriBuilder.Query = providerId[query..];
+
+        return uriBuilder.Uri;
+    }
+
+    public async Task<string> GetMqttTemplateAsync()
+    {
+        var template = options.Value.ScreenDetectTemplate!;
+
+        var result = await renderer.RenderAsync(template,
+            EnrichScope.TemplateProvider);
+
+        return result.Trim();
+    }
 
     /// <summary>
     /// Exports the Uri to MQTT
@@ -16,12 +54,7 @@ public class MqttUrlRenderer(
     /// <returns>Task</returns>
     public async Task RenderUrlAndPublish()
     {
-        var template = options.Value.ScreenDetectTemplate!;
-
-        var result = await renderer.RenderAsync(template,
-            EnrichScope.TemplateProvider);
-
-        await exporter.ExportUriToMqtt(result);
+        await exporter.PublishUriToMqttAsync(await GetMqttTemplateUriAsync());
     }
 
 }
