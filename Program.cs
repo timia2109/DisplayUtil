@@ -25,7 +25,8 @@ builder.Services.AddSingleton(FontProvider.Create())
     .AddSingleton<TemplateLoader>();
 
 builder.Services.AddScoped<TemplateRenderer>()
-    .AddScoped<TemplateContextProvider>();
+    .AddScoped<TemplateContextProvider>()
+    .AddSingleton<ITemplateExtender, UtilTemplateExtender>();
 
 builder.Services.AddTransient<FaIconDrawer>();
 
