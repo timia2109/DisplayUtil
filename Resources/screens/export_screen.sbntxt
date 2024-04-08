@@ -1,1 +1,8 @@
-TestUrl21?{{ date.to_string date.now "%s" }}=1
+{{
+    state = hass.get_state "sensor.wohnzimmer_display_mode"
+}}
+{{ if state == "Normal" }}
+main?version={{ date.to_string date.now "%s" }}
+{{ else }}
+{{ state | string.downcase }}
+{{ end }}
