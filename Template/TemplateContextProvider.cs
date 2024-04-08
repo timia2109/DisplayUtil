@@ -15,7 +15,6 @@ public class TemplateContextProvider(
     public TemplateContext GetTemplateContext(EnrichScope scope)
     {
         var scriptObject = new ScriptObject();
-        scriptObject.Import("to_float", ToFloat);
 
         foreach (var extender in extenders)
         {
@@ -31,11 +30,5 @@ public class TemplateContextProvider(
         context.PushGlobal(scriptObject);
 
         return context;
-    }
-
-    public static float ToFloat(string? content)
-    {
-        if (content == null) return 0;
-        return float.Parse(content, CultureInfo.InvariantCulture);
     }
 }

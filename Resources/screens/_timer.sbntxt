@@ -1,0 +1,20 @@
+{{ func timer() }}
+    {{
+        start_time = hass.get_datetime "input_datetime.googletimerstart"
+        end_time = hass.get_datetime "input_datetime.googletimerover"
+        timer_text = hass.get_state "input_text.countdown_text"
+    }}
+
+    {{ if start_time.year < 2000 
+        ret 0
+    end}}
+
+    <VBox Gap="5">
+        <Text Content="{{ timer_text | html.escape }}" />
+        {{ icon_data "hourglass-start" (start_time | date.to_string "%T") }}
+        {{ icon_data "hourglass-end" (end_time | date.to_string "%T") }}
+    </VBox>
+
+    {{ ret 1 }}
+
+{{ end }}

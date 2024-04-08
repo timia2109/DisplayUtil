@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using NetDaemon.HassModel;
 
 namespace DisplayUtil.MqttExport;
 
@@ -7,10 +8,13 @@ public class MqttExportJob(
     IOptions<MqttSettings> optionsSnapshot
 ) : IHostedService
 {
+    private static readonly TimeSpan InitTimeout = TimeSpan.FromSeconds(5);
     private CancellationTokenSource? _cancellationTokenSource;
 
     private async Task RunAsync(CancellationToken cancellation)
     {
+        await Task.Delay(InitTimeout);
+
         while (!cancellation.IsCancellationRequested)
         {
             await using (var scope = scopeFactory.CreateAsyncScope())

@@ -37,10 +37,9 @@ public abstract class IXmlModel
         FaIconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
     )
     {
-        foreach (var child in Children)
-        {
-            collection.Append(child.AsElement(iconDrawer, fontProvider, defaults));
-        }
+        collection.Append(
+            Children.Select(e => e.AsElement(iconDrawer, fontProvider, defaults))
+        );
         return collection;
     }
 }

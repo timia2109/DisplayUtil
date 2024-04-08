@@ -1,9 +1,3 @@
-using System.Diagnostics;
-using DisplayUtil.EspUtilities;
-using DisplayUtil.Scenes;
-using Microsoft.Extensions.Options;
-using MQTTnet.Client;
-
 namespace DisplayUtil.MqttExport;
 
 /// <summary>
@@ -11,37 +5,10 @@ namespace DisplayUtil.MqttExport;
 /// Scoped
 /// </summary>
 public class MqttExporter(
-    ExportingMqttClient exportingMqttClient,
-    IOptions<MqttSettings> options
+    ExportingMqttClient exportingMqttClient
 )
 {
-    public Task ExportUriToMqtt(string providerId)
-    {
-        var settings = options.Value;
-
-        var query = providerId.IndexOf('?');
-        var providerPath = query == -1
-            ? providerId
-            : providerId[0..(query - 1)];
-
-        var uriBuilder = new UriBuilder
-        {
-            Port = 80,
-            Scheme = "http",
-            Host = settings.ServerHostName,
-            Path = EspUtilitiesInitExtension.CompressedImageRoute
-        };
-
-        uriBuilder.Path = EspUtilitiesInitExtension.CompressedImageRoute
-            .Replace("{providerId}", providerPath);
-
-        if (query != -1)
-            uriBuilder.Query = providerId[query..];
-
-        return SubmitAsync(uriBuilder.Uri);
-    }
-
-    public virtual async Task SubmitAsync(Uri uri)
+    public virtual async Task PublishUriToMqttAsync(Uri uri)
     {
         await exportingMqttClient.SendAsync(uri.ToString());
     }
@@ -49,15 +16,14 @@ public class MqttExporter(
 
 internal partial class CachedMqttExporter(
     ExportingMqttClient exportingMqttClient,
-    IOptions<MqttSettings> options,
     ILogger<CachedMqttExporter> logger)
-    : MqttExporter(exportingMqttClient, options)
+    : MqttExporter(exportingMqttClient)
 {
     private readonly ILogger _logger = logger;
 
     private Uri? _lastSubmission;
 
-    public override Task SubmitAsync(Uri uri)
+    public override Task PublishUriToMqttAsync(Uri uri)
     {
         if (_lastSubmission == uri)
         {
@@ -67,7 +33,7 @@ internal partial class CachedMqttExporter(
 
         LogSubmitting(uri);
         _lastSubmission = uri;
-        return base.SubmitAsync(uri);
+        return base.PublishUriToMqttAsync(uri);
     }
 
     [LoggerMessage(LogLevel.Debug, "Skipping resubmission of {uri}")]

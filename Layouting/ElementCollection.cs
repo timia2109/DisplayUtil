@@ -46,6 +46,16 @@ public abstract class ElementCollection : Element
         return this;
     }
 
+    /// <summary>
+    /// Add all Elements to this Collection
+    /// </summary>
+    /// <param name="elements">The elements</param>
+    public ElementCollection Append(IEnumerable<Element> elements)
+    {
+        Children.AddRange(elements);
+        return this;
+    }
+
     protected override SKSize CalculateSize(DrawContext drawContext)
     {
         var childContext = BuildChildDrawContext(drawContext);

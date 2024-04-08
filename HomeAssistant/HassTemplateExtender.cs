@@ -1,3 +1,4 @@
+using System.Globalization;
 using DisplayUtil.Template;
 using NetDaemon.HassModel;
 using Scriban.Runtime;
@@ -14,6 +15,7 @@ internal class HassTemplateExtender(IHaContext haContext)
         hassObject.Import("get_state", GetState);
         hassObject.Import("get_attribute", GetAttribute);
         hassObject.Import("get_float_state", GetFloatState);
+        hassObject.Import("get_datetime", GetDateTime);
         context.Add("hass", hassObject);
     }
 
@@ -39,8 +41,21 @@ internal class HassTemplateExtender(IHaContext haContext)
     {
         var state = GetState(entityId);
         if (state == null) return 0f;
-        return TemplateContextProvider.ToFloat(state);
+        return UtilTemplateExtender.ToFloat(state);
     }
 
+    private DateTime? GetDateTime(string entityId)
+    {
+        var state = GetState(entityId);
+        if (state is null) return null;
 
+        if (!DateTime.TryParseExact(state,
+            "yyyy-MM-dd HH:mm:ss",
+            CultureInfo.GetCultureInfo("de-DE"),
+            DateTimeStyles.None,
+            out var dt))
+            return null;
+
+        return dt;
+    }
 }

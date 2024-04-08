@@ -1,0 +1,12 @@
+<Screen Height="800" Width="480">
+    <Defaults TextSize="40" IconHeight="40" />
+
+    <Flexbox Direction="Vertical" AlignItems="Center">
+        <Margin All="15" />
+        
+        <Icon IconName="person-circle-question" Height="200" />
+        <Text Content="Niemand da!" Font="ProductSansBold" Size="40" />
+        <Text Content="Der Bildschirm ist aus" />
+    </Flexbox>
+
+</Screen>
