@@ -1,6 +1,9 @@
 {{ 
     include "_media_player" 
     include "_icon_data" 
+    include "_timer"
+
+    items = 0
 
     media_players = [
         "media_player.buro",
@@ -31,19 +34,22 @@
                 <Border Bottom="2" />
             </Flexbox>
 
-            <Flexbox AlignItems="Center">
+            <Flexbox>
                 {{ icon_data "couch" (hass.get_float_state "sensor.smart_hygrometer_0998_temperature" | math.round 2) + " °C"}}
                 {{ icon_data "cloud-sun" (hass.get_float_state "sensor.hue_outdoor_motion_sensor_1_temperature" | math.round 2) + " °C"}}
+            </Flexbox>
+
+            <Flexbox>
+                {{ icon_data "dumbbell" (hass.get_state "sensor.fitx_auslastung") + "%" }}
             </Flexbox>
 
         </VBox>
 
         {{  for player in media_players
-                media_player player
-            end
-        }}
+                items += media_player player
+            end }}
 
-        <Text Content="Placeholder" />
+        {{ items += timer }}
 
         <Margin All="1" />
     </Flexbox>
