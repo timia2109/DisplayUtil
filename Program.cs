@@ -48,7 +48,8 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 .WithName("Preview Image")
 .WithOpenApi();
 
-app.UseEspUtilities();
+app.UseEspUtilities()
+    .UseMqttWriter();
 app.UseStaticFiles();
 
 app.Run();
