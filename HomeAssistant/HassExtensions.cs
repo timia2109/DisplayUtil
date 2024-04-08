@@ -20,7 +20,8 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>();
+            .AddScoped<ITemplateExtender, HassTemplateExtender>()
+            .AddSingleton<HassCalendarWorker>();
 
         // Hack: Initialize Hass Model
         var extensionType = typeof(DependencyInjectionSetup);
