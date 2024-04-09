@@ -1,15 +1,35 @@
-using System.Security.Cryptography;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 using NetDaemon.Client;
 using NetDaemon.Client.HomeAssistant.Model;
-using NetDaemon.HassModel.Entities;
 
-namespace DisplayUtil.HomeAssistant;
+namespace DisplayUtil.HomeAssistant.Calendar;
 
-public class HassCalendarWorker(IHomeAssistantConnection client)
+public partial class HassCalendarWorker(
+    IHomeAssistantConnection client,
+    HassAppointmentStore store,
+    IOptions<HassCalendarSettings> options,
+    ILogger<HassCalendarWorker> logger
+)
 {
+    private readonly ILogger _logger = logger;
+
+    public async Task RefreshAsync()
+    {
+        var appointments = await FetchAsync(CancellationToken.None);
+        store.Appointments = appointments ?? [];
+    }
+
     public async Task<HassEvent[]?> FetchAsync(CancellationToken cancellation)
     {
+        LogFetch();
+
+        if (client is null)
+        {
+            LogNoConnection();
+            return null;
+        }
+
         var command = new GetEventsPayload
         {
             ServiceData = new
@@ -18,19 +38,32 @@ public class HassCalendarWorker(IHomeAssistantConnection client)
             },
             Target = new HassTarget
             {
-                EntityIds = [
-                    "calendar.jenin_tim",
-                    "calendar.it_event",
-                    "calendar.th_koln"
-                ]
+                EntityIds = options.Value.CalendarEntities
             }
         };
 
-        var response = await client.SendCommandAndReturnResponseAsync
-            <GetEventsPayload, GetEventsResponse>(command, cancellation);
+        try
+        {
+            var response = await client.SendCommandAndReturnResponseAsync
+                <GetEventsPayload, GetEventsResponse>(command, cancellation);
 
-        return response?.Events?.ToArray();
+            return response?.Events?.ToArray();
+        }
+        catch (Exception e)
+        {
+            LogError(e);
+            return null;
+        }
     }
+
+    [LoggerMessage(LogLevel.Information, "Fetching Appointments")]
+    private partial void LogFetch();
+
+    [LoggerMessage(LogLevel.Warning, "No HASS Connection")]
+    private partial void LogNoConnection();
+
+    [LoggerMessage(LogLevel.Warning, "Error fetching appointments")]
+    private partial void LogError(Exception e);
 
 }
 
@@ -54,7 +87,7 @@ internal record GetEventsPayload : CommandMessage
 
 internal record GetEventsResponse : CommandMessage
 {
-    [JsonPropertyName("response")] public Dictionary<string, HassEvents> Response { get; init; }
+    [JsonPropertyName("response")] public Dictionary<string, HassEvents> Response { get; init; } = null!;
 
     public IEnumerable<HassEvent> Events => Response.Values
         .SelectMany(e => e.Event)

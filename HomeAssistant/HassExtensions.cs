@@ -1,3 +1,4 @@
+using DisplayUtil.HomeAssistant.Calendar;
 using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
@@ -8,11 +9,11 @@ namespace DisplayUtil.HomeAssistant;
 
 public static class HassExtension
 {
+    private const string _section = "HomeAssistant";
+
     public static IHostApplicationBuilder AddHassSupport(this IHostApplicationBuilder builder)
     {
-        var settings = builder.ConfigureAndGet<HomeAssistantSettings>(
-            "HomeAssistant"
-        );
+        var settings = builder.ConfigureAndGet<HomeAssistantSettings>(_section);
 
         if (settings is null
             || settings.Host is null
@@ -20,8 +21,7 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>()
-            .AddSingleton<HassCalendarWorker>();
+            .AddScoped<ITemplateExtender, HassTemplateExtender>();
 
         // Hack: Initialize Hass Model
         var extensionType = typeof(DependencyInjectionSetup);
@@ -35,6 +35,17 @@ public static class HassExtension
 
         // Background Connection
         builder.Services.AddHostedService<HassHostedService>();
+
+        var calendarSettings = builder.ConfigureAndGet<HassCalendarSettings>(
+            _section
+        );
+        if (calendarSettings?.CalendarEntities.Length == 0) return builder;
+
+        builder.Services
+            .AddSingleton<HassAppointmentStore>()
+            .AddSingleton<ITemplateExtender>(s => s.GetRequiredService<HassAppointmentStore>())
+            .AddScoped<HassCalendarWorker>()
+            .AddHostedService<HassCalendarJob>();
 
         return builder;
     }

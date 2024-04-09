@@ -1,44 +1,24 @@
+using DisplayUtil.Utils;
 using Microsoft.Extensions.Options;
 using NetDaemon.HassModel;
 
 namespace DisplayUtil.MqttExport;
 
+/// <summary>
+/// Job to publish the URI to MQTT
+/// </summary>
 public class MqttExportJob(
     IServiceScopeFactory scopeFactory,
-    IOptions<MqttSettings> optionsSnapshot
-) : IHostedService
+    ILogger<MqttExportJob> logger,
+    IOptions<MqttSettings> options
+) : TimedScopedService(scopeFactory, logger)
 {
-    private static readonly TimeSpan InitTimeout = TimeSpan.FromSeconds(5);
-    private CancellationTokenSource? _cancellationTokenSource;
+    protected override TimeSpan InitTimeout => TimeSpan.FromSeconds(5);
+    protected override TimeSpan Delay => options.Value.RefreshInterval!.Value;
 
-    private async Task RunAsync(CancellationToken cancellation)
+    protected override async Task TriggerAsync(IServiceProvider serviceProvider)
     {
-        await Task.Delay(InitTimeout);
-
-        while (!cancellation.IsCancellationRequested)
-        {
-            await using (var scope = scopeFactory.CreateAsyncScope())
-            {
-                var renderer = scope.ServiceProvider
-                    .GetRequiredService<MqttUrlRenderer>();
-                await renderer.RenderUrlAndPublish();
-            }
-
-            await Task.Delay(optionsSnapshot.Value.RefreshInterval!.Value,
-                cancellation);
-        }
-    }
-
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _cancellationTokenSource = new CancellationTokenSource();
-        _ = RunAsync(_cancellationTokenSource.Token);
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _cancellationTokenSource?.Cancel();
-        return Task.CompletedTask;
+        var renderer = serviceProvider.GetRequiredService<MqttUrlRenderer>();
+        await renderer.RenderUrlAndPublish();
     }
 }
