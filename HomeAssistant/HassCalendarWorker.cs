@@ -8,7 +8,7 @@ namespace DisplayUtil.HomeAssistant;
 
 public class HassCalendarWorker(IHomeAssistantConnection client)
 {
-    public async Task FetchAsync(CancellationToken cancellation)
+    public async Task<HassEvent[]?> FetchAsync(CancellationToken cancellation)
     {
         var command = new GetEventsPayload
         {
@@ -18,14 +18,18 @@ public class HassCalendarWorker(IHomeAssistantConnection client)
             },
             Target = new HassTarget
             {
-                EntityIds = ["calendar.jenin_tim"]
+                EntityIds = [
+                    "calendar.jenin_tim",
+                    "calendar.it_event",
+                    "calendar.th_koln"
+                ]
             }
         };
 
         var response = await client.SendCommandAndReturnResponseAsync
             <GetEventsPayload, GetEventsResponse>(command, cancellation);
 
-        _ = 1;
+        return response?.Events?.ToArray();
     }
 
 }
@@ -39,14 +43,25 @@ internal record GetEventsPayload : CommandMessage
 
     [JsonPropertyName("domain")] public string Domain => "calendar";
 
-    [JsonPropertyName("service")] public string Service => "list_events";
+    [JsonPropertyName("service")] public string Service => "get_events";
 
     [JsonPropertyName("service_data")] public object? ServiceData { get; init; }
 
     [JsonPropertyName("target")] public HassTarget? Target { get; init; }
+
+    [JsonPropertyName("return_response")] public bool ReturnResponse => true;
 }
 
 internal record GetEventsResponse : CommandMessage
+{
+    [JsonPropertyName("response")] public Dictionary<string, HassEvents> Response { get; init; }
+
+    public IEnumerable<HassEvent> Events => Response.Values
+        .SelectMany(e => e.Event)
+        .OrderBy(e => e.Start);
+}
+
+public record HassEvents
 {
     [JsonPropertyName("events")] public HassEvent[] Event { get; init; } = null!;
 }
