@@ -16,7 +16,7 @@
     end }}
 
 <Screen Width="480" Height="800">
-    <Defaults TextSize="40" IconHeight="40" />
+    <Defaults TextSize="50" IconHeight="50" />
     <Flexbox Direction="Vertical">
 
         <!-- Header Bar -->
