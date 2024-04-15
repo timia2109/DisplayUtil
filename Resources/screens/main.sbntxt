@@ -51,14 +51,6 @@
 
         {{ items += timer }}
 
-            {{ for appointment in appointments }}
-                <VBox>
-                    <Text Content="{{ appointment.start | date.to_string '%x %X' }}" />
-                    <Text Content="{{appointment.summary}}" />
-                </VBox>
-            {{ end }}
-        
-
         <Margin All="1" />
     </Flexbox>
 </Screen>
