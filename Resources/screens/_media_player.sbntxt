@@ -14,7 +14,7 @@
             end
         }}
         <VBox Gap="2">
-            <Defaults TextSize="30" IconHeight="30" />
+            
             <Border Y="2" />
             <Padding All="2" />
 

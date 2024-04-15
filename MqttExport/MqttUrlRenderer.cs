@@ -21,11 +21,8 @@ public class MqttUrlRenderer(
             ? providerId
             : providerId[0..query];
 
-        var uriBuilder = new UriBuilder
+        var uriBuilder = new UriBuilder(settings.ServerHostName!)
         {
-            Port = 80,
-            Scheme = "http",
-            Host = settings.ServerHostName,
             Path = EspUtilitiesInitExtension.CompressedImageRoute
         };
 
