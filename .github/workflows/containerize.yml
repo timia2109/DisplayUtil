@@ -10,23 +10,26 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+        defaults:
+            run:
+                working-directory: ./DisplayUtil
         steps:
             - uses: actions/checkout@v4
             - name: Setup .NET
-              uses: actions/setup-dotnet@v3.2.0
+              uses: actions/setup-dotnet@v4
               with:
                   dotnet-version: "8"
                   cache: true
-                  cache-dependency-path: DisplayUtil.csproj
+                  cache-dependency-path: DisplayUtil/DisplayUtil.csproj
             - name: Restore NuGet dependencies
               run: dotnet restore --locked-mode
             - name: Build server
               run: dotnet publish -c Release --no-restore
             - name: Upload a Build Artifact
-              uses: actions/upload-artifact@v3.1.3
+              uses: actions/upload-artifact@v4
               with:
                   name: backend-artifacts
-                  path: bin/Release/net8.0/publish/
+                  path: DisplayUtil/bin/Release/net8.0/publish/
     build-docker-image:
         runs-on: ubuntu-22.04
         permissions:
@@ -37,23 +40,23 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Download build artifacts
-              uses: actions/download-artifact@v3.0.2
+              uses: actions/download-artifact@v4
               with:
                   name: backend-artifacts
                   path: build/
             - name: Docker Login
-              uses: docker/login-action@v3.0.0
+              uses: docker/login-action@v3
               with:
                   registry: ${{ env.REGISTRY }}
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
             - name: Docker Metadata action
               id: docker_metadata
-              uses: docker/metadata-action@v5.0.0
+              uses: docker/metadata-action@v5
               with:
                   images: ${{ env.REGISTRY }}/${{ github.repository }}
             - name: Build and push Docker image
-              uses: docker/build-push-action@v5.1.0
+              uses: docker/build-push-action@v5
               with:
                   context: .
                   push: true

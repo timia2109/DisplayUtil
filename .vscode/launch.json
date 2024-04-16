@@ -4,7 +4,7 @@
             "name": "C#: DisplayUtil [https]",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\DisplayUtil.csproj",
+            "projectPath": "${workspaceFolder}\\DisplayUtil\\DisplayUtil.csproj",
             "launchConfigurationId": "TargetFramework=;https",
             "logging": {
                 "moduleLoad": false
