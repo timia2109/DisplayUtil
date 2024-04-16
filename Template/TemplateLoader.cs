@@ -1,3 +1,4 @@
+using DisplayUtil.Utils;
 using Microsoft.Extensions.Options;
 using Scriban;
 using Scriban.Parsing;
@@ -5,34 +6,21 @@ using Scriban.Runtime;
 
 namespace DisplayUtil.Template;
 
-public class TemplateLoader : ITemplateLoader
+public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoader
 {
-    private readonly string[] _searchPathes;
     private static readonly string[] _allowedExtensions = [
         "sbntxt", "sbnxml"
     ];
 
-    public TemplateLoader(IOptions<TemplateSettings> options)
-    {
-        var settings = options.Value;
-
-        _searchPathes = settings.Paths
-            .OrderBy(k => k.Key)
-            .Select(v => Path.GetFullPath(v.Value))
-            .ToArray();
-    }
-
     public string GetPath(string templateName)
     {
-        var fileNames = _allowedExtensions
-            .Select(e => $"{templateName}.{e}");
+        var (domain, item) = templateName.SpiltDomain(null);
 
-        var paths = fileNames
-            .SelectMany(f =>
-                _searchPathes.Select(p => Path.Combine(p, f))
-            );
+        var directory = options.Value.Paths[domain];
 
-        var path = paths
+        var path = _allowedExtensions
+            .Select(e => $"{item}.{e}")
+            .Select(f => Path.Combine(directory, f))
             .First(File.Exists);
 
         return path;
