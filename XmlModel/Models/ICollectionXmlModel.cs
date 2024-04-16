@@ -48,7 +48,7 @@ public abstract class ICollectionXmlModel : IXmlModel
 
     protected override ElementCollection FillWithChildren(
         ElementCollection collection,
-        FaIconDrawer iconDrawer,
+        IconDrawer iconDrawer,
         FontProvider fontProvider,
         DefaultDefinition defaults)
     {

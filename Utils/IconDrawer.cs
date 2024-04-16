@@ -4,9 +4,9 @@ using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
 
 namespace DisplayUtil.Utils;
 
-public partial class FaIconDrawer(
+public partial class IconDrawer(
     IconPathProvider iconPathProvider,
-    ILogger<FaIconDrawer> logger
+    ILogger<IconDrawer> logger
 ) : IDisposable
 {
     private readonly ILogger _logger = logger;

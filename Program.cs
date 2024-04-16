@@ -28,7 +28,7 @@ builder.Services.AddScoped<TemplateRenderer>()
     .AddScoped<TemplateContextProvider>()
     .AddSingleton<ITemplateExtender, UtilTemplateExtender>();
 
-builder.Services.AddTransient<FaIconDrawer>();
+builder.Services.AddTransient<IconDrawer>();
 
 builder.Services.AddScreenProvider(o => o
     .AddScribanFiles()

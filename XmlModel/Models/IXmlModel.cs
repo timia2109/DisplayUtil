@@ -21,7 +21,7 @@ public abstract class IXmlModel
     /// <param name="fontProvider">Font Provider</param>
     /// <param name="defaults">Defaults for the children</param>
     /// <returns>Element</returns>
-    public abstract Element AsElement(FaIconDrawer iconDrawer,
+    public abstract Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider,
         DefaultDefinition defaults
     );
@@ -35,7 +35,7 @@ public abstract class IXmlModel
     /// <returns>The ElementCollection</returns>
     protected virtual ElementCollection FillWithChildren(
         ElementCollection collection,
-        FaIconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
+        IconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
     )
     {
         collection.Append(

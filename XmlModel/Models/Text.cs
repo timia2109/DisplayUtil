@@ -20,7 +20,7 @@ public class Text : IXmlModel
     [XmlAttribute]
     public int Size;
 
-    public override Element AsElement(FaIconDrawer iconDrawer,
+    public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
     {
         var font = fontProvider.GetFont(Font ?? defaults.Font!);

@@ -20,7 +20,7 @@ public class Flexbox : ICollectionXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(FaIconDrawer iconDrawer,
+    public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
     {
         return FillWithChildren(
