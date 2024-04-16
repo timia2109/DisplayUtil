@@ -3,7 +3,7 @@
 DisplayUtil is a C# web server for creating status screens for an ESP32 with an 
 epaper display.
 
-## Features
+## Features (of server)
 
  - Render an XML template with [Scriban](https://github.com/scriban/scriban)
  - Applying an XML document to a layout system
@@ -14,7 +14,6 @@ epaper display.
 
 Render an image where I have massive power and submit it to the display.
 Since I'm using ESPHome, I send a URL over MQTT and the ESP fetches the image over HTTP.
-over HTTP.
 
 ## Project structure
 
@@ -28,3 +27,5 @@ over HTTP.
  - DisplayUtil/Template: Utilities for handling Scriban templates and their rendering
  - DisplayUtil/Utils: various utils
  - DisplayUtil/XmlModel: Deserialization of XML content
+  
+## Setup
