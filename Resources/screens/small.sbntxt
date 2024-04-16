@@ -1,6 +1,0 @@
-<Screen Width="64" Height="32">
-    <Text 
-        Content="219" 
-        Font="ProductSansBold" 
-        Size="32" />
-</Screen>

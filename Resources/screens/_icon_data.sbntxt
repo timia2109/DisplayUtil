@@ -1,8 +1,0 @@
-{{ func icon_data(sIconName, sText) }}
-    {{ if (sText | string.strip | string.size ) > 0}}
-        <HBox Gap="2">
-            <Icon IconName="{{sIconName}}" />
-            <Text Content="{{sText | html.escape}}" />
-        </HBox>
-    {{ end }}
-{{ end }}
