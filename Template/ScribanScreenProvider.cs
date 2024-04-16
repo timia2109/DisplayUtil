@@ -15,7 +15,7 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
 {
     private static readonly ObjectFactory<ScribanScreenProvider>
         factory = ActivatorUtilities.CreateFactory<ScribanScreenProvider>([
-            typeof(string), typeof(string)
+            typeof(string)
         ]);
 
     public IScreenProvider? GetScreenProvider(string id)
@@ -24,20 +24,19 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
 
         if (!File.Exists(path)) return null;
 
-        return factory(serviceProvider, [path, id]);
+        return factory(serviceProvider, [path]);
     }
 }
 
 internal class ScribanScreenProvider(
     TemplateRenderer renderer,
     XmlLayoutDeserializer layoutDeserializer,
-    string path,
-    string templateName)
+    string path)
     : IScreenProvider
 {
     public async Task<SKBitmap> GetImageAsync()
     {
-        using var xml = await renderer.RenderToStreamAsync(path, templateName);
+        using var xml = await renderer.RenderToStreamAsync(path);
         using var result = layoutDeserializer.DeserializeXml(xml);
 
         return DrawManager.Draw(

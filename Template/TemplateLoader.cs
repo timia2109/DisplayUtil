@@ -23,7 +23,7 @@ public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoade
             .Select(f => Path.Combine(directory, f))
             .First(File.Exists);
 
-        return path;
+        return Path.GetFullPath(path);
     }
 
     public string GetPath(
