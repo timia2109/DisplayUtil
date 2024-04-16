@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
+using DisplayUtil.Providers;
 using DisplayUtil.Utils;
 
 namespace DisplayUtil.XmlModel.Models;
@@ -19,7 +20,7 @@ public class Flexbox : ICollectionXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(FaIconDrawer iconDrawer,
+    public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)
     {
         return FillWithChildren(

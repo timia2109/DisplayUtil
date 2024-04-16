@@ -29,7 +29,6 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
 }
 
 internal class ScribanScreenProvider(
-    TemplateLoader templateLoader,
     TemplateRenderer renderer,
     XmlLayoutDeserializer layoutDeserializer,
     string path)

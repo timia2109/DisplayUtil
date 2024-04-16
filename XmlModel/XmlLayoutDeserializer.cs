@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
+using DisplayUtil.Providers;
 using DisplayUtil.Utils;
 using DisplayUtil.XmlModel.Models;
 using SkiaSharp;
@@ -8,11 +9,11 @@ namespace DisplayUtil.XmlModel;
 
 public class XmlLayoutDeserializer
 {
-    private readonly FaIconDrawer _iconDrawer;
+    private readonly IconDrawer _iconDrawer;
     private readonly FontProvider _fontProvider;
     private readonly XmlSerializer _serializer;
 
-    public XmlLayoutDeserializer(FaIconDrawer iconDrawer, FontProvider fontProvider)
+    public XmlLayoutDeserializer(IconDrawer iconDrawer, FontProvider fontProvider)
     {
         var subtypes = GetType().Assembly
             .DefinedTypes

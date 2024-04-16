@@ -27,7 +27,7 @@ public class MqttUrlRenderer(
         };
 
         uriBuilder.Path = EspUtilitiesInitExtension.CompressedImageRoute
-            .Replace("{providerId}", providerPath);
+            .Replace("{providerId}", Uri.EscapeDataString(providerPath));
 
         if (query != -1)
             uriBuilder.Query = providerId[query..];

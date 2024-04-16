@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
+using DisplayUtil.Providers;
 using DisplayUtil.Utils;
 
 namespace DisplayUtil.XmlModel.Models;
@@ -47,7 +48,7 @@ public abstract class ICollectionXmlModel : IXmlModel
 
     protected override ElementCollection FillWithChildren(
         ElementCollection collection,
-        FaIconDrawer iconDrawer,
+        IconDrawer iconDrawer,
         FontProvider fontProvider,
         DefaultDefinition defaults)
     {

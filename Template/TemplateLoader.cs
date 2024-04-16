@@ -1,18 +1,29 @@
+using DisplayUtil.Utils;
+using Microsoft.Extensions.Options;
 using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
 
 namespace DisplayUtil.Template;
 
-public class TemplateLoader : ITemplateLoader
+public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoader
 {
-    private const string TemplatePath = "./Resources/screens";
+    private static readonly string[] _allowedExtensions = [
+        "sbntxt", "sbnxml"
+    ];
 
     public string GetPath(string templateName)
     {
-        return Path.GetFullPath(
-            Path.Combine(TemplatePath, $"{templateName}.sbntxt")
-        );
+        var (domain, item) = templateName.SpiltDomain(null);
+
+        var directory = options.Value.Paths[domain];
+
+        var path = _allowedExtensions
+            .Select(e => $"{item}.{e}")
+            .Select(f => Path.Combine(directory, f))
+            .First(File.Exists);
+
+        return Path.GetFullPath(path);
     }
 
     public string GetPath(
