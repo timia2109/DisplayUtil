@@ -14,4 +14,17 @@ public record ProviderSettings
     /// Path where Google Fonts gets cached to
     /// </summary>
     public string GoogleFontsCachePath { get; init; } = null!;
+
+    /// <summary>
+    /// Specifies the available icons
+    /// Key = Protocol
+    /// Value = Path to SVG Folder
+    /// </summary>
+    public IReadOnlyDictionary<string, string> Icons { get; init; }
+        = new Dictionary<string, string>();
+
+    /// <summary>
+    /// Defines the default Icons
+    /// </summary>
+    public string? DefaultIcons { get; init; }
 }

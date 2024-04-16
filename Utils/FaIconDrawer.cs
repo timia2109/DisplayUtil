@@ -1,9 +1,13 @@
+using DisplayUtil.Providers;
 using SkiaSharp;
 using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
 
 namespace DisplayUtil.Utils;
 
-public partial class FaIconDrawer(ILogger<FaIconDrawer> logger) : IDisposable
+public partial class FaIconDrawer(
+    IconPathProvider iconPathProvider,
+    ILogger<FaIconDrawer> logger
+) : IDisposable
 {
     private readonly ILogger _logger = logger;
     private Dictionary<CacheKey, CacheEntry> _cache = new();
@@ -51,7 +55,7 @@ public partial class FaIconDrawer(ILogger<FaIconDrawer> logger) : IDisposable
     private CacheEntry? CreateIcon(string iconName, int height)
     {
         LogCreating(iconName, height);
-        var iconPath = $"./Resources/svgs/light/{iconName}.svg";
+        var iconPath = iconPathProvider.ResolvePath(iconName);
 
         if (!File.Exists(iconPath))
         {

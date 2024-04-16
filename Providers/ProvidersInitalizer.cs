@@ -11,7 +11,9 @@ public static class ProvidersInitalizer
     {
         builder.ConfigureAndGet<ProviderSettings>("Providers");
 
-        builder.Services.AddSingleton(FontProvider.CreateFontProvider);
+        builder.Services
+            .AddSingleton(FontProvider.CreateFontProvider)
+            .AddSingleton<IconPathProvider>();
 
         return builder;
     }
