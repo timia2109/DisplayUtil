@@ -16,19 +16,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder
     .AddProviders()
+    .AddTemplates()
     .AddHassSupport()
     .AddMqttWriter()
     .AddEspUtilities();
 
 builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
-    .AddSingleton<TemplateLoader>();
-
-builder.Services.AddScoped<TemplateRenderer>()
-    .AddScoped<TemplateContextProvider>()
-    .AddSingleton<ITemplateExtender, UtilTemplateExtender>();
-
-builder.Services.AddTransient<IconDrawer>();
+    .AddTransient<IconDrawer>();
 
 builder.Services.AddScreenProvider(o => o
     .AddScribanFiles()
