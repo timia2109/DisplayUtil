@@ -1,8 +1,7 @@
-using System.Text;
-using DisplayUtil;
 using DisplayUtil.EspUtilities;
 using DisplayUtil.HomeAssistant;
 using DisplayUtil.MqttExport;
+using DisplayUtil.Providers;
 using DisplayUtil.Scenes;
 using DisplayUtil.Template;
 using DisplayUtil.Utils;
@@ -16,11 +15,12 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder
+    .AddProviders()
     .AddHassSupport()
     .AddMqttWriter()
     .AddEspUtilities();
 
-builder.Services.AddSingleton(FontProvider.Create())
+builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
     .AddSingleton<TemplateLoader>();
 
