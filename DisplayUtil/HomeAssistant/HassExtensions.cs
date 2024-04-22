@@ -21,17 +21,8 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>();
-
-        // Hack: Initialize Hass Model
-        var extensionType = typeof(DependencyInjectionSetup);
-        var methodInfo = extensionType.GetMethod("AddScopedHaContext",
-            System.Reflection.BindingFlags.NonPublic
-            | System.Reflection.BindingFlags.Static
-            )
-            ?? throw new Exception("Error injecting Hass Model");
-
-        methodInfo.Invoke(null, [builder.Services]);
+            .AddScoped<ITemplateExtender, HassTemplateExtender>()
+            .AddScopedHaContext();
 
         // Background Connection
         builder.Services.AddHostedService<HassHostedService>();
