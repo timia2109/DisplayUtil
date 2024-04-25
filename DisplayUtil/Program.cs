@@ -1,3 +1,4 @@
+using DisplayUtil.EcmaScript;
 using DisplayUtil.EspUtilities;
 using DisplayUtil.HomeAssistant;
 using DisplayUtil.MqttExport;
@@ -19,7 +20,8 @@ builder
     .AddTemplates()
     .AddHassSupport()
     .AddMqttWriter()
-    .AddEspUtilities();
+    .AddEspUtilities()
+    .AddEcmaScript();
 
 builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
