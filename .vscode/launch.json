@@ -1,11 +1,17 @@
 {
     "configurations": [
         {
-            "name": "C#: DisplayUtil [https]",
-            "type": "dotnet",
+            "name": "C#: DisplayUtil Server",
+            "type": "coreclr",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\DisplayUtil\\DisplayUtil.csproj",
-            "launchConfigurationId": "TargetFramework=;https",
+            "preLaunchTask": "build_webserver",
+            "program": "${workspaceFolder}/DisplayUtil/bin/Debug/net8.0/DisplayUtil.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DisplayUtil",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
             "logging": {
                 "moduleLoad": false
             }
