@@ -12,6 +12,7 @@
     <PackageReference Include="MQTTnet" Version="4.3.3.952" />
     <PackageReference Include="NetDaemon.Client" Version="24.16.0" />
     <PackageReference Include="NetDaemon.HassModel" Version="24.16.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
     <PackageReference Include="Scriban" Version="5.9.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
