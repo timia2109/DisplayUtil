@@ -26,16 +26,6 @@ public record MqttSettings
     public string? Topic { get; init; }
 
     /// <summary>
-    /// Template used, to detect the MQTT Template
-    /// </summary>
-    public string? ScreenDetectTemplate { get; init; }
-
-    /// <summary>
-    /// Interval for rerendering the Template
-    /// </summary>
-    public TimeSpan? RefreshInterval { get; init; }
-
-    /// <summary>
     /// Should the message only be updated, when the value changes?
     /// </summary>
     public bool IncrementalUpdate { get; init; }
