@@ -36,12 +36,12 @@ public static class HassExtension
         builder.Services
             .AddSingleton<HassAppointmentStore>()
             .AddSingleton<ITemplateExtender>(s => s.GetRequiredService<HassAppointmentStore>())
-            .AddScoped<HassCalendarWorker>();
+            .AddScoped<HassCalendarImportJob>();
 
         builder.Services.Configure<QuartzOptions>(o =>
         {
-            var jobKey = new JobKey(nameof(HassCalendarWorker));
-            o.AddJob<HassCalendarWorker>(j => j.WithIdentity(jobKey));
+            var jobKey = new JobKey(nameof(HassCalendarImportJob));
+            o.AddJob<HassCalendarImportJob>(j => j.WithIdentity(jobKey));
 
             o.AddTrigger(t => t
                 .ForJob(jobKey)

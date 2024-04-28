@@ -6,11 +6,11 @@ using Quartz;
 
 namespace DisplayUtil.HomeAssistant.Calendar;
 
-public partial class HassCalendarWorker(
+public partial class HassCalendarImportJob(
     IHomeAssistantConnection client,
     HassAppointmentStore store,
     IOptions<HassCalendarSettings> options,
-    ILogger<HassCalendarWorker> logger
+    ILogger<HassCalendarImportJob> logger
 ) : IJob
 {
     private readonly ILogger _logger = logger;
