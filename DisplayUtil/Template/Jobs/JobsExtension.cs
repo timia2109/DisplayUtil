@@ -26,6 +26,7 @@ internal static class JobsExtension
                 );
 
                 o.AddTrigger(t => t
+                    .ForJob(jobKey)
                     .WithCronSchedule(setting.Cron)
                     .WithSecurityTimeout()
                     .WithIdentity($"{key}_schedule", KeyGroup)
