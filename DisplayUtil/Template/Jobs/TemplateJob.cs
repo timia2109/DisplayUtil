@@ -8,7 +8,7 @@ public class TemplateJob(TemplateRenderer renderer) : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var templateNameObject = context.Get(TemplateNameField);
+        var templateNameObject = context.MergedJobDataMap.Get(TemplateNameField);
         if (templateNameObject is not string templateName)
             throw new Exception("Unable to parse Template Name");
 
