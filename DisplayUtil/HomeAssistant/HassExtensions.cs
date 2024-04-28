@@ -45,7 +45,7 @@ public static class HassExtension
 
             o.AddTrigger(t => t
                 .ForJob(jobKey)
-                .StartAt(DateTime.Now + TimeSpan.FromSeconds(30))
+                .WithSecurityTimeout()
                 .WithSimpleSchedule(s => s.WithIntervalInHours(1))
             );
         });
