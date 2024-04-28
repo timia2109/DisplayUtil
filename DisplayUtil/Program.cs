@@ -26,7 +26,10 @@ builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
     .AddTransient<IconDrawer>()
     .AddQuartz()
-    .AddQuartzHostedService();
+    .AddQuartzHostedService(options =>
+    {
+        options.WaitForJobsToComplete = true;
+    });
 
 builder.Services.AddScreenProvider(o => o
     .AddScribanFiles()
