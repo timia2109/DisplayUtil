@@ -4,6 +4,7 @@ using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
 using NetDaemon.HassModel;
+using Quartz;
 
 namespace DisplayUtil.HomeAssistant;
 
@@ -35,8 +36,19 @@ public static class HassExtension
         builder.Services
             .AddSingleton<HassAppointmentStore>()
             .AddSingleton<ITemplateExtender>(s => s.GetRequiredService<HassAppointmentStore>())
-            .AddScoped<HassCalendarWorker>()
-            .AddHostedService<HassCalendarJob>();
+            .AddScoped<HassCalendarWorker>();
+
+        builder.Services.Configure<QuartzOptions>(o =>
+        {
+            var jobKey = new JobKey(nameof(HassCalendarWorker));
+            o.AddJob<HassCalendarWorker>(j => j.WithIdentity(jobKey));
+
+            o.AddTrigger(t => t
+                .ForJob(jobKey)
+                .StartAt(DateTime.Now + TimeSpan.FromSeconds(30))
+                .WithSimpleSchedule(s => s.WithIntervalInHours(1))
+            );
+        });
 
         return builder;
     }

@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using NetDaemon.Client;
 using NetDaemon.Client.HomeAssistant.Model;
+using Quartz;
 
 namespace DisplayUtil.HomeAssistant.Calendar;
 
@@ -10,7 +11,7 @@ public partial class HassCalendarWorker(
     HassAppointmentStore store,
     IOptions<HassCalendarSettings> options,
     ILogger<HassCalendarWorker> logger
-)
+) : IJob
 {
     private readonly ILogger _logger = logger;
 
@@ -20,7 +21,7 @@ public partial class HassCalendarWorker(
         store.Appointments = appointments ?? [];
     }
 
-    public async Task<HassEvent[]?> FetchAsync(CancellationToken cancellation)
+    private async Task<HassEvent[]?> FetchAsync(CancellationToken cancellation)
     {
         LogFetch();
 
@@ -65,6 +66,10 @@ public partial class HassCalendarWorker(
     [LoggerMessage(LogLevel.Warning, "Error fetching appointments")]
     private partial void LogError(Exception e);
 
+    public Task Execute(IJobExecutionContext context)
+    {
+        return RefreshAsync();
+    }
 }
 
 internal record GetEventsPayload : CommandMessage
