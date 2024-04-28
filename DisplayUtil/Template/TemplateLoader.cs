@@ -9,7 +9,7 @@ namespace DisplayUtil.Template;
 public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoader
 {
     private static readonly string[] _allowedExtensions = [
-        "sbntxt", "sbnxml"
+        "sbntxt", "sbnxml", "sbn"
     ];
 
     public string GetPath(string templateName)

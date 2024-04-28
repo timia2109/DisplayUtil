@@ -4,6 +4,7 @@ using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
 using NetDaemon.HassModel;
+using Quartz;
 
 namespace DisplayUtil.HomeAssistant;
 
@@ -21,17 +22,8 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>();
-
-        // Hack: Initialize Hass Model
-        var extensionType = typeof(DependencyInjectionSetup);
-        var methodInfo = extensionType.GetMethod("AddScopedHaContext",
-            System.Reflection.BindingFlags.NonPublic
-            | System.Reflection.BindingFlags.Static
-            )
-            ?? throw new Exception("Error injecting Hass Model");
-
-        methodInfo.Invoke(null, [builder.Services]);
+            .AddScoped<ITemplateExtender, HassTemplateExtender>()
+            .AddScopedHaContext();
 
         // Background Connection
         builder.Services.AddHostedService<HassHostedService>();
@@ -44,8 +36,19 @@ public static class HassExtension
         builder.Services
             .AddSingleton<HassAppointmentStore>()
             .AddSingleton<ITemplateExtender>(s => s.GetRequiredService<HassAppointmentStore>())
-            .AddScoped<HassCalendarWorker>()
-            .AddHostedService<HassCalendarJob>();
+            .AddScoped<HassCalendarImportJob>();
+
+        builder.Services.Configure<QuartzOptions>(o =>
+        {
+            var jobKey = new JobKey(nameof(HassCalendarImportJob));
+            o.AddJob<HassCalendarImportJob>(j => j.WithIdentity(jobKey));
+
+            o.AddTrigger(t => t
+                .ForJob(jobKey)
+                .WithSecurityTimeout()
+                .WithSimpleSchedule(s => s.WithIntervalInHours(1))
+            );
+        });
 
         return builder;
     }

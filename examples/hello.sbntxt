@@ -1,0 +1,11 @@
+<Screen Width="256" Height="128">
+    <Defaults TextSize="40" IconHeight="40" Font="Roboto400" />
+    <Flexbox Direction="Vertical">
+
+        <Text Content="Hello World" FontSize="60" />
+
+        <Text Content="at {{ date.to_string date.now "%H:%M" }}" />
+
+        <Margin All="1" />
+    </Flexbox>
+</Screen>

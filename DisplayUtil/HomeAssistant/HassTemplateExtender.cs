@@ -15,7 +15,7 @@ internal class HassTemplateExtender(IHaContext haContext)
         hassObject.Import("get_state", GetState);
         hassObject.Import("get_attribute", GetAttribute);
         hassObject.Import("get_float_state", GetFloatState);
-        hassObject.Import("get_datetime", GetDateTime);
+        hassObject.Import("get_datetime_state", GetDateTime);
         context.Add("hass", hassObject);
     }
 
