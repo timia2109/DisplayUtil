@@ -1,5 +1,7 @@
 # DisplayUtil
 
+**This repo is currently work in progress**
+
 DisplayUtil is a C# web server for creating status screens for an ESP32 with an
 epaper display.
 
