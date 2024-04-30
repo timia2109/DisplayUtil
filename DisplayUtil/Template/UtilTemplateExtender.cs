@@ -18,7 +18,11 @@ internal class UtilTemplateExtender : ITemplateExtender
     public static float ToFloat(string? content)
     {
         if (content == null) return 0;
-        return float.Parse(content, CultureInfo.InvariantCulture);
+        if (float.TryParse(content, CultureInfo.InvariantCulture, out var value))
+        {
+            return value;
+        }
+        return 0;
     }
 
     public static string TimespanToString(TimeSpan timeSpan, string format)

@@ -7,6 +7,7 @@ using DisplayUtil.Scenes;
 using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using DisplayUtil.XmlModel;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -25,7 +26,12 @@ builder
 
 builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
-    .AddTransient<IconDrawer>();
+    .AddTransient<IconDrawer>()
+    .AddQuartz()
+    .AddQuartzHostedService(options =>
+    {
+        options.WaitForJobsToComplete = true;
+    });
 
 builder.Services.AddScreenProvider(o => o
     .AddScribanFiles()
@@ -46,8 +52,7 @@ app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository r
 .WithName("Preview Image")
 .WithOpenApi();
 
-app.UseEspUtilities()
-    .UseMqttWriter();
+app.UseEspUtilities();
 app.UseStaticFiles();
 
 app.Run();

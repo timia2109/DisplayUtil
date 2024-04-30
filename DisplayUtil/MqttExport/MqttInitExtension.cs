@@ -1,3 +1,4 @@
+using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using MQTTnet;
 using MQTTnet.Client;
@@ -19,12 +20,7 @@ public static class MqttInitExtension
         else
             builder.Services.AddSingleton<MqttExporter>();
 
-        if (
-            settings.ScreenDetectTemplate is null
-            || settings.RefreshInterval is null
-        ) return builder;
-
-        builder.Services.AddHostedService<MqttExportJob>();
+        builder.Services.AddScoped<ITemplateExtender, MqttTemplateExtender>();
 
         return builder;
     }
@@ -60,24 +56,5 @@ public static class MqttInitExtension
             .AddScoped<MqttUrlRenderer>();
 
         return true;
-    }
-
-    public static WebApplication UseMqttWriter(this WebApplication app)
-    {
-        if (app.Services.GetService<MqttExporter>() is null) return app;
-
-        app.MapGet("/mqtt/uri", async (MqttUrlRenderer renderer) =>
-        {
-            return Results.Ok(await renderer.GetMqttTemplateUriAsync());
-        })
-        .WithName("Get MQTT URI")
-        .WithOpenApi();
-
-        app.MapGet("/mqtt/template", async (MqttUrlRenderer renderer)
-            => Results.Ok(await renderer.GetMqttTemplateAsync()))
-        .WithName("Get MQTT Template")
-        .WithOpenApi();
-
-        return app;
     }
 }
