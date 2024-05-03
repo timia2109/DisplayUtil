@@ -16,7 +16,12 @@ public enum EnrichScope
     /// <summary>
     /// This template will used for Providing an other template
     /// </summary>
-    TemplateProvider
+    TemplateProvider,
+
+    /// <summary>
+    /// This template will used as Job
+    /// </summary>
+    Job
 }
 
 /// <summary>
