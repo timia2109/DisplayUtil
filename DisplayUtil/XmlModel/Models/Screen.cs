@@ -19,11 +19,10 @@ public class Screen : IXmlModel
     [XmlAttribute]
     public int Height;
 
-    public override Element AsElement(IconDrawer iconDrawer,
-        FontProvider fontProvider, DefaultDefinition defaults)
+    public override Element AsElement(DefaultDefinition defaults)
     {
         return Children.First().AsElement(
-            iconDrawer, fontProvider, defaults.MergeWith(Defaults)
+            defaults.MergeWith(Defaults)
         );
     }
 }

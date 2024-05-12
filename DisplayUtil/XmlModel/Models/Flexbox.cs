@@ -20,12 +20,16 @@ public class Flexbox : ICollectionXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(IconDrawer iconDrawer,
-        FontProvider fontProvider, DefaultDefinition defaults)
+    public override Element AsElement(DefaultDefinition defaults)
     {
         return FillWithChildren(
-            new FlexboxElement(Gap, Direction, JustifyContent, AlignItems),
-            iconDrawer, fontProvider,
+            new FlexboxElement
+            {
+                Gap = Gap,
+                Direction = Direction,
+                JustifyContent = JustifyContent,
+                AlignItems = AlignItems
+            },
             defaults.MergeWith(Defaults)
         );
     }

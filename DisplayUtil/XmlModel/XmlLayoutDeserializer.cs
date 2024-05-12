@@ -9,11 +9,9 @@ namespace DisplayUtil.XmlModel;
 
 public class XmlLayoutDeserializer
 {
-    private readonly IconDrawer _iconDrawer;
-    private readonly FontProvider _fontProvider;
     private readonly XmlSerializer _serializer;
 
-    public XmlLayoutDeserializer(IconDrawer iconDrawer, FontProvider fontProvider)
+    public XmlLayoutDeserializer()
     {
         var subtypes = GetType().Assembly
             .DefinedTypes
@@ -35,8 +33,6 @@ public class XmlLayoutDeserializer
         attrOverrides.Add(typeof(IXmlModel), nameof(IXmlModel.Children), attrs);
 
         _serializer = new XmlSerializer(typeof(Screen), attrOverrides);
-        _iconDrawer = iconDrawer;
-        _fontProvider = fontProvider;
     }
 
     public SerializingResult DeserializeXml(Stream xmlStream)
@@ -47,7 +43,7 @@ public class XmlLayoutDeserializer
         }
 
         return new(
-            model.AsElement(_iconDrawer, _fontProvider, DefaultDefinition.Default),
+            model.AsElement(DefaultDefinition.Default),
             new SKSize(model.Width, model.Height)
         );
     }

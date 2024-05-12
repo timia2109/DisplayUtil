@@ -12,10 +12,14 @@ public class HBox : ICollectionXmlModel
     [XmlAttribute]
     public int Gap = 0;
 
-    public override Element AsElement(IconDrawer iconDrawer,
-        FontProvider fontProvider, DefaultDefinition defaults)
+    public override Element AsElement(DefaultDefinition defaults)
     {
-        return FillWithChildren(new HBoxElement(Gap), iconDrawer, fontProvider,
-            defaults.MergeWith(Defaults));
+        return FillWithChildren(
+            new HBoxElement
+            {
+                Gap = Gap,
+            },
+            defaults.MergeWith(Defaults)
+        );
     }
 }

@@ -17,29 +17,21 @@ public abstract class IXmlModel
     /// <summary>
     /// Returns the corrosponding Element
     /// </summary>
-    /// <param name="iconDrawer">Icon Drawer</param>
-    /// <param name="fontProvider">Font Provider</param>
     /// <param name="defaults">Defaults for the children</param>
     /// <returns>Element</returns>
-    public abstract Element AsElement(IconDrawer iconDrawer,
-        FontProvider fontProvider,
-        DefaultDefinition defaults
-    );
+    public abstract Element AsElement(DefaultDefinition defaults);
 
     /// <summary>
     /// Fills the <see cref="ElementCollection"/> with the children of this Model
     /// </summary>
     /// <param name="collection">ELement Collection</param>
-    /// <param name="iconDrawer">Icon Drawer</param>
-    /// <param name="fontProvider">FontProvider</param>
     /// <returns>The ElementCollection</returns>
     protected virtual ElementCollection FillWithChildren(
-        ElementCollection collection,
-        IconDrawer iconDrawer, FontProvider fontProvider, DefaultDefinition defaults
+        ElementCollection collection, DefaultDefinition defaults
     )
     {
         collection.Append(
-            Children.Select(e => e.AsElement(iconDrawer, fontProvider, defaults))
+            Children.Select(e => e.AsElement(defaults))
         );
         return collection;
     }

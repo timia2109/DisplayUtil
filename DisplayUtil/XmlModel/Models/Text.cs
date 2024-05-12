@@ -20,20 +20,13 @@ public class Text : IXmlModel
     [XmlAttribute]
     public int Size;
 
-    public override Element AsElement(IconDrawer iconDrawer,
-        FontProvider fontProvider, DefaultDefinition defaults)
+    public override Element AsElement(DefaultDefinition defaults)
     {
-        var font = fontProvider.GetFont(Font ?? defaults.Font!);
-
-        var paint = new SKPaint
+        return new TextElement
         {
-            IsAntialias = true,
-            TextSize = Size == 0 ? defaults.TextSize : Size,
-            Color = SKColors.Black,
-            Style = SKPaintStyle.Fill,
-            Typeface = font
+            Content = Content,
+            Font = Font ?? defaults.Font!,
+            Size = Size == 0 ? defaults.TextSize : Size
         };
-
-        return new TextElement(Content, paint);
     }
 }

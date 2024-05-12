@@ -48,12 +48,10 @@ public abstract class ICollectionXmlModel : IXmlModel
 
     protected override ElementCollection FillWithChildren(
         ElementCollection collection,
-        IconDrawer iconDrawer,
-        FontProvider fontProvider,
         DefaultDefinition defaults)
     {
         var collectionElement = base.FillWithChildren(
-            collection, iconDrawer, fontProvider, defaults);
+            collection, defaults);
 
         collectionElement.Margin = Margin.AsSiteSize();
         collectionElement.Border = Border.AsSiteSize();
