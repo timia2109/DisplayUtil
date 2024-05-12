@@ -1,39 +1,55 @@
+using DisplayUtil.Layouting;
 using DisplayUtil.Scenes;
 using DisplayUtil.Template;
+using DisplayUtil.XmlModel;
+using DisplayUtil.XmlModel.Models;
 using Esprima;
 using Esprima.Utils;
+using Jint;
+using Jint.Native.Function;
 using SkiaSharp;
 
 namespace DisplayUtil.EcmaScript;
 
-internal class EcmaScriptProvider : IScreenProvider
+internal class EcmaScriptProvider(
+    DrawManager drawManager,
+    Engine engine,
+    Function func) : IScreenProvider
 {
     private readonly JavaScriptParser _parser = new JsxParser();
 
     public Task<SKBitmap> GetImageAsync()
     {
-        var source = """
-            const a = 1+2;
-            export const render = () => (
-                <HBox>
-                    <VBox>
-                        <Text content="Hello World" />
-                        <Text content={`1+2=${a}`} />
-                    </VBox>
-                </HBox>
-            );
-        """;
+        var result = engine.Invoke(func);
+        var screen = result.AsInstance<Screen>()
+            ?? throw new ArgumentException("Module MUST return a Screen Instance");
 
-        var script = _parser.ParseModule(source);
-        return Task.FromResult(new SKBitmap(1, 1));
+        return Task.FromResult(
+            drawManager.Draw(
+                new SKSize(screen.Width, screen.Height),
+                screen.AsElement(DefaultDefinition.Default)
+            )
+        );
     }
 }
 
-internal class EcmaScriptScreenProviderRepo : IScreenProviderSource
+internal class EcmaScriptScreenProviderRepo(DrawManager drawManager, Engine engine) : IScreenProviderSource
 {
     public IScreenProvider? GetScreenProvider(string id)
     {
-        if (id == "ecma") return new EcmaScriptProvider();
-        return null;
+        try
+        {
+            var module = engine.Modules.Import(id);
+            if (module is null) return null;
+
+            if (module.Get("render") is not Function renderFunction) return null;
+
+            return new EcmaScriptProvider(drawManager, engine, renderFunction);
+        }
+        catch
+        {
+            return null;
+        }
+
     }
 }
