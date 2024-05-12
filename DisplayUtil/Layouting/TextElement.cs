@@ -5,27 +5,35 @@ namespace DisplayUtil.Layouting;
 /// <summary>
 /// Simple TextElement
 /// </summary>
-/// <param name="content">The Content</param>
-/// <param name="paint">Painting Information</param>
-public class TextElement(string content, SKPaint paint) : Element
+public class TextElement : Element
 {
+    /// <summary>
+    /// The Content
+    /// </summary>
+    public required string Content { get; set; }
+
+    /// <summary>
+    /// Painting Information
+    /// </summary>
+    public required SKPaint Paint { get; set; }
+
     public override void Draw(DrawContext drawContext)
     {
         var point = drawContext.StartPoint;
-        point.Y -= paint.FontMetrics.Ascent;
+        point.Y -= Paint.FontMetrics.Ascent;
 
-        drawContext.Canvas.DrawText(content, point, paint);
+        drawContext.Canvas.DrawText(Content, point, Paint);
     }
 
     protected override SKSize CalculateSize(DrawContext drawContext)
     {
-        var width = paint.MeasureText(content);
-        return new SKSize(width, paint.TextSize);
+        var width = Paint.MeasureText(Content);
+        return new SKSize(width, Paint.TextSize);
     }
 
     public override void Dispose()
     {
         base.Dispose();
-        paint.Dispose();
+        Paint.Dispose();
     }
 }

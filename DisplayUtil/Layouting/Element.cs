@@ -1,3 +1,4 @@
+using DisplayUtil.Utils;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using SkiaSharp;
@@ -7,7 +8,8 @@ namespace DisplayUtil.Layouting;
 public record struct DrawContext(
     SKCanvas Canvas,
     SKSize Size,
-    SKPoint StartPoint
+    SKPoint StartPoint,
+    DrawResources DrawResources
 );
 
 /// <summary>
