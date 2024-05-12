@@ -1,3 +1,4 @@
+using DisplayUtil.Providers;
 using DisplayUtil.Utils;
 
 namespace DisplayUtil.Layouting;
@@ -6,5 +7,6 @@ namespace DisplayUtil.Layouting;
 /// Resources needed for Drawing
 /// </summary>
 public record DrawResources(
-    IconDrawer IconDrawer
+    IconDrawer IconDrawer,
+    FontProvider FontProvider
 );
