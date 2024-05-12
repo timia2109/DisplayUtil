@@ -1,6 +1,7 @@
 using DisplayUtil.EcmaScript;
 using DisplayUtil.EspUtilities;
 using DisplayUtil.HomeAssistant;
+using DisplayUtil.Layouting;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Providers;
 using DisplayUtil.Scenes;
@@ -27,6 +28,8 @@ builder
 builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
     .AddTransient<IconDrawer>()
+    .AddTransient<DrawResources>()
+    .AddScoped<DrawManager>()
     .AddQuartz()
     .AddQuartzHostedService(options =>
     {
