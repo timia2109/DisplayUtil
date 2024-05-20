@@ -14,8 +14,6 @@ internal class EcmaScriptProvider(
     Engine engine,
     Function func) : IScreenProvider
 {
-    private readonly JavaScriptParser _parser = new JsxParser();
-
     public Task<SKBitmap> GetImageAsync()
     {
         var result = engine.Invoke(func);

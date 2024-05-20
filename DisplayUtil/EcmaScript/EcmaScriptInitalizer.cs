@@ -1,7 +1,6 @@
+using DisplayUtil.EcmaScript.Environment;
 using DisplayUtil.Scenes;
 using DisplayUtil.Utils;
-using Jint;
-using Jint.Runtime.Modules;
 
 namespace DisplayUtil.EcmaScript;
 
@@ -12,14 +11,9 @@ public static class EcmaScriptInitializer
         var settings = builder.ConfigureAndGet<JsSettings>("JavaScript");
 
         builder.Services
-            .AddSingleton<IModuleLoader, DisplayUtilModuleLoader>()
-            .AddScoped<EngineProvider>()
-            .AddScoped(s => s.GetRequiredService<EngineProvider>()
-                .GetEngine())
-            .AddScoped<IScreenProviderSource, EcmaScriptScreenProviderRepo>();
+            .AddScoped<IScreenProviderSource, EcmaScriptScreenProviderRepo>()
+            .AddSingleton<IJsValueProvider, XmlModelProvider>();
 
         return builder;
     }
-
-
 }

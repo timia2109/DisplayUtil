@@ -1,12 +1,12 @@
-using DisplayUtil.XmlModel.Models;
+using DisplayUtil.EcmaScript.Environment;
 using Jint;
-using Jint.Native;
 using Jint.Runtime.Modules;
 
 namespace DisplayUtil.EcmaScript;
 
 public class EngineProvider(
-    IModuleLoader moduleLoader
+    IModuleLoader moduleLoader,
+    IEnumerable<IJsValueProvider> jsValueProviders
 )
 {
     public Engine GetEngine()
@@ -16,10 +16,12 @@ public class EngineProvider(
         options.Modules.ModuleLoader = moduleLoader;
 
         var engine = new Engine(options);
-        PropertyObjectFactory.AddNamespaceMembers<IXmlModel>(
-            engine,
-            new Jint.Runtime.Realm()
-        );
+        var exporter = new JsExporter(engine);
+
+        foreach (var provider in jsValueProviders)
+        {
+            provider.Inject(exporter);
+        }
 
         return engine;
     }
