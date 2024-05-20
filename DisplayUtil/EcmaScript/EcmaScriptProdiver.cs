@@ -1,10 +1,8 @@
 using DisplayUtil.Layouting;
 using DisplayUtil.Scenes;
-using DisplayUtil.Template;
 using DisplayUtil.XmlModel;
 using DisplayUtil.XmlModel.Models;
 using Esprima;
-using Esprima.Utils;
 using Jint;
 using Jint.Native.Function;
 using SkiaSharp;
@@ -21,7 +19,7 @@ internal class EcmaScriptProvider(
     public Task<SKBitmap> GetImageAsync()
     {
         var result = engine.Invoke(func);
-        var screen = result.AsInstance<Screen>()
+        var screen = result.ToObject() as Screen
             ?? throw new ArgumentException("Module MUST return a Screen Instance");
 
         return Task.FromResult(

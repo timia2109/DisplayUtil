@@ -26,6 +26,7 @@ builder
     .AddEcmaScript();
 
 builder.Services
+    .AddHttpClient()
     .AddSingleton<XmlLayoutDeserializer>()
     .AddTransient<IconDrawer>()
     .AddTransient<DrawResources>()

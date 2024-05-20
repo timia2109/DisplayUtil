@@ -9,18 +9,102 @@ using Jint.Runtime;
 
 namespace DisplayUtil.EcmaScript;
 
-internal record JsProp(
-    PropertyInfo TargetProperty
+/// <summary>
+/// Represents a converted property for an array as target
+/// </summary>
+internal class ArrayJsProp : JsProp
+{
+    /// <summary>
+    /// Type of the array contents
+    /// </summary>
+    private readonly Type _itemType;
+
+    public ArrayJsProp(Engine engine, FieldInfo targetProp) : base(engine, targetProp)
+    {
+        if (!Matches(_targetType))
+        {
+            throw new Exception("Requires collection");
+        }
+
+        _itemType = _targetType.GetElementType()!;
+    }
+
+    protected override object? ConvertValue(JsValue jsValue)
+    {
+        var arr = jsValue.AsArray();
+        var items = Array.CreateInstance(_itemType, arr.Length);
+
+        for (var i = 0; i < arr.Length; i++)
+        {
+            items.SetValue(ConvertValue(arr[i].ToObject()!, _itemType), i);
+        }
+
+        return ConvertValue(items, _targetType);
+    }
+
+    /// <summary>
+    /// Is this property an array?
+    /// </summary>
+    /// <param name="t">Type of property</param>
+    /// <returns>Is array</returns>
+    internal static bool Matches(Type t)
+    {
+        return t.IsArray;
+    }
+}
+
+/// <summary>
+/// Represents a mapped property
+/// </summary>
+/// <param name="engine">JS Engine</param>
+/// <param name="TargetProperty">Target Property</param>
+internal class JsProp(
+    Engine engine,
+    FieldInfo TargetProperty
 )
 {
+    protected Engine CurrentEngine => engine;
+    protected readonly Type _targetType = TargetProperty.FieldType;
+
+    /// <summary>
+    /// Converts a object to another type
+    /// </summary>
+    /// <param name="obj">Affected value</param>
+    /// <param name="targetType">Target Type</param>
+    /// <returns>The converted C# Type</returns>
+    protected object? ConvertValue(object obj, Type targetType)
+    {
+        if (targetType.IsAssignableFrom(obj!.GetType()))
+            return obj;
+
+        return Convert.ChangeType(obj, _targetType);
+    }
+
+    /// <summary>
+    /// Converts the JavaScript value to the <see cref="_targetType"/>
+    /// </summary>
+    /// <param name="jsValue">JavaScript Value</param>
+    /// <returns>Converted value</returns>
+    protected virtual object? ConvertValue(JsValue jsValue)
+    {
+        return ConvertValue(jsValue.ToObject()!, _targetType);
+    }
+
+    /// <summary>
+    /// Sets the value to the object
+    /// </summary>
+    /// <param name="jsValue">JavaScript Value</param>
+    /// <param name="targetObject">Target Object</param>
     internal void SetValue(
         JsValue jsValue,
         object targetObject
     )
     {
+        if (jsValue.IsUndefined() || jsValue.IsNull()) return;
+
         TargetProperty.SetValue(
             targetObject,
-            ((IConvertible)jsValue).ToType(TargetProperty.PropertyType, null)
+            ConvertValue(jsValue)
         );
     }
 };
@@ -37,10 +121,12 @@ internal static class PropertyObjectFactory
     internal static Function CreateForObject(Type type, Engine engine, Realm realm)
     {
         var properties = type
-            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .GetFields(BindingFlags.Instance | BindingFlags.Public)
             .ToFrozenDictionary(
                 k => _namingPolicy.ConvertName(k.Name),
-                v => new JsProp(v)
+                v => ArrayJsProp.Matches(v.FieldType)
+                    ? new ArrayJsProp(engine, v)
+                    : new JsProp(engine, v)
             );
 
         return new PropertyObjectFactoryFunction(
