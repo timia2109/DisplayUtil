@@ -1,3 +1,4 @@
+using DisplayUtil.EcmaScript.PropertyObjects;
 using Jint;
 using Jint.Native;
 using Jint.Native.Function;
@@ -7,7 +8,7 @@ namespace DisplayUtil.EcmaScript.Environment;
 /// <summary>
 /// Object to add values to the JavaScript Engine
 /// </summary>
-public class JsExporter
+internal class JsExporter : IJsExporter
 {
     private readonly Engine _engine;
 
@@ -39,10 +40,6 @@ public class JsExporter
         ExposeFunction(functionName, function);
     }
 
-    /// <summary>
-    /// Adds alls types of the namespace as a function to the engine
-    /// </summary>
-    /// <typeparam name="TRefType">Reference Type of namespace</typeparam>
     public void ExposeNamespaceFunctionsAsCreators<TRefType>()
     {
         var type = typeof(TRefType);

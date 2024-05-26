@@ -9,5 +9,5 @@ public interface IJsValueProvider
     /// Injects the Properties into JavaScript
     /// </summary>
     /// <param name="exporter">Exporter</param>
-    void Inject(JsExporter exporter);
+    void Inject(IJsExporter exporter);
 }
