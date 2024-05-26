@@ -1,4 +1,5 @@
 using System.Globalization;
+using DisplayUtil.EcmaScript.Environment;
 using DisplayUtil.Template;
 using NetDaemon.HassModel;
 using Scriban.Runtime;
@@ -6,7 +7,7 @@ using Scriban.Runtime;
 namespace DisplayUtil.HomeAssistant;
 
 internal class HassTemplateExtender(IHaContext haContext)
-: ITemplateExtender
+    : ITemplateExtender, IJsValueProvider
 {
     public void Enrich(ScriptObject context, EnrichScope scope)
     {
@@ -19,13 +20,13 @@ internal class HassTemplateExtender(IHaContext haContext)
         context.Add("hass", hassObject);
     }
 
-    private string? GetState(string entityId)
+    public string? GetState(string entityId)
     {
         var entity = haContext.GetState(entityId);
         return entity?.State;
     }
 
-    private string? GetAttribute(string entityId, string attribute)
+    public string? GetAttribute(string entityId, string attribute)
     {
         var entity = haContext.GetState(entityId);
         var attributes = entity?.Attributes as Dictionary<string, object?>;
@@ -37,14 +38,14 @@ internal class HassTemplateExtender(IHaContext haContext)
         return value?.ToString();
     }
 
-    private float GetFloatState(string entityId)
+    public float GetFloatState(string entityId)
     {
         var state = GetState(entityId);
         if (state == null) return 0f;
         return UtilTemplateExtender.ToFloat(state);
     }
 
-    private DateTime? GetDateTime(string entityId)
+    public DateTime? GetDateTime(string entityId)
     {
         var state = GetState(entityId);
         if (state is null) return null;
@@ -57,5 +58,10 @@ internal class HassTemplateExtender(IHaContext haContext)
             return null;
 
         return dt;
+    }
+
+    public void Inject(IJsExporter exporter)
+    {
+        exporter.ExposeValue("hass", this);
     }
 }

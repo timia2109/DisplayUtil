@@ -1,3 +1,4 @@
+using DisplayUtil.EcmaScript;
 using DisplayUtil.HomeAssistant.Calendar;
 using DisplayUtil.Template;
 using DisplayUtil.Utils;
@@ -23,6 +24,7 @@ public static class HassExtension
         builder.Services
             .AddHomeAssistantClient()
             .AddScoped<ITemplateExtender, HassTemplateExtender>()
+            .AddScopedJsValueProvider<HassTemplateExtender>()
             .AddScopedHaContext();
 
         // Background Connection
