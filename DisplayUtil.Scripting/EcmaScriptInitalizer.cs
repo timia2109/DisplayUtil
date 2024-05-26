@@ -1,3 +1,5 @@
+using DisplayUtil.EcmaScript.Environment;
+using Esprima.Ast;
 using Jint.Runtime.Modules;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,5 +24,29 @@ public static class EcmaScriptInitializer
         return services;
     }
 
+    /// <summary>
+    /// Add an <see cref="IJsValueProvider"/> as Scoped to the services
+    /// </summary>
+    /// <typeparam name="TProvider">Provider</typeparam>
+    /// <param name="services">Services</param>
+    /// <returns>Services</returns>
+    public static IServiceCollection AddScopedJsValueProvider<TProvider>(this IServiceCollection services)
+        where TProvider : class, IJsValueProvider
+    {
+        services.AddScoped<IJsValueProvider, TProvider>();
+        return services;
+    }
 
+    /// <summary>
+    /// Add an <see cref="IJsValueProvider"/> as Singleton to the services
+    /// </summary>
+    /// <typeparam name="TProvider">Provider</typeparam>
+    /// <param name="services">Services</param>
+    /// <returns>Services</returns>
+    public static IServiceCollection AddSingletonJsValueProvider<TProvider>(this IServiceCollection services)
+        where TProvider : class, IJsValueProvider
+    {
+        services.AddSingleton<IJsValueProvider, TProvider>();
+        return services;
+    }
 }
