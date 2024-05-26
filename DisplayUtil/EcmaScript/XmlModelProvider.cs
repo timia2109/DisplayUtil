@@ -5,7 +5,7 @@ namespace DisplayUtil.EcmaScript;
 
 internal class XmlModelProvider : IJsValueProvider
 {
-    public void Inject(JsExporter exporter)
+    public void Inject(IJsExporter exporter)
     {
         exporter.ExposeNamespaceFunctionsAsCreators<IXmlModel>();
     }

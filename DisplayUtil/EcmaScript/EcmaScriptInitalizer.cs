@@ -10,6 +10,8 @@ public static class EcmaScriptInitializer
     {
         var settings = builder.ConfigureAndGet<JsSettings>("JavaScript");
 
+        builder.Services.AddScripting();
+
         builder.Services
             .AddScoped<IScreenProviderSource, EcmaScriptScreenProviderRepo>()
             .AddSingleton<IJsValueProvider, XmlModelProvider>();
