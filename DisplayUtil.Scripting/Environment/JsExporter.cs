@@ -57,4 +57,12 @@ internal class JsExporter : IJsExporter
             ExposeFunction(name, function);
         }
     }
+
+    public void ExposeConverter<TType>()
+    {
+        PropertyObjectFactory.AutoConverters.TryAdd(
+            typeof(TType),
+            PropertyObjectFactory.CreateForObject<TType>(_engine)
+        );
+    }
 }

@@ -18,12 +18,21 @@ public interface IJsExporter
     /// <param name="functionName">Name of the function</param>
     /// <param name="function">Function</param>
     void ExposeFunction(string functionName, Function function);
+
     /// <summary>
     /// Exposes a Function to the JavaScript Runtime
     /// </summary>
     /// <param name="functionName">Name of the function</param>
     /// <param name="factory">Factory Delegate</param>
     void ExposeFunction(string functionName, Func<Engine, Function> factory);
+
+    /// <summary>
+    /// Exposes an converter which converts a <see cref="JsObject"/> to the given type.
+    /// This does not support inheritance.
+    /// This only affects CreatorFunctions
+    /// </summary>
+    /// <typeparam name="TType">Type</typeparam>
+    void ExposeConverter<TType>();
 
     /// <summary>
     /// Exposes a Creator Function (a function which can set all public fields with an JsObject)

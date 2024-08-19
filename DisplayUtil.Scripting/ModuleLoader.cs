@@ -9,7 +9,7 @@ public record JsSettings
     public required IReadOnlyDictionary<string, string> Paths { get; init; }
 }
 
-internal class DisplayUtilModuleLoader(IOptions<JsSettings> options) : ModuleLoader
+internal class DisplayUtilModuleLoader(IOptions<JsSettings> options, HttpClient httpClient) : ModuleLoader
 {
     private static string[] _allowedExtensions = ["js", "mjs"];
 
@@ -31,6 +31,16 @@ internal class DisplayUtilModuleLoader(IOptions<JsSettings> options) : ModuleLoa
         if (Uri.TryCreate(specifier, UriKind.Absolute, out var uri))
         {
             var scheme = uri.Scheme;
+            if (scheme == "http" || scheme == "https")
+            {
+                return new ResolvedSpecifier(
+                    moduleRequest,
+                    specifier,
+                    uri,
+                    SpecifierType.RelativeOrAbsolute
+                );
+            }
+
             if (!settings.Paths.TryGetValue(scheme, out var directory))
             {
                 throw new ModuleResolutionException("Unable to find scope",
@@ -64,6 +74,12 @@ internal class DisplayUtilModuleLoader(IOptions<JsSettings> options) : ModuleLoa
         if (resolved.Uri == null)
         {
             throw new Exception($"Module '{specifier}' of type '{resolved.Type}' has no resolved URI.");
+        }
+
+        if (resolved.Uri.Scheme is "http" or "https")
+        {
+            var content = httpClient.GetStringAsync(resolved.Uri).Result;
+            return content;
         }
 
         var fileName = Uri.UnescapeDataString(resolved.Uri.AbsolutePath);

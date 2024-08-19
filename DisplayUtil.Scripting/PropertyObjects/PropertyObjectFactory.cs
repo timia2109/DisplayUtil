@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 using System.Reflection;
 using System.Text.Json;
 using Jint;
@@ -12,6 +13,8 @@ namespace DisplayUtil.EcmaScript.PropertyObjects;
 internal static class PropertyObjectFactory
 {
     private static readonly JsonNamingPolicy _namingPolicy = JsonNamingPolicy.CamelCase;
+
+    internal static Dictionary<Type, Function> AutoConverters { get; } = new();
 
     internal static Function CreateForObject<TTarget>(Engine engine)
     {

@@ -1,6 +1,7 @@
 using System.Reflection;
 using Jint;
 using Jint.Native;
+using Jint.Native.Function;
 
 namespace DisplayUtil.EcmaScript.PropertyObjects;
 
@@ -38,6 +39,12 @@ internal class JsProp(
     /// <returns>Converted value</returns>
     protected virtual object? ConvertValue(JsValue jsValue)
     {
+        if (PropertyObjectFactory.AutoConverters.TryGetValue(_targetType,
+            out var value))
+        {
+            return value.Call(jsValue).ToObject();
+        }
+
         return ConvertValue(jsValue.ToObject()!, _targetType);
     }
 
