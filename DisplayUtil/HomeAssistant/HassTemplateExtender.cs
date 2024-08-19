@@ -26,6 +26,12 @@ internal class HassTemplateExtender(IHaContext haContext)
         return entity?.State;
     }
 
+    public bool GetBinaryState(string entityId)
+    {
+        var state = GetState(entityId);
+        return state == "on";
+    }
+
     public string? GetAttribute(string entityId, string attribute)
     {
         var entity = haContext.GetState(entityId);
