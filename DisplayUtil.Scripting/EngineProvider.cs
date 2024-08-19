@@ -1,3 +1,4 @@
+using System.Globalization;
 using DisplayUtil.EcmaScript.Environment;
 using Jint;
 using Jint.Runtime.Interop;
@@ -10,10 +11,11 @@ public class EngineProvider(
     IEnumerable<IJsValueProvider> jsValueProviders
 )
 {
-    public Engine GetEngine()
+    public Engine GetEngine(CultureInfo cultureInfo)
     {
         var options = new Options { };
         options.AllowClr();
+        options.Culture = cultureInfo;
         options.Modules.ModuleLoader = moduleLoader;
 
         var engine = new Engine(options);

@@ -1,3 +1,4 @@
+using System.Globalization;
 using DisplayUtil.EcmaScript.Environment;
 using Jint.Runtime.Modules;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,9 @@ public static class EcmaScriptInitializer
             .AddSingleton<IModuleLoader, DisplayUtilModuleLoader>()
             .AddScoped<EngineProvider>()
             .AddScoped(s => s.GetRequiredService<EngineProvider>()
-                .GetEngine());
+                .GetEngine(
+                   CultureInfo.GetCultureInfo("de-DE")
+                ));
 
         return services;
     }
