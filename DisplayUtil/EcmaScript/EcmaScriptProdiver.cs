@@ -2,7 +2,6 @@ using DisplayUtil.Layouting;
 using DisplayUtil.Scenes;
 using DisplayUtil.XmlModel;
 using DisplayUtil.XmlModel.Models;
-using Esprima;
 using Jint;
 using Jint.Native.Function;
 using SkiaSharp;
@@ -29,8 +28,14 @@ internal class EcmaScriptProvider(
     }
 }
 
-internal class EcmaScriptScreenProviderRepo(DrawManager drawManager, Engine engine) : IScreenProviderSource
+internal partial class EcmaScriptScreenProviderRepo(DrawManager drawManager,
+    Engine engine,
+    ILogger<EcmaScriptScreenProviderRepo> logger
+) : IScreenProviderSource
 {
+
+    private readonly ILogger _logger = logger;
+
     public IScreenProvider? GetScreenProvider(string id)
     {
         try
@@ -42,10 +47,14 @@ internal class EcmaScriptScreenProviderRepo(DrawManager drawManager, Engine engi
 
             return new EcmaScriptProvider(drawManager, engine, renderFunction);
         }
-        catch
+        catch (Exception ex)
         {
+            LogExecutingError(id, ex);
             return null;
         }
 
     }
+
+    [LoggerMessage(LogLevel.Error, "Error executing script {id}")]
+    private partial void LogExecutingError(string id, Exception ex);
 }
