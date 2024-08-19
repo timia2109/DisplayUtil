@@ -5,7 +5,7 @@ namespace DisplayUtil.XmlModel;
 /// <summary>
 /// Setting defaults for the child elements
 /// </summary>
-public record struct DefaultDefinition()
+public record DefaultDefinition
 {
     /// <summary>
     /// Textsize
@@ -33,7 +33,7 @@ public record struct DefaultDefinition()
     public DefaultDefinition MergeWith(DefaultDefinition? other)
     {
         if (other == null) return this;
-        var o = other.Value;
+        var o = other;
 
         return new DefaultDefinition
         {

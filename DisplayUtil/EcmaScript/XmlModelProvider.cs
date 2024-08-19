@@ -9,7 +9,9 @@ internal class XmlModelProvider : IJsValueProvider
     public void Inject(IJsExporter exporter)
     {
         exporter.ExposeNamespaceFunctionsAsCreators<IXmlModel>();
+        exporter.ExposeConverter<DefaultDefinition>();
+        exporter.ExposeConverter<XmlSiteSize>();
         // Need to add, it's a record struct
-        exporter.ExposeCreatorFunction<DefaultDefinition>("DefaultDefinition");
+        //exporter.ExposeCreatorFunction<DefaultDefinition>("DefaultDefinition");
     }
 }
