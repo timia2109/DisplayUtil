@@ -54,6 +54,21 @@ internal class DisplayUtilModuleLoader(IOptions<JsSettings> options, HttpClient 
 
             resolved = new Uri(Path.GetFullPath(path));
         }
+        else if (IsRelative(specifier))
+        {
+            if (referencingModuleLocation == null)
+            {
+                throw new ModuleResolutionException("Unable to resolve relative module specifier",
+                    specifier, referencingModuleLocation, null);
+            }
+
+            var directory = Path.GetDirectoryName(referencingModuleLocation);
+            var path = _allowedExtensions
+                .Select(e => Path.Combine(directory, $"{specifier}.{e}"))
+                .First(File.Exists);
+
+            resolved = new Uri(Path.GetFullPath(path));
+        }
         else
         {
             throw new Exception("Unable to parse");
