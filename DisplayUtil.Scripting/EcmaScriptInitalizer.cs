@@ -1,5 +1,4 @@
 using DisplayUtil.EcmaScript.Environment;
-using Esprima.Ast;
 using Jint.Runtime.Modules;
 using Microsoft.Extensions.DependencyInjection;
 
