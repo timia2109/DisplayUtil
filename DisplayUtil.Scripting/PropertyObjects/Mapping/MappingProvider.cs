@@ -1,14 +1,16 @@
 using System.Reflection;
+using System.Text.Json;
 using Jint;
 using Jint.Native;
 using Jint.Runtime;
 
 namespace DisplayUtil.Scripting.PropertyObjects.Mapping;
 
-public static class MappingFactory
+public sealed class MappingFactory(MappingRegistry registry)
 {
+    private static readonly JsonNamingPolicy _namingPolicy = JsonNamingPolicy.CamelCase;
 
-    public static PropertyMapping ForMemberInfo(MemberInfo member)
+    internal PropertyMapping ForMemberInfo(MemberInfo member)
     {
         return member switch
         {
@@ -18,28 +20,52 @@ public static class MappingFactory
         };
     }
 
-    private static PropertyMapping ForPropertyInfo(PropertyInfo property)
+    private PropertyMapping ForPropertyInfo(PropertyInfo property)
     {
         return new PropertyMapping()
         {
-            PropertyName = property.Name,
+            PropertyName = _namingPolicy.ConvertName(property.Name),
             Mapping = ForType(property.PropertyType),
             Member = property
         };
     }
 
-    private static PropertyMapping ForFieldInfo(FieldInfo field)
+    private PropertyMapping ForFieldInfo(FieldInfo field)
     {
         return new PropertyMapping()
         {
-            PropertyName = field.Name,
+            PropertyName = _namingPolicy.ConvertName(field.Name),
             Mapping = ForType(field.FieldType),
             Member = field
         };
     }
 
-    public static IMapping ForType(Type type)
+    private PropertyMapping[] GetPropertyMappings(Type type)
     {
+        return type.GetMembers(BindingFlags.Instance | BindingFlags.Public)
+            .Where(m => m is PropertyInfo || m is FieldInfo)
+            .Select(ForMemberInfo)
+            .ToArray();
+    }
+
+    public IMapping ForObject(Type type)
+    {
+        if (type.GetConstructor(Type.EmptyTypes) == null)
+        {
+            return new OptimisticObjectMapping();
+        }
+
+        var genericType = typeof(ObjectMapping<>).MakeGenericType(type);
+        var constructor = genericType.GetConstructor([typeof(PropertyMapping[])]);
+        var mappings = GetPropertyMappings(type);
+        return (IMapping)constructor!.Invoke([mappings]);
+    }
+
+    public IMapping ForType(Type type)
+    {
+        if (type.IsEnum)
+            return new EnumMapping(type);
+
         switch (Type.GetTypeCode(type))
         {
             case TypeCode.Boolean:
@@ -59,11 +85,11 @@ public static class MappingFactory
             case TypeCode.Single:
                 return new NumberMapping(type);
             case TypeCode.Object:
-                if (type.IsEnum)
-                    return new EnumMapping(type);
                 if (type.IsArray)
                     return new ArrayMapping(type.GetElementType()!, ForType(type.GetElementType()!));
-                return new ObjectMapping(type, GetPropertyMappings(type));
+                return registry.RegisterType(type);
+            default:
+                throw new ArgumentException("Type not supported");
         }
     }
 }
@@ -194,6 +220,8 @@ internal class PropertyMapping
 internal class ObjectMapping<TType>(PropertyMapping[] children) : BaseMapping
     where TType : new()
 {
+    internal PropertyMapping[] Children => children;
+
     protected override Types ExpectedType => Types.Object;
 
     protected override object MapInternal(JsValue jsValue)
@@ -211,5 +239,15 @@ internal class ObjectMapping<TType>(PropertyMapping[] children) : BaseMapping
             child.MapProperty(obj, jsObject);
 
         return obj;
+    }
+}
+
+internal class OptimisticObjectMapping : BaseMapping
+{
+    protected override Types ExpectedType => Types.Object;
+
+    protected override object MapInternal(JsValue jsValue)
+    {
+        return jsValue.ToObject();
     }
 }

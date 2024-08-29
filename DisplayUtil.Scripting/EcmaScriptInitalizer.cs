@@ -1,5 +1,6 @@
 using System.Globalization;
 using DisplayUtil.EcmaScript.Environment;
+using DisplayUtil.Scripting.PropertyObjects.Mapping;
 using Jint.Runtime.Modules;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class EcmaScriptInitializer
         services
             .AddSingleton<IModuleLoader, DisplayUtilModuleLoader>()
             .AddScoped<EngineProvider>()
+            .AddSingleton<MappingRegistry>()
             .AddScoped(s => s.GetRequiredService<EngineProvider>()
                 .GetEngine(
                    CultureInfo.GetCultureInfo("de-DE")
