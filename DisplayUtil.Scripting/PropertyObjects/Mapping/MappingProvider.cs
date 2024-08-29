@@ -52,7 +52,7 @@ public sealed class MappingFactory(MappingRegistry registry)
     {
         if (type.GetConstructor(Type.EmptyTypes) == null)
         {
-            return new OptimisticObjectMapping();
+            return OptimisticObjectMapping.Instance;
         }
 
         var genericType = typeof(ObjectMapping<>).MakeGenericType(type);
@@ -69,9 +69,9 @@ public sealed class MappingFactory(MappingRegistry registry)
         switch (Type.GetTypeCode(type))
         {
             case TypeCode.Boolean:
-                return new BooleanMapping();
+                return BooleanMapping.Instance;
             case TypeCode.String:
-                return new StringMapping();
+                return StringMapping.Instance;
             case TypeCode.UInt64:
             case TypeCode.Int64:
             case TypeCode.UInt32:
@@ -143,6 +143,10 @@ internal class NumberMapping(Type expectedType) : BaseMapping
 
 internal class StringMapping : BaseMapping
 {
+    internal static StringMapping Instance = new();
+
+    private StringMapping() { }
+
     protected override Types ExpectedType => Types.String;
 
     protected override object MapInternal(JsValue jsValue)
@@ -153,6 +157,10 @@ internal class StringMapping : BaseMapping
 
 internal class BooleanMapping : BaseMapping
 {
+    internal static BooleanMapping Instance = new();
+
+    private BooleanMapping() { }
+
     protected override Types ExpectedType => Types.Boolean;
 
     protected override object MapInternal(JsValue jsValue)
@@ -244,6 +252,10 @@ internal class ObjectMapping<TType>(PropertyMapping[] children) : BaseMapping
 
 internal class OptimisticObjectMapping : BaseMapping
 {
+    internal static OptimisticObjectMapping Instance = new();
+
+    private OptimisticObjectMapping() { }
+
     protected override Types ExpectedType => Types.Object;
 
     protected override object MapInternal(JsValue jsValue)
