@@ -1,7 +1,4 @@
-using System.Xml.Serialization;
 using DisplayUtil.Layouting;
-using DisplayUtil.Providers;
-using DisplayUtil.Utils;
 
 namespace DisplayUtil.XmlModel.Models;
 
@@ -31,7 +28,9 @@ public abstract class IXmlModel
     )
     {
         collection.Append(
-            Children.Select(e => e.AsElement(defaults))
+            Children
+                .Select(e => e?.AsElement(defaults))
+                .Where(e => e is not null)!
         );
         return collection;
     }
