@@ -11,7 +11,7 @@ public record JsSettings
 
 internal class DisplayUtilModuleLoader(IOptions<JsSettings> options, HttpClient httpClient) : ModuleLoader
 {
-    private static string[] _allowedExtensions = ["js", "mjs"];
+    internal static string[] _allowedExtensions = ["js", "mjs"];
 
     public override ResolvedSpecifier Resolve(
         string? referencingModuleLocation,

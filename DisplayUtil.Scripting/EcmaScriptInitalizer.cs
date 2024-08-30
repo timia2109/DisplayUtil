@@ -1,5 +1,5 @@
-using System.Globalization;
 using DisplayUtil.EcmaScript.Environment;
+using DisplayUtil.Scripting;
 using DisplayUtil.Scripting.PropertyObjects.Mapping;
 using Jint.Runtime.Modules;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,26 +18,14 @@ public static class EcmaScriptInitializer
     {
         services
             .AddSingleton<IModuleLoader, DisplayUtilModuleLoader>()
-            .AddScoped<EngineProvider>()
+            .AddSingleton<EngineFactory>()
+            .AddSingleton<EngineProvider>()
             .AddSingleton<MappingRegistry>()
             .AddScoped(s => s.GetRequiredService<EngineProvider>()
-                .GetEngine(
-                   CultureInfo.GetCultureInfo("de-DE")
-                ));
+                .GetEngineHandle())
+            .AddScoped(s => s.GetRequiredService<EngineHandle>().Engine)
+            .AddHostedService<JsModuleWatcher>();
 
-        return services;
-    }
-
-    /// <summary>
-    /// Add an <see cref="IJsValueProvider"/> as Scoped to the services
-    /// </summary>
-    /// <typeparam name="TProvider">Provider</typeparam>
-    /// <param name="services">Services</param>
-    /// <returns>Services</returns>
-    public static IServiceCollection AddScopedJsValueProvider<TProvider>(this IServiceCollection services)
-        where TProvider : class, IJsValueProvider
-    {
-        services.AddScoped<IJsValueProvider, TProvider>();
         return services;
     }
 

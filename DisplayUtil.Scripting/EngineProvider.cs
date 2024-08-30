@@ -1,36 +1,40 @@
 using System.Globalization;
-using DisplayUtil.EcmaScript.Environment;
-using DisplayUtil.Scripting.PropertyObjects.Mapping;
+using DisplayUtil.Scripting;
 using Jint;
-using Jint.Runtime.Interop;
-using Jint.Runtime.Modules;
 
 namespace DisplayUtil.EcmaScript;
 
-public class EngineProvider(
-    IModuleLoader moduleLoader,
-    MappingRegistry mappingRegistry,
-    IEnumerable<IJsValueProvider> jsValueProviders
-)
+public class EngineHandle : IDisposable
 {
-    public Engine GetEngine(CultureInfo cultureInfo)
+    public Engine Engine { get; }
+
+    private Action _onDispose;
+
+    internal EngineHandle(Engine engine, Action onDispose)
     {
-        var options = new Options { };
-        options.AllowClr();
-        options.Culture = cultureInfo;
-        options.Strict = true;
-        options.Modules.ModuleLoader = moduleLoader;
-
-        var engine = new Engine(options);
-        engine.SetValue("log", new Action<object>(Console.WriteLine));
-        var exporter = new JsExporter(engine, mappingRegistry);
-
-        foreach (var provider in jsValueProviders)
-        {
-            provider.Inject(exporter);
-        }
-
-        return engine;
+        Engine = engine;
+        _onDispose = onDispose;
     }
 
+    public void Dispose()
+    {
+        _onDispose();
+    }
+}
+
+internal class EngineProvider(
+    EngineFactory engineFactory
+)
+{
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
+
+    public EngineHandle GetEngineHandle()
+    {
+        _semaphore.Wait();
+
+        var engine = engineFactory.CurrentEngine
+            ?? throw new InvalidOperationException("Engine not created");
+
+        return new EngineHandle(engine, () => _semaphore.Release());
+    }
 }

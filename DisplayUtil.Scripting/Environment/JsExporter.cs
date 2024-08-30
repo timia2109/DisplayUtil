@@ -11,6 +11,8 @@ namespace DisplayUtil.EcmaScript.Environment;
 /// </summary>
 internal class JsExporter(Engine engine, MappingRegistry mappingRegistry) : IJsExporter
 {
+    public Engine Engine => engine;
+
     public void ExposeValue(string variableName, object obj)
     {
         engine.Global[variableName] = JsValue.FromObject(engine, obj);

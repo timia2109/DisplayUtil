@@ -5,6 +5,8 @@ namespace DisplayUtil.EcmaScript.Environment;
 
 public interface IJsExporter
 {
+    Engine Engine { get; }
+
     /// <summary>
     /// Exposes an object to the JavaScript Runtime
     /// </summary>
