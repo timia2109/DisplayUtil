@@ -119,6 +119,8 @@ internal abstract class BaseMapping : IMapping
 {
     public object Map(JsValue jsValue)
     {
+        if (jsValue.Type is Types.Undefined or Types.Null) return null;
+
         if (jsValue.Type != ExpectedType)
             throw new TypeException(ExpectedType, jsValue.Type);
 
