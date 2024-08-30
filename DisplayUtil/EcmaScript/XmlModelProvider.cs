@@ -6,12 +6,18 @@ namespace DisplayUtil.EcmaScript;
 
 internal class XmlModelProvider : IJsValueProvider
 {
-    public void Inject(IJsExporter exporter)
+    public void AfterSetup()
+    {
+    }
+
+    public void OnDispose()
+    {
+    }
+
+    public void OnSetup(IJsExporter exporter)
     {
         exporter.ExposeNamespaceFunctionsAsCreators<IXmlModel>();
         exporter.ExposeConverter<DefaultDefinition>();
         exporter.ExposeConverter<XmlSiteSize>();
-        // Need to add, it's a record struct
-        //exporter.ExposeCreatorFunction<DefaultDefinition>("DefaultDefinition");
     }
 }
