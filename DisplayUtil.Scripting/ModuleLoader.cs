@@ -4,11 +4,6 @@ using Microsoft.Extensions.Options;
 
 namespace DisplayUtil.EcmaScript;
 
-public record JsSettings
-{
-    public required IReadOnlyDictionary<string, string> Paths { get; init; }
-}
-
 internal class DisplayUtilModuleLoader(IOptions<JsSettings> options, HttpClient httpClient) : ModuleLoader
 {
     internal static string[] _allowedExtensions = ["js", "mjs"];
