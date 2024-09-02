@@ -5,8 +5,7 @@ namespace DisplayUtil.Layouting;
 /// <summary>
 /// A VBox (Draws content under each other)
 /// </summary>
-/// <param name="gap">Gap between Items</param>
-public class VBoxElement(int gap = 0) : ElementCollection
+public class VBoxElement : GapElementCollection
 {
     protected override void DrawCollection(DrawContext drawContext)
     {
@@ -14,13 +13,12 @@ public class VBoxElement(int gap = 0) : ElementCollection
         foreach (var child in Children)
         {
             var size = child.GetSize(drawContext);
-            child.Draw(new DrawContext(
-                drawContext.Canvas,
-                drawContext.Size,
-                point
-            ));
+            child.Draw(drawContext with
+            {
+                StartPoint = point
+            });
 
-            point.Y += size.Height + gap;
+            point.Y += size.Height + Gap;
         }
     }
 
@@ -29,7 +27,7 @@ public class VBoxElement(int gap = 0) : ElementCollection
         var childrenSize = GetChildrenSizes(drawContext);
         return new SKSize(
             childrenSize.MaxWidth,
-            childrenSize.HeightSum + (gap * (Children.Count - 1))
+            childrenSize.HeightSum + (Gap * (Children.Count - 1))
         );
     }
 }

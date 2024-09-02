@@ -1,6 +1,4 @@
-using System.Collections.Frozen;
 using DisplayUtil.Utils;
-using Microsoft.Extensions.Options;
 
 namespace DisplayUtil.Providers;
 
@@ -12,7 +10,7 @@ public static class ProvidersInitalizer
         builder.ConfigureAndGet<ProviderSettings>("Providers");
 
         builder.Services
-            .AddSingleton(FontProvider.CreateFontProvider)
+            .AddActivatedSingleton(FontProvider.CreateFontProvider)
             .AddSingleton<IconPathProvider>();
 
         return builder;

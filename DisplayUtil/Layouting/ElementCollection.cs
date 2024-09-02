@@ -201,3 +201,12 @@ public abstract class ElementCollection : Element
         public int Y => StartY + EndY;
     }
 }
+
+public abstract class GapElementCollection : ElementCollection
+{
+
+    /// <summary>
+    /// Gap between Items
+    /// </summary>
+    public int Gap { get; set; }
+}

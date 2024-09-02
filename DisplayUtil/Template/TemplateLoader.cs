@@ -12,11 +12,12 @@ public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoade
         "sbntxt", "sbnxml", "sbn"
     ];
 
-    public string GetPath(string templateName)
+    public string? GetPath(string templateName)
     {
         var (domain, item) = templateName.SpiltDomain(null);
 
-        var directory = options.Value.Paths[domain];
+        if (!options.Value.Paths.TryGetValue(domain, out var directory))
+            return null;
 
         var path = _allowedExtensions
             .Select(e => $"{item}.{e}")
@@ -26,7 +27,7 @@ public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoade
         return Path.GetFullPath(path);
     }
 
-    public string GetPath(
+    public string? GetPath(
         TemplateContext context,
         SourceSpan callerSpan,
         string templateName

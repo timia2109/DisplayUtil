@@ -1,4 +1,6 @@
+using DisplayUtil.EcmaScript;
 using DisplayUtil.HomeAssistant.Calendar;
+using DisplayUtil.HomeAssistant.Registration;
 using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
@@ -22,11 +24,11 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>()
-            .AddScopedHaContext();
+            .AddSingleton<HaStateRegistry>()
+            .AddSingletonJsValueProvider<HaJsValueProvider>();
 
         // Background Connection
-        builder.Services.AddHostedService<HassHostedService>();
+        builder.Services.AddHostedService<HaStateSubscriber>();
 
         var calendarSettings = builder.ConfigureAndGet<HassCalendarSettings>(
             _section

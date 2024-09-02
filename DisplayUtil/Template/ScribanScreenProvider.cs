@@ -31,6 +31,7 @@ internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
 internal class ScribanScreenProvider(
     TemplateRenderer renderer,
     XmlLayoutDeserializer layoutDeserializer,
+    DrawManager drawManager,
     string path)
     : IScreenProvider
 {
@@ -39,7 +40,7 @@ internal class ScribanScreenProvider(
         using var xml = await renderer.RenderToStreamAsync(path);
         using var result = layoutDeserializer.DeserializeXml(xml);
 
-        return DrawManager.Draw(
+        return drawManager.Draw(
             result.Size,
             result.Element
         );

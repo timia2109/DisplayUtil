@@ -20,7 +20,7 @@ public class MqttTemplateExtender(
         scriptObject.Import("publish_mqtt_template", SetMqttTemplate);
     }
 
-    private void SetMqttTemplate(string templateId)
+    public void SetMqttTemplate(string templateId)
     {
         _ = SetMqttTemplateAsync(templateId.Trim());
     }

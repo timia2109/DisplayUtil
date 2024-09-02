@@ -6,7 +6,7 @@ namespace DisplayUtil.Layouting;
 /// A HBox (Draws content next to each other)
 /// </summary>
 /// <param name="gap">Gap between Items</param>
-public class HBoxElement(int gap = 0) : ElementCollection
+public class HBoxElement : GapElementCollection
 {
     protected override void DrawCollection(DrawContext drawContext)
     {
@@ -14,13 +14,9 @@ public class HBoxElement(int gap = 0) : ElementCollection
         foreach (var child in Children)
         {
             var size = child.GetSize(drawContext);
-            child.Draw(new DrawContext(
-                drawContext.Canvas,
-                drawContext.Size,
-                point
-            ));
+            child.Draw(drawContext with { StartPoint = point });
 
-            point.X += size.Width + gap;
+            point.X += size.Width + Gap;
         }
     }
 
@@ -28,7 +24,7 @@ public class HBoxElement(int gap = 0) : ElementCollection
     {
         var childrenSize = GetChildrenSizes(drawContext);
         return new SKSize(
-            childrenSize.WidthSum + (gap * (Children.Count - 1)),
+            childrenSize.WidthSum + (Gap * (Children.Count - 1)),
             childrenSize.MaxHeight
         );
     }
