@@ -1,14 +1,13 @@
-using DisplayUtil.Template;
-using Scriban.Runtime;
+using DisplayUtil.EcmaScript.Environment;
 
 namespace DisplayUtil.HomeAssistant.Calendar;
 
-public class HassAppointmentStore : ITemplateExtender
+public class HassAppointmentStore : IJsValueProvider
 {
     public HassEvent[] Appointments { get; set; } = [];
 
-    public void Enrich(ScriptObject scriptObject, EnrichScope scope)
+    public void OnSetup(IJsExporter exporter)
     {
-        scriptObject.Add("appointments", Appointments);
+        exporter.ExposeValue("appointments", Appointments);
     }
 }

@@ -1,6 +1,4 @@
 using System.Globalization;
-using DisplayUtil.Template;
-using NetDaemon.Client.HomeAssistant.Model;
 using NetDaemon.HassModel.Entities;
 
 namespace DisplayUtil.HomeAssistant;
@@ -27,7 +25,7 @@ public abstract record HassStateValue
     {
         var state = Value;
         if (state == null) return 0f;
-        return UtilTemplateExtender.ToFloat(state);
+        return ScriptUtils.ToFloat(state);
     }
 
     public DateTime? GetDateTime()

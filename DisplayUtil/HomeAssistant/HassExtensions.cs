@@ -1,6 +1,5 @@
 using DisplayUtil.EcmaScript;
 using DisplayUtil.HomeAssistant.Calendar;
-using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
@@ -36,7 +35,6 @@ public static class HassExtension
 
         builder.Services
             .AddSingleton<HassAppointmentStore>()
-            .AddSingleton<ITemplateExtender>(s => s.GetRequiredService<HassAppointmentStore>())
             .AddScoped<HassCalendarImportJob>();
 
         builder.Services.Configure<QuartzOptions>(o =>

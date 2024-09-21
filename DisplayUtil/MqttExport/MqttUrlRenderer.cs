@@ -1,5 +1,4 @@
 using DisplayUtil.EspUtilities;
-using DisplayUtil.Template;
 using Microsoft.Extensions.Options;
 
 namespace DisplayUtil.MqttExport;

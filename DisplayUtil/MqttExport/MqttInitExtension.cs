@@ -1,5 +1,5 @@
-using DisplayUtil.Template;
 using DisplayUtil.Utils;
+using DisplayUtil.EcmaScript;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -20,7 +20,7 @@ public static class MqttInitExtension
         else
             builder.Services.AddSingleton<MqttExporter>();
 
-        builder.Services.AddScoped<ITemplateExtender, MqttTemplateExtender>();
+        builder.Services.AddScopedJsValueProvider<MqttJsProvider>();
 
         return builder;
     }

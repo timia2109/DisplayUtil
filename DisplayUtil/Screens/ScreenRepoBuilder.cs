@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using DisplayUtil.Template;
 
 namespace DisplayUtil.Scenes;
 
@@ -21,12 +20,6 @@ public class ScreenRepoBuilder(
     {
         staticScreenProviderTypes.Add(providerId, typeof(TType));
         services.AddScoped<TType>();
-        return this;
-    }
-
-    public ScreenRepoBuilder AddScribanFiles(string? path = null)
-    {
-        services.AddScoped<IScreenProviderSource, ScibanScreenProviderSource>();
         return this;
     }
 }

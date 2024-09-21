@@ -5,7 +5,6 @@ using DisplayUtil.Layouting;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Providers;
 using DisplayUtil.Scenes;
-using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using DisplayUtil.XmlModel;
 using Quartz;
@@ -19,7 +18,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder
     .AddProviders()
-    .AddTemplates()
     .AddHassSupport()
     .AddMqttWriter()
     .AddEspUtilities()
@@ -37,9 +35,7 @@ builder.Services
         options.WaitForJobsToComplete = true;
     });
 
-builder.Services.AddScreenProvider(o => o
-    .AddScribanFiles()
-);
+builder.Services.AddScreenProvider(o => { });
 
 var app = builder.Build();
 
