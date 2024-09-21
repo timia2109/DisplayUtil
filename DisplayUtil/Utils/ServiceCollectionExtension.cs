@@ -8,7 +8,9 @@ public static class ServiceCollectionExtension
     where TModel : class
     {
         var section = builder.Configuration.GetSection(sectionName);
-        builder.Services.Configure<TModel>(section);
+        builder.Services.AddOptions<TModel>()
+            .Bind(section)
+            .ValidateDataAnnotations();
 
         return section.Get<TModel>();
     }
