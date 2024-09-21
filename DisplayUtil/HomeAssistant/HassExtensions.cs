@@ -23,8 +23,7 @@ public static class HassExtension
 
         builder.Services
             .AddHomeAssistantClient()
-            .AddScoped<ITemplateExtender, HassTemplateExtender>()
-            .AddScopedJsValueProvider<HassTemplateExtender>()
+            .AddScopedJsValueProvider<HassJsProvider>()
             .AddScopedHaContext();
 
         // Background Connection

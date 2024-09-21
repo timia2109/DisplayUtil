@@ -1,3 +1,4 @@
+using System.Globalization;
 using DisplayUtil.EcmaScript.Environment;
 using DisplayUtil.Scripting;
 using DisplayUtil.Scripting.PropertyObjects.Mapping;
@@ -18,13 +19,10 @@ public static class EcmaScriptInitializer
     {
         services
             .AddSingleton<IModuleLoader, DisplayUtilModuleLoader>()
-            .AddSingleton<EngineFactory>()
-            .AddSingleton<EngineProvider>()
+            .AddScoped<EngineFactory>()
             .AddSingleton<MappingRegistry>()
-            .AddScoped(s => s.GetRequiredService<EngineProvider>()
-                .GetEngineHandle())
-            .AddScoped(s => s.GetRequiredService<EngineHandle>().Engine)
-            .AddHostedService<JsModuleWatcher>();
+            .AddScoped(s => s.GetRequiredService<EngineFactory>()
+                .CreateEngine(CultureInfo.CurrentCulture));
 
         return services;
     }
@@ -39,6 +37,13 @@ public static class EcmaScriptInitializer
         where TProvider : class, IJsValueProvider
     {
         services.AddSingleton<IJsValueProvider, TProvider>();
+        return services;
+    }
+
+    public static IServiceCollection AddScopedJsValueProvider<TProvider>(this IServiceCollection services)
+        where TProvider : class, IJsValueProvider
+    {
+        services.AddScoped<IJsValueProvider, TProvider>();
         return services;
     }
 }
