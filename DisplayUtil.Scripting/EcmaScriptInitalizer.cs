@@ -40,6 +40,12 @@ public static class EcmaScriptInitializer
         return services;
     }
 
+    /// <summary>
+    /// Adds an <see cref="IJsValueProvider"/> as Scoped to the services
+    /// </summary>
+    /// <typeparam name="TProvider">Provider Type</typeparam>
+    /// <param name="services">Services</param>
+    /// <returns>Services</returns>
     public static IServiceCollection AddScopedJsValueProvider<TProvider>(this IServiceCollection services)
         where TProvider : class, IJsValueProvider
     {

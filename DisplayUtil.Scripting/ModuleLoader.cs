@@ -9,6 +9,9 @@ public record JsSettings
     public required IReadOnlyDictionary<string, string> Paths { get; init; }
 }
 
+/// <summary>
+/// Module Loader for JavaScript
+/// </summary>
 internal class DisplayUtilModuleLoader(IOptions<JsSettings> options, HttpClient httpClient) : ModuleLoader
 {
     internal static string[] _allowedExtensions = ["js", "mjs"];
