@@ -1,0 +1,73 @@
+using System.Globalization;
+using DisplayUtil.EcmaScript.Environment;
+using DisplayUtil.Template;
+using NetDaemon.HassModel;
+using Scriban.Runtime;
+
+namespace DisplayUtil.HomeAssistant;
+
+internal class HassTemplateExtender(IHaContext haContext)
+    : ITemplateExtender, IJsValueProvider
+{
+    public void Enrich(ScriptObject context, EnrichScope scope)
+    {
+        // Hass Functions
+        var hassObject = new ScriptObject();
+        hassObject.Import("get_state", GetState);
+        hassObject.Import("get_attribute", GetAttribute);
+        hassObject.Import("get_float_state", GetFloatState);
+        hassObject.Import("get_datetime_state", GetDateTime);
+        context.Add("hass", hassObject);
+    }
+
+    public string? GetState(string entityId)
+    {
+        var entity = haContext.GetState(entityId);
+        return entity?.State;
+    }
+
+    public bool GetBinaryState(string entityId)
+    {
+        var state = GetState(entityId);
+        return state == "on";
+    }
+
+    public string? GetAttribute(string entityId, string attribute)
+    {
+        var entity = haContext.GetState(entityId);
+        var attributes = entity?.Attributes as Dictionary<string, object?>;
+        object? value = null;
+
+        if (!attributes?.TryGetValue(attribute, out value) ?? true)
+            return null;
+
+        return value?.ToString();
+    }
+
+    public float GetFloatState(string entityId)
+    {
+        var state = GetState(entityId);
+        if (state == null) return 0f;
+        return UtilTemplateExtender.ToFloat(state);
+    }
+
+    public DateTime? GetDateTime(string entityId)
+    {
+        var state = GetState(entityId);
+        if (state is null) return null;
+
+        if (!DateTime.TryParseExact(state,
+            "yyyy-MM-dd HH:mm:ss",
+            CultureInfo.GetCultureInfo("de-DE"),
+            DateTimeStyles.None,
+            out var dt))
+            return null;
+
+        return dt;
+    }
+
+    public void Inject(IJsExporter exporter)
+    {
+        exporter.ExposeValue("hass", this);
+    }
+}
