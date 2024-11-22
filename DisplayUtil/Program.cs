@@ -1,5 +1,6 @@
 using DisplayUtil.EspUtilities;
 using DisplayUtil.HomeAssistant;
+using DisplayUtil.Layouting.Utils;
 using DisplayUtil.MqttExport;
 using DisplayUtil.Providers;
 using DisplayUtil.Scenes;
@@ -24,7 +25,7 @@ builder
 
 builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
-    .AddTransient<IconDrawer>()
+    .AddTransient<IIconDrawer, IconDrawer>()
     .AddQuartz()
     .AddQuartzHostedService(options =>
     {

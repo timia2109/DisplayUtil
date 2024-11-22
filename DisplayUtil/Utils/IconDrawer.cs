@@ -1,3 +1,4 @@
+using DisplayUtil.Layouting.Utils;
 using DisplayUtil.Providers;
 using SkiaSharp;
 using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
@@ -7,7 +8,7 @@ namespace DisplayUtil.Utils;
 public partial class IconDrawer(
     IconPathProvider iconPathProvider,
     ILogger<IconDrawer> logger
-) : IDisposable
+) : IIconDrawer, IDisposable
 {
     private readonly ILogger _logger = logger;
     private Dictionary<CacheKey, CacheEntry> _cache = new();
