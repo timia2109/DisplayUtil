@@ -22,6 +22,11 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DisplayUtil.Core\DisplayUtil.Core.csproj" />
+    <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Content Include="Resources\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
