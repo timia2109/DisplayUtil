@@ -1,4 +1,4 @@
-using DisplayUtil.Utils;
+using DisplayUtil.Layouting.Utils;
 using SkiaSharp;
 
 namespace DisplayUtil.Layouting;
@@ -9,7 +9,7 @@ namespace DisplayUtil.Layouting;
 /// <param name="iconName">Name of the Icon</param>
 /// <param name="height">Width of the Icon</param>
 /// <param name="iconDrawer">The Icon Drawer</param>
-public class IconElement(string iconName, int height, IconDrawer iconDrawer) : Element
+public class IconElement(string iconName, int height, IIconDrawer iconDrawer) : Element
 {
     public override void Draw(DrawContext drawContext)
     {
