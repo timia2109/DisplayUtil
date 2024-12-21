@@ -1,5 +1,13 @@
 # DisplayUtil
 
+This repo contains several libraries to render images for ESP32 ePaper Displays.
+
+Project Structure:
+
+-   DisplayUtil.Layouting - Implementing Layouts with Elements on SkiaShap Canvas
+-   DisplayUtil.Infrastucture - Provide Server Utilities for building ESP32 ePapers
+-   DisplayUtil.Building - Utilities to build simpler layout based images on C#
+
 **This repo is currently work in progress**
 
 DisplayUtil is a C# web server for creating status screens for an ESP32 with an

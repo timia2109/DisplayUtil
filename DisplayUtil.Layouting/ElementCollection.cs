@@ -11,7 +11,7 @@ public abstract class ElementCollection : Element
     /// <summary>
     /// Children of this collection
     /// </summary>
-    public List<Element> Children { get; } = [];
+    public List<Element> Children { get; set; } = [];
 
     /// <summary>
     /// Sizes of Borders
