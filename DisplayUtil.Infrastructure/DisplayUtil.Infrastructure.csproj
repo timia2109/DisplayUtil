@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8" />
     <ProjectReference Include="..\DisplayUtil.Building\DisplayUtil.Building.csproj" />
     <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
