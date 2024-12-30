@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using DisplayUtil.Scenes;
+using DisplayUtil.Infrastructure.Providers.Image;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 
@@ -11,7 +11,7 @@ namespace DisplayUtil.Infrastructure.EspUtilities;
 /// </summary>
 public partial class EspImageProvider(
     ILogger<EspImageProvider> logger,
-    ScreenRepository screenRepository
+    ImageResolver imageResolver
 )
 {
     private readonly ILogger _logger = logger;
@@ -19,16 +19,18 @@ public partial class EspImageProvider(
     /// <summary>
     /// Gets the image as plain true / false Bytes
     /// </summary>
-    /// <param name="providerId">Id of the provider</param>
-    /// <returns>Byte Array</returns>
-    public async Task<(byte[], SKSize)> GetAsPlainBytesAsync(string providerId)
+    /// <param name="imageId">Id of the provider</param>
+    /// <returns>Byte Array or null if the image was not found</returns>
+    public async Task<(byte[], SKSize)?> GetAsPlainBytesAsync(string imageId)
     {
         var stopwatch = new Stopwatch();
-        LogRender(providerId);
+        LogRender(imageId);
         stopwatch.Start();
 
         //Render
-        using var image = await screenRepository.GetImageAsync(providerId);
+        using var image = await imageResolver.GetImageAsync(imageId);
+        if (image == null) return null;
+
         stopwatch.Stop();
         var elapsed = stopwatch.ElapsedMilliseconds;
         LogRenderTime(elapsed);
@@ -41,11 +43,14 @@ public partial class EspImageProvider(
     /// <summary>
     /// Gets the Image as RunLength Compressed
     /// </summary>
-    /// <param name="providerId">Id of the provider</param>
+    /// <param name="imageId">Id of the provider</param>
     /// <returns>Compressed Data</returns>
-    public async Task<(byte[], SKSize)> GetAsRunLengthAsync(string providerId)
+    public async Task<(byte[], SKSize)?> GetAsRunLengthAsync(string imageId)
     {
-        var (plainBytes, size) = await GetAsPlainBytesAsync(providerId);
+        var result = await GetAsPlainBytesAsync(imageId);
+        if (result == null) return null;
+
+        var (plainBytes, size) = result.Value;
 
         var runLengthEncoder = new RunLengthCompressor();
         var compressedData = runLengthEncoder.WriteStream(plainBytes);
@@ -60,15 +65,15 @@ public partial class EspImageProvider(
     }
 
 
-    [LoggerMessage(LogLevel.Information, "Render screen {providerId}")]
-    private partial void LogRender(string providerId);
+    [LoggerMessage(LogLevel.Debug, "Render screen {imageId}")]
+    private partial void LogRender(string imageId);
 
-    [LoggerMessage(LogLevel.Information, "Rendering took {time} ms")]
+    [LoggerMessage(LogLevel.Debug, "Rendering took {time} ms")]
     private partial void LogRenderTime(long time);
 
-    [LoggerMessage(LogLevel.Information, "Plain binary takes {bytes} bytes")]
+    [LoggerMessage(LogLevel.Debug, "Plain binary takes {bytes} bytes")]
     private partial void LogPlainBytes(int bytes);
 
-    [LoggerMessage(LogLevel.Information, "Compressing takes {bytes} bytes ({percent} % less)")]
+    [LoggerMessage(LogLevel.Debug, "Compressing takes {bytes} bytes ({percent} % less)")]
     private partial void LogCompressedBytes(int bytes, double percent);
 }
