@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 
-namespace DisplayUtil.Infrastructure.Providers.Image.SingleImageProviders;
+namespace DisplayUtil.Infrastructure.Providers.Image;
 
 public class KeyedImageRegistryProvider(IServiceProvider serviceProvider) : IImageProvider
 {

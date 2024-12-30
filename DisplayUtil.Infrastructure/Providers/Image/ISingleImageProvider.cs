@@ -1,6 +1,6 @@
 using SkiaSharp;
 
-namespace DisplayUtil.Infrastructure.Providers.Image.SingleImageProviders;
+namespace DisplayUtil.Infrastructure.Providers.Image;
 
 /// <summary>
 /// Provides a single image.

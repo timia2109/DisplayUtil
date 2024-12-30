@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DisplayUtil.Infrastructure.Providers.Image.SingleImageProviders;
+namespace DisplayUtil.Infrastructure.Providers.Image;
 
 public static class ServiceCollectionExtension
 {
@@ -40,6 +42,45 @@ public static class ServiceCollectionExtension
 
         services.AddScoped<IImageProvider, KeyedImageRegistryProvider>();
         return services;
+    }
+
+    /// <summary>
+    /// Maps a route to get the image preview
+    /// </summary>
+    /// <param name="app">WebApp</param>
+    /// <param name="route">URI to preview page</param>
+    /// <returns>Web App</returns>
+    public static WebApplication MapImagePreview(
+        this WebApplication app,
+        string route = "/preview/{imageId}"
+    )
+    {
+        app.MapGet(route, async (string imageId, ImageResolver imageResolver,
+            HttpRequest request) =>
+        {
+            var image = await imageResolver.GetImageAsync(imageId);
+            if (image == null)
+            {
+                return Results.NotFound();
+            }
+
+            var acceptHeader = request.Headers.Accept;
+            var format = SkiaSharp.SKEncodedImageFormat.Png;
+            var mimeType = "image/png";
+
+            if (acceptHeader.Any(a => a?.Contains("image/jpeg") ?? false))
+            {
+                format = SkiaSharp.SKEncodedImageFormat.Jpeg;
+                mimeType = "image/jpeg";
+            }
+
+            var data = image.Encode(format, 100);
+            return Results.File(data.ToArray(), mimeType);
+        })
+        .WithName("Preview Image")
+        .WithOpenApi();
+
+        return app;
     }
 
 
