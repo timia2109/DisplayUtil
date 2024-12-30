@@ -34,7 +34,12 @@ public static class EspUtilitiesInitExtension
         app.MapGet(CompressedImageRoute, async (string providerId, HttpContext ctx, EspImageProvider espProvider) =>
         {
             var accept = ctx.Request.Headers.Accept;
-            var (data, size) = await espProvider.GetAsRunLengthAsync(providerId);
+            var imageResult = await espProvider.GetAsRunLengthAsync(providerId);
+
+            if (imageResult == null)
+                return Results.NotFound();
+
+            var (data, size) = imageResult.Value;
             ctx.Response.Headers.Append("X-Width", size.Width.ToString());
             ctx.Response.Headers.Append("X-Height", size.Height.ToString());
 
@@ -52,7 +57,13 @@ public static class EspUtilitiesInitExtension
         app.MapGet(PlainImageRoute, async (string providerId, HttpContext ctx, EspImageProvider espProvider) =>
         {
             var accept = ctx.Request.Headers.Accept;
-            var (data, size) = await espProvider.GetAsPlainBytesAsync(providerId);
+            var imageResult = await espProvider.GetAsPlainBytesAsync(providerId);
+
+            if (imageResult == null)
+                return Results.NotFound();
+
+            var (data, size) = imageResult.Value;
+
             ctx.Response.Headers.Append("X-Width", size.Width.ToString());
             ctx.Response.Headers.Append("X-Height", size.Height.ToString());
 
