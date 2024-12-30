@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using DisplayUtil.Building.Font;
 using DisplayUtil.Building.Items;
 using DisplayUtil.Layouting;
@@ -37,17 +36,17 @@ public class ScreenBuilder(IFontProvider fontProvider,
 
     public FlexboxBuilder UseFlexbox()
     {
-        return Use(new FlexboxBuilder(fontProvider, iconDrawer, defaultDefinition));
+        return Use(new FlexboxBuilder(fontProvider, iconDrawer, DefaultDefinition));
     }
 
     public VBoxBuilder UseVBox()
     {
-        return Use(new VBoxBuilder(fontProvider, iconDrawer, defaultDefinition));
+        return Use(new VBoxBuilder(fontProvider, iconDrawer, DefaultDefinition));
     }
 
     public HBoxBuilder UseHBox()
     {
-        return Use(new HBoxBuilder(fontProvider, iconDrawer, defaultDefinition));
+        return Use(new HBoxBuilder(fontProvider, iconDrawer, DefaultDefinition));
     }
 
     public override Element Build()

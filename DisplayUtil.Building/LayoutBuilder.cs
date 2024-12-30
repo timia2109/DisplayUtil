@@ -17,33 +17,11 @@ public abstract class LayoutBuilder<TBuilder>(
     IFontProvider fontProvider,
     IIconDrawer iconDrawer,
     DefaultDefinition defaultDefinition
-) : ILayoutBuilder
+) : DefaultDefinitionBuilder<TBuilder>(defaultDefinition), ILayoutBuilder
 where TBuilder : LayoutBuilder<TBuilder>
 {
     protected IFontProvider fontProvider = fontProvider;
     protected IIconDrawer iconDrawer = iconDrawer;
-    protected DefaultDefinition defaultDefinition = defaultDefinition;
-
-    public DefaultDefinition DefaultDefinition { get; protected set; }
-        = defaultDefinition;
-
-    public TBuilder SetFontSize(int size)
-    {
-        DefaultDefinition = DefaultDefinition with { TextSize = size };
-        return (TBuilder)this;
-    }
-
-    public TBuilder SetFont(string fontName)
-    {
-        DefaultDefinition = DefaultDefinition with { Font = fontName };
-        return (TBuilder)this;
-    }
-
-    public TBuilder SetIconHeight(int height)
-    {
-        DefaultDefinition = DefaultDefinition with { IconHeight = height };
-        return (TBuilder)this;
-    }
 
     protected IconElement CreateIcon(string iconName, int? height)
         => new(iconName, height ?? DefaultDefinition.IconHeight, iconDrawer);
