@@ -1,13 +1,13 @@
 {
     "configurations": [
         {
-            "name": "C#: DisplayUtil Server",
+            "name": "C#: DisplayUtil.Home Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build_webserver",
-            "program": "${workspaceFolder}/DisplayUtil/bin/Debug/net8.0/DisplayUtil.dll",
+            "program": "${workspaceFolder}/DisplayUtil.Home/bin/Debug/net9.0/DisplayUtil.Home.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DisplayUtil",
+            "cwd": "${workspaceFolder}/DisplayUtil.Home",
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Layouting", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Infrastructure", "DisplayUtil.Infrastructure\DisplayUtil.Infrastructure.csproj", "{0C193DC1-F307-4E95-943A-1A75B05C8862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Home", "DisplayUtil.Home\DisplayUtil.Home.csproj", "{58139D95-D55B-48D1-B1E1-214894358548}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{0C193DC1-F307-4E95-943A-1A75B05C8862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C193DC1-F307-4E95-943A-1A75B05C8862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C193DC1-F307-4E95-943A-1A75B05C8862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58139D95-D55B-48D1-B1E1-214894358548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58139D95-D55B-48D1-B1E1-214894358548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58139D95-D55B-48D1-B1E1-214894358548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58139D95-D55B-48D1-B1E1-214894358548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

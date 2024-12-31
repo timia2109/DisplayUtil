@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DisplayUtil/DisplayUtil.csproj",
+                "${workspaceFolder}/DisplayUtil.Home/DisplayUtil.Home.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
