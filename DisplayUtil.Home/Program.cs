@@ -10,6 +10,7 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
 
 builder.Services
     .AddOpenApi()
+    .AddHttpClient()
     .AddEspUtilities()
     .AddScreenBuilder(d => d
         .WithTextSize(45)

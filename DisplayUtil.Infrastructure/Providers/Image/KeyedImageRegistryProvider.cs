@@ -8,7 +8,7 @@ public class KeyedImageRegistryProvider(IServiceProvider serviceProvider) : IIma
     public bool CanResolve(string imageName)
     {
         // TODO: Optimize
-        return serviceProvider.GetKeyedService<IServiceProvider>(imageName)
+        return serviceProvider.GetKeyedService<ISingleImageProvider>(imageName)
             != null;
     }
 
