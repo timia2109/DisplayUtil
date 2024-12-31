@@ -1,4 +1,5 @@
 using DisplayUtil.Layouting.Utils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -27,6 +28,35 @@ public static class ServiceCollectionExtension
             new DirectoryIconProvider(iconPrefix, folderPath)
         );
         return services;
+    }
+
+    public static IServiceCollection AddFolderIconProvider(
+        this IServiceCollection services,
+        IconConfiguration iconConfiguration
+    )
+    {
+        services.TryAddIconDrawer();
+
+        foreach (var (iconPrefix, folderPath) in iconConfiguration.Icons)
+        {
+            services.AddSingleton<IIconProvider>(
+                new DirectoryIconProvider(iconPrefix, folderPath)
+            );
+        }
+
+        return services;
+    }
+
+    public static IServiceCollection AddFolderIconProvider(
+        this IServiceCollection services,
+        IConfiguration iconConfiguration
+    )
+    {
+        return AddFolderIconProvider(
+            services,
+            iconConfiguration.Get<IconConfiguration>()
+                ?? throw new Exception("Icon configuration is missing")
+        );
     }
 
     /// <summary>

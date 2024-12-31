@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9" />
     <ProjectReference Include="..\DisplayUtil.Building\DisplayUtil.Building.csproj" />
     <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />

@@ -18,10 +18,10 @@ public static class EspUtilitiesInitExtension
     /// </summary>
     /// <param name="builder">Application Builder</param>
     /// <returns>Application Builder</returns>
-    public static IHostApplicationBuilder AddEspUtilities(this IHostApplicationBuilder builder)
+    public static IServiceCollection AddEspUtilities(this IServiceCollection services)
     {
-        builder.Services.AddScoped<EspImageProvider>();
-        return builder;
+        services.AddScoped<EspImageProvider>();
+        return services;
     }
 
     /// <summary>
