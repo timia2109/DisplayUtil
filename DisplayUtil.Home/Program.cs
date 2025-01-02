@@ -4,6 +4,7 @@ using DisplayUtil.Infrastructure.EspUtilities;
 using DisplayUtil.Infrastructure.Providers.Font;
 using DisplayUtil.Infrastructure.Providers.Icons;
 using DisplayUtil.Infrastructure.Providers.Image;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
@@ -26,10 +27,9 @@ builder.Services
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
+app.MapGet("/swagger", () => Results.Redirect("/scalar/v1"));
 
 app.UseHttpsRedirection();
 
