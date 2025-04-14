@@ -48,6 +48,9 @@ public abstract class CollectionBuilder<TBuilder>(
         where TElement : ElementCollection
     {
         element.Children = children.Select(c => c.Build()).ToList();
+        element.Border = _border?.Build() ?? new();
+        element.Margin = _margin?.Build() ?? new();
+        element.Padding = _padding?.Build() ?? new();
         return element;
     }
 
@@ -58,6 +61,12 @@ public abstract class CollectionBuilder<TBuilder>(
         return hbox;
     }
 
+    public TBuilder AddHBox(Action<HBoxBuilder> configure)
+    {
+        configure(AddHBox());
+        return (TBuilder)this;
+    }
+
     public VBoxBuilder AddVBox()
     {
         var vbox = new VBoxBuilder(fontProvider, iconDrawer, DefaultDefinition);
@@ -65,10 +74,22 @@ public abstract class CollectionBuilder<TBuilder>(
         return vbox;
     }
 
+    public TBuilder AddVBox(Action<VBoxBuilder> configure)
+    {
+        configure(AddVBox());
+        return (TBuilder)this;
+    }
+
     public FlexboxBuilder AddFlexbox()
     {
         var flexbox = new FlexboxBuilder(fontProvider, iconDrawer, DefaultDefinition);
         children.Add(flexbox);
         return flexbox;
+    }
+
+    public TBuilder AddFlexbox(Action<FlexboxBuilder> configure)
+    {
+        configure(AddFlexbox());
+        return (TBuilder)this;
     }
 }

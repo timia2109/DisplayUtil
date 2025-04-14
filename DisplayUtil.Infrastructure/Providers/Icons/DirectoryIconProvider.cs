@@ -13,13 +13,13 @@ public class DirectoryIconProvider(string prefix, string path) : IIconProvider
 
     public bool CanResolve(string iconName)
     {
-        var (domain, _) = iconName.SpiltDomain();
+        var (domain, iconElement) = iconName.SpiltDomain();
         if (!string.Equals(domain, prefix, StringComparison.OrdinalIgnoreCase))
             return false;
 
-        return File.Exists(GetFullPath(iconName));
+        return File.Exists(GetFullPath(iconElement));
     }
 
     public Stream GetSvgIcon(string iconName)
-        => File.OpenRead(GetFullPath(iconName));
+        => File.OpenRead(GetFullPath(iconName.SpiltDomain().item));
 }

@@ -1,3 +1,4 @@
+using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.Screens;
 using DisplayUtil.Infrastructure;
 using DisplayUtil.Infrastructure.EspUtilities;
@@ -8,6 +9,8 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+
+builder.AddHassSupport();
 
 builder.Services
     .AddOpenApi()
@@ -22,7 +25,8 @@ builder.Services
     .AddFolderIconProvider(builder.Configuration);
 
 builder.Services
-    .AddSingleImageProvider<ExampleScreen>("example");
+    .AddSingleImageProvider<ExampleScreen>("example")
+    .AddSingleImageProvider<DefaultScreen>("default");
 
 var app = builder.Build();
 

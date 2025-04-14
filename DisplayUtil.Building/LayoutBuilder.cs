@@ -22,6 +22,9 @@ where TBuilder : LayoutBuilder<TBuilder>
 {
     protected IFontProvider fontProvider = fontProvider;
     protected IIconDrawer iconDrawer = iconDrawer;
+    protected SiteSizeBuilder? _padding;
+    protected SiteSizeBuilder? _margin;
+    protected SiteSizeBuilder? _border;
 
     protected IconElement CreateIcon(string iconName, int? height)
         => new(iconName, height ?? DefaultDefinition.IconHeight, iconDrawer);
@@ -38,6 +41,27 @@ where TBuilder : LayoutBuilder<TBuilder>
             Typeface = font
         };
         return new TextElement(text, paint);
+    }
+
+    public TBuilder WithPadding(Action<SiteSizeBuilder> configure)
+    {
+        _padding = new SiteSizeBuilder();
+        configure(_padding);
+        return (TBuilder)this;
+    }
+
+    public TBuilder WithMargin(Action<SiteSizeBuilder> configure)
+    {
+        _margin = new SiteSizeBuilder();
+        configure(_margin);
+        return (TBuilder)this;
+    }
+
+    public TBuilder WithBorder(Action<SiteSizeBuilder> configure)
+    {
+        _border = new SiteSizeBuilder();
+        configure(_border);
+        return (TBuilder)this;
     }
 
     public abstract Element Build();
