@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DisplayUtil.Building\DisplayUtil.Building.csproj" />
     <ProjectReference Include="..\DisplayUtil.Infrastructure\DisplayUtil.Infrastructure.csproj" />
     <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj" />
