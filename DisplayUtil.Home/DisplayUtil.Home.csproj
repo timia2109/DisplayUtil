@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DisplayUtil.Infrastructure\DisplayUtil.Infrastructure.csproj" />
+    <ProjectReference Include="..\DisplayUtil.Widgets\DisplayUtil.Widgets.csproj" />
   </ItemGroup>
 
 </Project>

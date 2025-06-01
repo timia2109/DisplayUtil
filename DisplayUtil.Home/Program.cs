@@ -5,10 +5,11 @@ using DisplayUtil.Infrastructure.EspUtilities;
 using DisplayUtil.Infrastructure.Providers.Font;
 using DisplayUtil.Infrastructure.Providers.Icons;
 using DisplayUtil.Infrastructure.Providers.Image;
+using DisplayUtil.Widgets;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 builder.AddHassSupport();
 
@@ -16,6 +17,7 @@ builder.Services
     .AddOpenApi()
     .AddHttpClient()
     .AddEspUtilities()
+    .AddWidgets()
     .AddScreenBuilder(d => d
         .WithTextSize(45)
         .WithFont("Roboto")
