@@ -13,13 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Home", "DisplayUtil.Home\DisplayUtil.Home.csproj", "{58139D95-D55B-48D1-B1E1-214894358548}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayUtil.Widgets", "DisplayUtil.Widgets\DisplayUtil.Widgets.csproj", "{122DF6C9-1FF5-4E22-A9D6-9DD47BC7B726}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DC4DD66A-4C26-47A3-B35F-DB571BAE55F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +41,12 @@ Global
 		{58139D95-D55B-48D1-B1E1-214894358548}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58139D95-D55B-48D1-B1E1-214894358548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58139D95-D55B-48D1-B1E1-214894358548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{122DF6C9-1FF5-4E22-A9D6-9DD47BC7B726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{122DF6C9-1FF5-4E22-A9D6-9DD47BC7B726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{122DF6C9-1FF5-4E22-A9D6-9DD47BC7B726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{122DF6C9-1FF5-4E22-A9D6-9DD47BC7B726}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
