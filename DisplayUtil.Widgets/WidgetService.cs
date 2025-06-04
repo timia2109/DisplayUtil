@@ -15,13 +15,15 @@ internal class WidgetService(IServiceProvider serviceProvider, IWidgetRegistry w
     }
 
     private WidgetEntity GetEntity(WidgetRegistration registration) =>
-        new(registration.Name, GetWidget(registration), registration.Priority);
+        new(registration.Id, GetWidget(registration), registration.Priority, registration.WidgetGroup);
 
     private IWidget GetWidget(WidgetRegistration registration)
     {
-        if (registration.ServiceKey != null)
-            return (IWidget)serviceProvider.GetRequiredKeyedService(registration.WidgetType, registration.ServiceKey);
-
-        return (IWidget)serviceProvider.GetRequiredService(registration.WidgetType);
+        return serviceProvider.GetRequiredKeyedService<IWidget>(
+            registration.Id);
     }
+
+    public IEnumerable<WidgetEntity> GetActiveWidgets(string widgetGroup)
+        => GetActiveWidgets()
+            .Where(w => w.WidgetGroup.Equals(widgetGroup, StringComparison.OrdinalIgnoreCase));
 }

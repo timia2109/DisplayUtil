@@ -1,20 +1,14 @@
 ﻿namespace DisplayUtil.Widgets;
 
-internal class WidgetRegistry : IWidgetRegistry
+/// <summary>
+/// Registry for widgets.
+/// </summary>
+/// <param name="registrations">Registered Widgets (must be sorted for priority descending)</param> 
+internal class WidgetRegistry(WidgetRegistration[] registrations) : IWidgetRegistry
 {
-    private readonly Dictionary<string, WidgetRegistration> _widgets = new();
+    public IEnumerable<WidgetRegistration> GetRegisteredWidgets() => registrations;
 
-    public void RegisterWidget<TWidget>(string name, string? serviceKey = null,
-        int priority = IWidgetRegistry.DefaultPriority) where TWidget : IWidget
-    {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("Widget name cannot be null or empty.", nameof(name));
-        if (_widgets.ContainsKey(name))
-            throw new InvalidOperationException($"A widget with the name '{name}' is already registered.");
-
-        _widgets[name] = new WidgetRegistration(name, typeof(TWidget), serviceKey, priority);
-    }
-
-    public IEnumerable<WidgetRegistration> GetRegisteredWidgets() => _widgets.Values
-        .OrderByDescending(w => w.Priority);
+    public IEnumerable<WidgetRegistration> GetRegisteredWidgets(string widgetGroup)
+        => registrations
+            .Where(w => w.WidgetGroup.Equals(widgetGroup, StringComparison.OrdinalIgnoreCase));
 }
