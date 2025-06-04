@@ -1,5 +1,6 @@
 using DisplayUtil.Building;
 using DisplayUtil.Building.Font;
+using DisplayUtil.Infrastructure.Providers;
 using DisplayUtil.Layouting.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,12 +22,15 @@ public static class ServiceCollectionExtension
         var builder = new DefaultDefinitionBuilder();
         configureDefaultDefinition(builder);
 
+        services.AddSingleton(new DefaultDefinitionProvider(
+            builder.DefaultDefinition));
+
+        services.AddScoped<ElementBuilderProvider>();
+
         services.AddTransient(s =>
         {
-            var fontProvider = s.GetRequiredService<IFontProvider>();
-            var iconDrawer = s.GetRequiredService<IIconDrawer>();
-            var defaultDefinition = builder.DefaultDefinition;
-            return new ScreenBuilder(fontProvider, iconDrawer, defaultDefinition);
+            var elementBuilderProvider = s.GetRequiredService<ElementBuilderProvider>();
+            return elementBuilderProvider.ScreenBuilder;
         });
 
         return services;
