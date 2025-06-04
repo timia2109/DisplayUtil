@@ -1,11 +1,13 @@
 using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.Screens;
+using DisplayUtil.Home.Widgets;
 using DisplayUtil.Infrastructure;
 using DisplayUtil.Infrastructure.EspUtilities;
 using DisplayUtil.Infrastructure.Providers.Font;
 using DisplayUtil.Infrastructure.Providers.Icons;
 using DisplayUtil.Infrastructure.Providers.Image;
 using DisplayUtil.Widgets;
+using NetDaemon.HassModel;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +19,28 @@ builder.Services
     .AddOpenApi()
     .AddHttpClient()
     .AddEspUtilities()
-    .AddWidgets()
+    .AddWidgets(w =>
+    {
+        // TODO: Use Configuration to load media players
+        string[] mediaPlayers = [
+            "media_player.wohnzimmer_2",
+            "media_player.googlehome5731"
+        ];
+
+        foreach (var mediaPlayer in mediaPlayers)
+        {
+            w.RegisterWidget(
+                mediaPlayer,
+                (s, k) => new MediaPlayerWidget(
+                    s.GetRequiredService<IHaContext>(),
+                    s.GetRequiredService<ElementBuilderProvider>(),
+                    mediaPlayer
+                ),
+                100,
+                "Media Players"
+            );
+        }
+    })
     .AddScreenBuilder(d => d
         .WithTextSize(45)
         .WithFont("Roboto")

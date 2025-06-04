@@ -3,13 +3,15 @@ using DisplayUtil.Building.Items;
 using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Infrastructure.Providers.Image;
 using DisplayUtil.Layouting;
+using DisplayUtil.Widgets;
 using SkiaSharp;
 
 namespace DisplayUtil.Home.Screens;
 
 public sealed class DefaultScreen(
     ScreenBuilder screenBuilder,
-    HassUtil hassUtil
+    HassUtil hassUtil,
+    IWidgetService widgetService
 ) : ISingleImageProvider
 {
     public async ValueTask<SKBitmap> GetImageAsync()
@@ -21,6 +23,12 @@ public sealed class DefaultScreen(
         var flexbox = builder.UseFlexbox()
             .WithDirection(FlexDirection.Vertical)
             .AddVBox(RenderHead);
+
+        var widgets = widgetService.GetActiveWidgets();
+        foreach (var widget in widgets)
+        {
+            var widgetBuilder = flexbox.WithElement(await widget.RenderAsync());
+        }
 
         return builder.Draw();
     }
