@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.HomeAssistant.Calendar;
 using DisplayUtil.Home.Utils;
@@ -11,6 +13,8 @@ public static class HassExtension
 {
     private const string _section = "HomeAssistant";
 
+    public const string JsonKey = "home-assistant";
+
     public static IHostApplicationBuilder AddHassSupport(this IHostApplicationBuilder builder)
     {
         var settings = builder.ConfigureAndGet<HomeAssistantSettings>(_section);
@@ -19,9 +23,21 @@ public static class HassExtension
             || settings.Host is null
         ) return builder;
 
+        builder.Services.AddKeyedSingleton(JsonKey,
+            new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+                WriteIndented = true,
+                Converters =
+                {
+                    new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
+                }
+            });
+
         builder.Services
             .AddHomeAssistantClient()
             .AddScoped<HassUtil>()
+            .AddScoped<MediaPlayerService>()
             .AddScopedHaContext();
 
         // Background Connection
