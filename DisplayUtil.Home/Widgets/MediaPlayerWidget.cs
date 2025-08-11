@@ -9,6 +9,7 @@ namespace DisplayUtil.Home.Widgets;
 public class MediaPlayerWidget(
     MediaPlayerService mediaPlayerService,
     ElementBuilderProvider elementBuilderProvider,
+    MediaAppIconHelper mediaAppIconHelper,
     string mediaPlayerEntity
 ) : IWidget
 {
@@ -63,7 +64,8 @@ public class MediaPlayerWidget(
 
         vbox
             .WithIconElement(
-                "fa:airplay",
+                mediaAppIconHelper.GetIconForApp(content.AppName
+                    ?? string.Empty),
                 content.AppName
             )
             .WithIconElement(

@@ -1,5 +1,6 @@
 using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.Screens;
+using DisplayUtil.Home.Utils;
 using DisplayUtil.Home.Widgets;
 using DisplayUtil.Infrastructure;
 using DisplayUtil.Infrastructure.EspUtilities;
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 builder.AddHassSupport();
+builder.AddMediaAppIcons();
 
 builder.Services
     .AddOpenApi()
