@@ -1,6 +1,7 @@
 using DisplayUtil.Building;
 using DisplayUtil.Building.Items;
 using DisplayUtil.Home.HomeAssistant;
+using DisplayUtil.Home.Utils;
 using DisplayUtil.Infrastructure.Providers.Image;
 using DisplayUtil.Layouting;
 using DisplayUtil.Widgets;
@@ -45,18 +46,16 @@ public sealed class DefaultScreen(
 
         flexboxBuilder
             .WithAlignItems(AlignItems.Center)
-            .WithPadding(p => p.WithBottom(2))
+            .WithJustifyContent(JustifyContent.Between)
+            .WithPadding(p => p.WithAll(2))
             .WithMargin(p => p.WithBottom(2))
             .WithBorder(p => p.WithBottom(2))
             .AddVBox(v =>
-                v.AddHBox(h => h
-                    .WithIcon("fa:calendar")
-                    .WithText(
-                        now.ToString("dd")
-                    )
-                    .WithText(now.ToString("dd.MM.yyyy"))
+                v.WithIconElement("fa:calendar",
+                    now.DayOfWeek.ToString()[0..2]
                 )
+                .WithText(now.ToString("dd.MM.yyyy"))
             )
-            .WithText(now.ToString("HH:MM"), "ProductSansBold", 80);
+            .WithText(now.ToString("t"), "ProductSansBold", 80);
     }
 }

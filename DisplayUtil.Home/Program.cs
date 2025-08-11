@@ -31,10 +31,8 @@ builder.Services
         {
             w.RegisterWidget(
                 mediaPlayer,
-                (s, k) => new MediaPlayerWidget(
-                    s.GetRequiredService<IHaContext>(),
-                    s.GetRequiredService<ElementBuilderProvider>(),
-                    mediaPlayer
+                (s, k) => ActivatorUtilities.CreateInstance<MediaPlayerWidget>(
+                    s, [mediaPlayer]
                 ),
                 100,
                 "Media Players"
