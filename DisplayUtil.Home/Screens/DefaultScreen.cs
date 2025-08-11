@@ -23,6 +23,7 @@ public sealed class DefaultScreen(
 
         var flexbox = builder.UseFlexbox()
             .WithDirection(FlexDirection.Vertical)
+            .WithJustifyContent(JustifyContent.Between)
             .AddVBox(RenderHead);
 
         var widgets = widgetService.GetActiveWidgets();
