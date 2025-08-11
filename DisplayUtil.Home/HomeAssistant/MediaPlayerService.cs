@@ -70,6 +70,8 @@ public class MediaPlayerService(
             Duration = duration,
             StartTime = startTime,
             EndTime = endTime,
+            MediaArtist = attributes.MediaArtist,
+            MediaAlbumName = attributes.MediaAlbumName,
             MediaContentType = attributes.MediaContentType ?? MediaContentType.Unknown
         };
     }
@@ -98,6 +100,10 @@ public record MediaPlayerAttributes
 
     public bool? IsVolumeMuted { get; init; }
 
+    public string? MediaArtist { get; init; }
+
+    public string? MediaAlbumName { get; init; }
+
     public string? EntityPictureLocal { get; init; }
 
     public DateTimeOffset? MediaPositionUpdatedAt { get; init; }
@@ -116,6 +122,10 @@ public record MediaContent
     public string? AppId { get; init; }
 
     public string? AppName { get; init; }
+
+    public string? MediaArtist { get; init; }
+
+    public string? MediaAlbumName { get; init; }
 
     public MediaContentType MediaContentType { get; init; }
 
