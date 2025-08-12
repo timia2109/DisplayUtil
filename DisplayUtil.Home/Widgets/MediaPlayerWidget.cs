@@ -59,6 +59,7 @@ public class MediaPlayerWidget(
         {
             MediaContentType.Music => "fa:list-music",
             MediaContentType.Video => "fa:film",
+            MediaContentType.TvShow => "fa:tv-retro",
             _ => "fa:tv-music"
         };
 
@@ -69,7 +70,11 @@ public class MediaPlayerWidget(
                 content.AppName
             )
             .WithIconElement(
-                "fa:user-music",
+                content.MediaContentType switch
+                {
+                    MediaContentType.TvShow => "fa:tower-broadcast",
+                    _ => "fa:user-music"
+                },
                 content.MediaArtist
             )
             .WithIconElement(
@@ -89,7 +94,7 @@ public class MediaPlayerWidget(
                 "fa:circle-pause",
                 "Pausiert"
             );
-        else
+        else if (content.Duration is not null && content.EndTime is not null)
         {
             // Plaining
             vbox.AddFlexbox(f => f

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using NetDaemon.Client.Settings;
@@ -8,12 +9,40 @@ namespace DisplayUtil.Home.HomeAssistant;
 public class MediaPlayerService(
     IOptions<HomeAssistantSettings> settings,
     IHaContext ctx,
+    HassUtil hassUtil,
     [FromKeyedServices(HassExtension.JsonKey)]
     JsonSerializerOptions jsonSerializerOptions
 )
 {
     private const string PlayingState = "playing",
-            PausedState = "paused";
+            PausedState = "paused",
+            UnavailableState = "unavailable";
+
+    /// <summary>
+    /// Evaluates the special handling for my tv show entities
+    /// </summary>
+    /// <param name="playerEntity">Affected Player</param>
+    /// <returns>The Media Content information for the TV show (or null if there isn't a show)</returns>
+    private TvContent? GetTvShowContent(string playerEntity)
+    {
+        var playerDomainPos = playerEntity.IndexOf('.');
+        var playerName = playerEntity[(playerDomainPos + 1)..];
+        var showState = $"sensor.{playerName}_show";
+
+        var showName = hassUtil.GetState(showState);
+        if (showName is UnavailableState or null) return null;
+
+        var showStart = hassUtil.GetDateTime($"{showState}_start");
+        var showEnd = hassUtil.GetDateTime($"{showState}_end");
+
+        var offset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+        return new TvContent
+        {
+            ShowName = showName,
+            ShowStart = new DateTimeOffset(showStart!.Value, offset),
+            ShowEnd = new DateTimeOffset(showEnd!.Value, offset)
+        };
+    }
 
     public MediaContent? GetMediaContent(string playerEntity)
     {
@@ -43,6 +72,17 @@ public class MediaPlayerService(
         {
             startTime = attributes.MediaPositionUpdatedAt.Value.AddSeconds(-(double)attributes.MediaPosition);
             endTime = startTime.Value.AddSeconds((double)attributes.MediaDuration);
+        }
+
+        // Try to get TvShow
+        var tvShowInfo = GetTvShowContent(playerEntity);
+        if (tvShowInfo is not null)
+        {
+            startTime = tvShowInfo.ShowStart;
+            endTime = tvShowInfo.ShowEnd;
+            attributes.MediaTitle = tvShowInfo.ShowName;
+            duration = tvShowInfo.Duration;
+            attributes.MediaContentType = MediaContentType.TvShow;
         }
 
         Uri? mediaPicture = null;
@@ -76,6 +116,15 @@ public class MediaPlayerService(
         };
     }
 
+    private record TvContent
+    {
+        public required string ShowName { get; init; }
+        public required DateTimeOffset ShowStart { get; init; }
+        public required DateTimeOffset ShowEnd { get; init; }
+
+        public TimeSpan Duration => ShowEnd - ShowStart;
+    }
+
 }
 
 public enum MediaContentType
@@ -89,12 +138,11 @@ public enum MediaContentType
 
 public record MediaPlayerAttributes
 {
-
     public string? AppId { get; init; }
 
     public string? AppName { get; init; }
 
-    public MediaContentType? MediaContentType { get; init; }
+    public MediaContentType? MediaContentType { get; set; }
 
     public decimal? VolumeLevel { get; init; }
 
@@ -110,7 +158,7 @@ public record MediaPlayerAttributes
 
     public decimal? MediaDuration { get; init; }
 
-    public string? MediaTitle { get; init; }
+    public string? MediaTitle { get; set; }
 
     public decimal? MediaPosition { get; init; }
 }

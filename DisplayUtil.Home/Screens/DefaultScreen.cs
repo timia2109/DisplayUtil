@@ -1,3 +1,4 @@
+using System.Globalization;
 using DisplayUtil.Building;
 using DisplayUtil.Building.Items;
 using DisplayUtil.Home.HomeAssistant;
@@ -53,9 +54,9 @@ public sealed class DefaultScreen(
             .WithBorder(p => p.WithBottom(2))
             .AddVBox(v =>
                 v.WithIconElement("fa:calendar",
-                    now.DayOfWeek.ToString()[0..2]
+                    now.ToString("dddd", CultureInfo.CurrentCulture)
                 )
-                .WithText(now.ToString("dd.MM.yyyy"))
+                .WithText(now.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture))
             )
             .WithText(now.ToString("t"), "ProductSansBold", 80);
     }
