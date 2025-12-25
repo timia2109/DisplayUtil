@@ -8,7 +8,7 @@ public record AwtrixConnectionOptions
     /// <summary>
     ///     Affected topic on the Awtrix MQTT broker.
     /// </summary>
-    public string MqttTopic { get; init; } = !null;
+    public required string MqttTopic { get; init; }
 
     /// <summary>
     ///     Host of the MQTT broker.
