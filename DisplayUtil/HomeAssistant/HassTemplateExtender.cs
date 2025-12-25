@@ -6,7 +6,7 @@ using Scriban.Runtime;
 namespace DisplayUtil.HomeAssistant;
 
 internal class HassTemplateExtender(IHaContext haContext)
-: ITemplateExtender
+    : ITemplateExtender
 {
     public void Enrich(ScriptObject context, EnrichScope scope)
     {
@@ -50,10 +50,10 @@ internal class HassTemplateExtender(IHaContext haContext)
         if (state is null) return null;
 
         if (!DateTime.TryParseExact(state,
-            "yyyy-MM-dd HH:mm:ss",
-            CultureInfo.GetCultureInfo("de-DE"),
-            DateTimeStyles.None,
-            out var dt))
+                "yyyy-MM-dd HH:mm:ss",
+                CultureInfo.GetCultureInfo("de-DE"),
+                DateTimeStyles.None,
+                out var dt))
             return null;
 
         return dt;

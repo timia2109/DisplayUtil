@@ -5,7 +5,7 @@ using MQTTnet.Protocol;
 namespace DisplayUtil.MqttExport;
 
 /// <summary>
-/// Responsible to export the new URL to MQTT
+///     Responsible to export the new URL to MQTT
 /// </summary>
 public partial class ExportingMqttClient(
     IMqttClient client,
@@ -14,7 +14,6 @@ public partial class ExportingMqttClient(
     ILogger<ExportingMqttClient> logger
 )
 {
-
     private readonly ILogger _logger = logger;
 
     private async Task EnsureConnectedAsync()
@@ -32,7 +31,7 @@ public partial class ExportingMqttClient(
 
         await client.PublishStringAsync(
             settings.Value.Topic
-                ?? throw new ArgumentNullException(nameof(settings.Value.Topic)),
+            ?? throw new ArgumentNullException(nameof(settings.Value.Topic)),
             payload,
             MqttQualityOfServiceLevel.AtLeastOnce,
             true

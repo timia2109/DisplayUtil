@@ -4,12 +4,13 @@ using DisplayUtil.Layouting.Utils;
 
 namespace DisplayUtil.Building.Items;
 
-public class FlexboxBuilder(IFontProvider fontProvider, IIconDrawer iconDrawer, DefaultDefinition defaultDefinition) : CollectionBuilder<FlexboxBuilder>(fontProvider, iconDrawer, defaultDefinition)
+public class FlexboxBuilder(IFontProvider fontProvider, IIconDrawer iconDrawer, DefaultDefinition defaultDefinition)
+    : CollectionBuilder<FlexboxBuilder>(fontProvider, iconDrawer, defaultDefinition)
 {
-    private FlexDirection _flexDirection = FlexDirection.Horizontal;
-    private int _gap = 0;
-    private JustifyContent _justifyContent = JustifyContent.Start;
     private AlignItems _alignItems = AlignItems.Start;
+    private FlexDirection _flexDirection = FlexDirection.Horizontal;
+    private int _gap;
+    private JustifyContent _justifyContent = JustifyContent.Start;
 
     public FlexboxBuilder WithDirection(FlexDirection direction)
     {

@@ -9,7 +9,7 @@ public class KeyedImageRegistryProvider(IServiceProvider serviceProvider) : IIma
     {
         // TODO: Optimize
         return serviceProvider.GetKeyedService<ISingleImageProvider>(imageName)
-            != null;
+               != null;
     }
 
     public ValueTask<SKBitmap> GetImageAsync(string imageName)

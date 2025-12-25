@@ -4,9 +4,11 @@ namespace DisplayUtil.Widgets;
 
 internal class WidgetService(IServiceProvider serviceProvider, IWidgetRegistry widgetRegistry) : IWidgetService
 {
-    public IEnumerable<WidgetEntity> GetAllWidgets() =>
-        widgetRegistry.GetRegisteredWidgets()
+    public IEnumerable<WidgetEntity> GetAllWidgets()
+    {
+        return widgetRegistry.GetRegisteredWidgets()
             .Select(GetEntity);
+    }
 
     public IEnumerable<WidgetEntity> GetActiveWidgets()
     {
@@ -14,16 +16,21 @@ internal class WidgetService(IServiceProvider serviceProvider, IWidgetRegistry w
             .Where(w => w.Widget.IsActive);
     }
 
-    private WidgetEntity GetEntity(WidgetRegistration registration) =>
-        new(registration.Id, GetWidget(registration), registration.Priority, registration.WidgetGroup);
+    public IEnumerable<WidgetEntity> GetActiveWidgets(string widgetGroup)
+    {
+        return GetActiveWidgets()
+            .Where(w => w.WidgetGroup.Equals(widgetGroup, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private WidgetEntity GetEntity(WidgetRegistration registration)
+    {
+        return new WidgetEntity(registration.Id, GetWidget(registration), registration.Priority,
+            registration.WidgetGroup);
+    }
 
     private IWidget GetWidget(WidgetRegistration registration)
     {
         return serviceProvider.GetRequiredKeyedService<IWidget>(
             registration.Id);
     }
-
-    public IEnumerable<WidgetEntity> GetActiveWidgets(string widgetGroup)
-        => GetActiveWidgets()
-            .Where(w => w.WidgetGroup.Equals(widgetGroup, StringComparison.OrdinalIgnoreCase));
 }

@@ -1,16 +1,13 @@
-using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
 using DisplayUtil.Providers;
 using DisplayUtil.Utils;
-using SkiaSharp;
 
 namespace DisplayUtil.XmlModel.Models;
 
 public class HBox : ICollectionXmlModel
 {
-    [XmlAttribute]
-    public int Gap = 0;
+    [XmlAttribute] public int Gap;
 
     public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)

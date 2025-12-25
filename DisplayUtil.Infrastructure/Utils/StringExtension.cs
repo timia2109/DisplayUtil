@@ -5,7 +5,7 @@ public static class StringExtension
     private const char _separator = ':';
 
     /// <summary>
-    /// Spilts a string with a domain and an item path
+    ///     Spilts a string with a domain and an item path
     /// </summary>
     /// <param name="path">Path String format: "[domain]:item"</param>
     /// <param name="defaultDomain">Fallback Domain</param>
@@ -20,20 +20,16 @@ public static class StringExtension
 
         if (separatorIndex == -1)
         {
-            if (defaultDomain is null)
-            {
-                throw new Exception($"No default domain defined: {path}");
-            }
+            if (defaultDomain is null) throw new Exception($"No default domain defined: {path}");
             domain = defaultDomain;
             icon = path;
         }
         else
         {
-            domain = path[0..separatorIndex];
+            domain = path[..separatorIndex];
             icon = path[(separatorIndex + 1)..];
         }
 
         return (domain, icon);
     }
-
 }

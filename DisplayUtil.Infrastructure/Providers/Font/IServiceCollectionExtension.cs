@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using DisplayUtil.Building.Font;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +7,7 @@ namespace DisplayUtil.Infrastructure.Providers.Font;
 public static class IServiceCollectionExtension
 {
     /// <summary>
-    /// Adds the Font Provider
+    ///     Adds the Font Provider
     /// </summary>
     /// <param name="services">Services</param>
     /// <param name="configure">Configure action</param>

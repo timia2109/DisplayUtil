@@ -1,14 +1,12 @@
 using DisplayUtil.Layouting;
 using DisplayUtil.Scenes;
-using DisplayUtil.Utils;
 using DisplayUtil.XmlModel;
-using Scriban.Parsing;
-using Scriban.Runtime;
 using SkiaSharp;
 
 namespace DisplayUtil.Template;
 
-internal class ScibanScreenProviderSource(IServiceProvider serviceProvider,
+internal class ScibanScreenProviderSource(
+    IServiceProvider serviceProvider,
     TemplateLoader templateLoader
 )
     : IScreenProviderSource

@@ -10,15 +10,11 @@ namespace DisplayUtil.XmlModel.Models;
 [XmlType(nameof(Text))]
 public class Text : IXmlModel
 {
-    [XmlAttribute]
-    [Required]
-    public string Content = null!;
+    [XmlAttribute] [Required] public string Content = null!;
 
-    [XmlAttribute]
-    public string? Font;
+    [XmlAttribute] public string? Font;
 
-    [XmlAttribute]
-    public int Size;
+    [XmlAttribute] public int Size;
 
     public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)

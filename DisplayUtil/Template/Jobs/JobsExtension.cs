@@ -22,7 +22,7 @@ internal static class JobsExtension
                 o.AddJob<TemplateJob>(j => j
                     .WithIdentity(jobKey)
                     .UsingJobData(TemplateJob.TemplateNameField,
-                            setting.TemplateName)
+                        setting.TemplateName)
                 );
 
                 o.AddTrigger(t => t

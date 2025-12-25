@@ -1,12 +1,12 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.HomeAssistant.Calendar;
 using DisplayUtil.Home.Utils;
 using NCronJob;
 using NetDaemon.Client.Extensions;
 using NetDaemon.Client.Settings;
 using NetDaemon.HassModel;
+
 namespace DisplayUtil.Home.HomeAssistant;
 
 public static class HassExtension
@@ -21,7 +21,7 @@ public static class HassExtension
 
         if (settings is null
             || settings.Host is null
-        ) return builder;
+           ) return builder;
 
         builder.Services.AddKeyedSingleton(JsonKey,
             new JsonSerializerOptions

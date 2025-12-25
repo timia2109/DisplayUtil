@@ -19,6 +19,4 @@ public static class TemplateInitializer
 
         return builder;
     }
-
-
 }

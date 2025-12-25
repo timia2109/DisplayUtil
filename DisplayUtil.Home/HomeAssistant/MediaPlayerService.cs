@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using NetDaemon.Client.Settings;
@@ -15,11 +14,11 @@ public class MediaPlayerService(
 )
 {
     private const string PlayingState = "playing",
-            PausedState = "paused",
-            UnavailableState = "unavailable";
+        PausedState = "paused",
+        UnavailableState = "unavailable";
 
     /// <summary>
-    /// Evaluates the special handling for my tv show entities
+    ///     Evaluates the special handling for my tv show entities
     /// </summary>
     /// <param name="playerEntity">Affected Player</param>
     /// <returns>The Media Content information for the TV show (or null if there isn't a show)</returns>
@@ -49,7 +48,7 @@ public class MediaPlayerService(
         var entity = ctx.GetState(playerEntity);
 
         if (entity is null || entity.State is null
-            || entity.State is not (PlayingState or PausedState))
+                           || entity.State is not (PlayingState or PausedState))
             return null;
 
         var attributes = entity.AttributesJson
@@ -124,7 +123,6 @@ public class MediaPlayerService(
 
         public TimeSpan Duration => ShowEnd - ShowStart;
     }
-
 }
 
 public enum MediaContentType

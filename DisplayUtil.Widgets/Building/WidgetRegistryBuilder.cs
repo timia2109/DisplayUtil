@@ -56,5 +56,4 @@ internal class WidgetRegistryBuilder(IServiceCollection services) : IWidgetRegis
             new WidgetRegistry(widgets)
         );
     }
-
 }

@@ -7,11 +7,15 @@ namespace DisplayUtil.Building;
 
 internal class PrebuildElement(Element element) : ILayoutBuilder
 {
-    public Element Build() => element;
+    public Element Build()
+    {
+        return element;
+    }
 }
 
 public abstract class CollectionBuilder<TBuilder>(
-    IFontProvider fontProvider, IIconDrawer iconDrawer,
+    IFontProvider fontProvider,
+    IIconDrawer iconDrawer,
     DefaultDefinition defaultDefinition)
     : LayoutBuilder<TBuilder>(fontProvider, iconDrawer, defaultDefinition)
     where TBuilder : CollectionBuilder<TBuilder>
@@ -48,9 +52,9 @@ public abstract class CollectionBuilder<TBuilder>(
         where TElement : ElementCollection
     {
         element.Children = children.Select(c => c.Build()).ToList();
-        element.Border = _border?.Build() ?? new();
-        element.Margin = _margin?.Build() ?? new();
-        element.Padding = _padding?.Build() ?? new();
+        element.Border = _border?.Build() ?? new SiteSize();
+        element.Margin = _margin?.Build() ?? new SiteSize();
+        element.Padding = _padding?.Build() ?? new SiteSize();
         return element;
     }
 

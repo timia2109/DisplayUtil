@@ -15,6 +15,11 @@ public partial class HassCalendarImportJob(
 {
     private readonly ILogger _logger = logger;
 
+    public Task Execute(IJobExecutionContext context)
+    {
+        return RefreshAsync();
+    }
+
     public async Task RefreshAsync()
     {
         var appointments = await FetchAsync(CancellationToken.None);
@@ -65,11 +70,6 @@ public partial class HassCalendarImportJob(
 
     [LoggerMessage(LogLevel.Warning, "Error fetching appointments")]
     private partial void LogError(Exception e);
-
-    public Task Execute(IJobExecutionContext context)
-    {
-        return RefreshAsync();
-    }
 }
 
 internal record GetEventsPayload : CommandMessage

@@ -3,30 +3,38 @@ using System.Xml.Serialization;
 namespace DisplayUtil.XmlModel;
 
 /// <summary>
-/// Setting defaults for the child elements
+///     Setting defaults for the child elements
 /// </summary>
-public record struct DefaultDefinition()
+public record struct DefaultDefinition
 {
     /// <summary>
-    /// Textsize
+    ///     Font
     /// </summary>
-    [XmlAttribute]
-    public int TextSize;
+    [XmlAttribute] public string? Font;
 
     /// <summary>
-    /// Font
+    ///     Icon Height
     /// </summary>
-    [XmlAttribute]
-    public string? Font;
+    [XmlAttribute] public int IconHeight;
 
     /// <summary>
-    /// Icon Height
+    ///     Textsize
     /// </summary>
-    [XmlAttribute]
-    public int IconHeight;
+    [XmlAttribute] public int TextSize;
 
     /// <summary>
-    /// Overrides the defaults
+    ///     The default set
+    /// </summary>
+    public static DefaultDefinition Default =>
+        new()
+        {
+            TextSize = 20,
+            Font = "Roboto-Medium",
+            IconHeight = 20
+        };
+
+    /// <summary>
+    ///     Overrides the defaults
     /// </summary>
     /// <param name="other">Defined defaults on that Element</param>
     /// <returns>The merged</returns>
@@ -42,17 +50,4 @@ public record struct DefaultDefinition()
             IconHeight = o.IconHeight != 0 ? o.IconHeight : IconHeight
         };
     }
-
-    /// <summary>
-    /// The default set
-    /// </summary>
-    public static DefaultDefinition Default =>
-         new()
-         {
-             TextSize = 20,
-             Font = "Roboto-Medium",
-             IconHeight = 20
-         };
-
-
 }

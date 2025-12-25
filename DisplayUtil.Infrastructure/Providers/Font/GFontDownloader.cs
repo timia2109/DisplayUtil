@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace DisplayUtil.Infrastructure.Providers.Font;
 
 /// <summary>
-/// Responsible to download from Google Fonts
+///     Responsible to download from Google Fonts
 /// </summary>
 internal partial class GFontDownloader(
     string googleFontsPath,
@@ -14,23 +12,23 @@ internal partial class GFontDownloader(
     IHttpClientFactory httpClientFactory
 )
 {
-    private readonly ILogger _logger = logger;
+    private static readonly Dictionary<string, int> _fontWeights = new()
+    {
+        { "thin", 100 },
+        { "extra-light", 200 },
+        { "light", 300 },
+        { "regular", 400 },
+        { "medium", 500 },
+        { "semi-bold", 600 },
+        { "bold", 700 },
+        { "extra-bold", 800 },
+        { "black", 900 }
+    };
 
     private readonly HttpClient _httpClient
         = httpClientFactory.CreateClient(nameof(GFontDownloader));
 
-    private static readonly Dictionary<string, int> _fontWeights = new()
-    {
-        {"thin", 100},
-        {"extra-light", 200},
-        {"light", 300},
-        {"regular", 400},
-        {"medium", 500},
-        {"semi-bold", 600},
-        {"bold", 700},
-        {"extra-bold", 800},
-        {"black", 900},
-    };
+    private readonly ILogger _logger = logger;
 
     private DownloadData ParseExpression(string fontPath)
     {
@@ -69,17 +67,11 @@ internal partial class GFontDownloader(
         LogStartDownload(downloadData, uri);
 
         var response = await _httpClient.GetAsync(uri);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Error on downloading font {downloadData}");
-        }
+        if (!response.IsSuccessStatusCode) throw new Exception($"Error on downloading font {downloadData}");
         var text = await response.Content.ReadAsStringAsync();
 
         var ttfUri = GetCssRegex().Match(text);
-        if (ttfUri is null)
-        {
-            throw new Exception($"Could not parse GFont Response on font {downloadData}");
-        }
+        if (ttfUri is null) throw new Exception($"Could not parse GFont Response on font {downloadData}");
 
         var fontResponse = await _httpClient.GetAsync(ttfUri.Groups[1].Value);
         await fontResponse.Content.CopyToAsync(File.OpenWrite(path));
@@ -91,12 +83,10 @@ internal partial class GFontDownloader(
 
         // Check if weight is number
         if (!GetNumberRegex().IsMatch(data.Weight))
-        {
             data = data with
             {
                 Weight = _fontWeights[data.Weight].ToString()
             };
-        }
 
         var path = GeneratePath(data);
 

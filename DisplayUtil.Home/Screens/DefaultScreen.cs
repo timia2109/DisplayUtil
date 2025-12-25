@@ -54,9 +54,9 @@ public sealed class DefaultScreen(
             .WithBorder(p => p.WithBottom(2))
             .AddVBox(v =>
                 v.WithIconElement("fa:calendar",
-                    now.ToString("dddd", CultureInfo.CurrentCulture)
-                )
-                .WithText(now.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture))
+                        now.ToString("dddd", CultureInfo.CurrentCulture)
+                    )
+                    .WithText(now.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture))
             )
             .WithText(now.ToString("t"), "ProductSansBold", 80);
     }

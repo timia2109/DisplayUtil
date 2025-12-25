@@ -8,16 +8,14 @@ namespace DisplayUtil.XmlModel.Models;
 public class Screen : IXmlModel
 {
     /// <summary>
-    /// Width of this screen
+    ///     Height of this screen
     /// </summary>
-    [XmlAttribute]
-    public int Width;
+    [XmlAttribute] public int Height;
 
     /// <summary>
-    /// Height of this screen
+    ///     Width of this screen
     /// </summary>
-    [XmlAttribute]
-    public int Height;
+    [XmlAttribute] public int Width;
 
     public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)

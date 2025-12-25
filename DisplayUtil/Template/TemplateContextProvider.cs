@@ -5,8 +5,8 @@ using Scriban.Runtime;
 namespace DisplayUtil.Template;
 
 /// <summary>
-/// Provides the default template objects.
-/// Scoped
+///     Provides the default template objects.
+///     Scoped
 /// </summary>
 public class TemplateContextProvider(
     IEnumerable<ITemplateExtender> extenders,
@@ -16,10 +16,7 @@ public class TemplateContextProvider(
     {
         var scriptObject = new ScriptObject();
 
-        foreach (var extender in extenders)
-        {
-            extender.Enrich(scriptObject, scope);
-        }
+        foreach (var extender in extenders) extender.Enrich(scriptObject, scope);
 
         var context = new TemplateContext
         {

@@ -1,22 +1,33 @@
-
 using System.Diagnostics;
 
 namespace DisplayUtil.Utils;
 
 /// <summary>
-/// Helper class to handle scheduled background tasks
+///     Helper class to handle scheduled background tasks
 /// </summary>
 public abstract partial class TimedScopedService(
     IServiceScopeFactory scopeFactory,
     ILogger logger
 ) : IHostedService
 {
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly ILogger _logger = logger;
-    private CancellationTokenSource _cancellationTokenSource = new();
 
     protected abstract TimeSpan InitTimeout { get; }
     protected abstract TimeSpan Delay { get; }
     protected CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _ = RunAsync(_cancellationTokenSource.Token);
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _cancellationTokenSource?.Cancel();
+        return Task.CompletedTask;
+    }
 
     protected abstract Task TriggerAsync(IServiceProvider serviceProvider);
 
@@ -46,18 +57,6 @@ public abstract partial class TimedScopedService(
             await RunJobAsync();
             await Task.Delay(Delay, cancellationToken);
         }
-    }
-
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _ = RunAsync(_cancellationTokenSource.Token);
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _cancellationTokenSource?.Cancel();
-        return Task.CompletedTask;
     }
 
     [LoggerMessage(LogLevel.Information, "Trigger task")]

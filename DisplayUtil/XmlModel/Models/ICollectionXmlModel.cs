@@ -7,36 +7,29 @@ namespace DisplayUtil.XmlModel.Models;
 
 public record XmlSiteSize
 {
-    [XmlAttribute]
-    public int Top = 0;
+    [XmlAttribute] public int All;
 
-    [XmlAttribute]
-    public int Left = 0;
+    [XmlAttribute] public int Bottom;
 
-    [XmlAttribute]
-    public int Right = 0;
+    [XmlAttribute] public int Left;
 
-    [XmlAttribute]
-    public int Bottom = 0;
+    [XmlAttribute] public int Right;
 
-    [XmlAttribute]
-    public int All = 0;
+    [XmlAttribute] public int Top;
 
-    [XmlAttribute]
-    public int X = 0;
+    [XmlAttribute] public int X;
 
-    [XmlAttribute]
-    public int Y = 0;
+    [XmlAttribute] public int Y;
 
     public SiteSize AsSiteSize()
     {
         if (All != default)
-            return new(All);
+            return new SiteSize(All);
 
         if (X != default || Y != default)
-            return new(X, Y);
+            return new SiteSize(X, Y);
 
-        return new(Top, Right, Bottom, Left);
+        return new SiteSize(Top, Right, Bottom, Left);
     }
 }
 

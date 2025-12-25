@@ -1,7 +1,5 @@
 using DisplayUtil.Building;
-using DisplayUtil.Building.Font;
 using DisplayUtil.Infrastructure.Providers;
-using DisplayUtil.Layouting.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DisplayUtil.Infrastructure;
@@ -9,7 +7,7 @@ namespace DisplayUtil.Infrastructure;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Adds a <see cref="ScreenBuilder"/> to the dependency injection
+    ///     Adds a <see cref="ScreenBuilder" /> to the dependency injection
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configureDefaultDefinition"></param>
@@ -35,5 +33,4 @@ public static class ServiceCollectionExtension
 
         return services;
     }
-
 }

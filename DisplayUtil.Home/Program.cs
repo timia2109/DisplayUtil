@@ -8,7 +8,6 @@ using DisplayUtil.Infrastructure.Providers.Font;
 using DisplayUtil.Infrastructure.Providers.Icons;
 using DisplayUtil.Infrastructure.Providers.Image;
 using DisplayUtil.Widgets;
-using NetDaemon.HassModel;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,22 +23,20 @@ builder.Services
     .AddWidgets(w =>
     {
         // TODO: Use Configuration to load media players
-        string[] mediaPlayers = [
+        string[] mediaPlayers =
+        [
             "media_player.wohnzimmer_2",
             "media_player.googlehome5731"
         ];
 
         foreach (var mediaPlayer in mediaPlayers)
-        {
             w.RegisterWidget(
                 mediaPlayer,
                 (s, k) => ActivatorUtilities.CreateInstance<MediaPlayerWidget>(
-                    s, [mediaPlayer]
-                ),
+                    s, mediaPlayer),
                 100,
                 "Media Players"
             );
-        }
     })
     .AddScreenBuilder(d => d
         .WithTextSize(45)

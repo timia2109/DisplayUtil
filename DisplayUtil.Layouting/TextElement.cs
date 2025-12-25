@@ -3,7 +3,7 @@ using SkiaSharp;
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// Simple TextElement
+///     Simple TextElement
 /// </summary>
 /// <param name="content">The Content</param>
 /// <param name="paint">Painting Information</param>

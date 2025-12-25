@@ -8,10 +8,10 @@ namespace DisplayUtil.Infrastructure.Providers.Icons;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Adds a directory icon provider to the service collection.
-    /// Prefix is used to identify the icons provided by this provider.
-    /// Icon Name will be "prefix:iconName".
-    /// The <see cref="IIconDrawer"/> will also be added to the service collection.
+    ///     Adds a directory icon provider to the service collection.
+    ///     Prefix is used to identify the icons provided by this provider.
+    ///     Icon Name will be "prefix:iconName".
+    ///     The <see cref="IIconDrawer" /> will also be added to the service collection.
     /// </summary>
     /// <param name="services">Service Collection</param>
     /// <param name="iconPrefix">Identifying Prefix</param>
@@ -38,11 +38,9 @@ public static class ServiceCollectionExtension
         services.TryAddIconDrawer();
 
         foreach (var (iconPrefix, folderPath) in iconConfiguration.Icons)
-        {
             services.AddSingleton<IIconProvider>(
                 new DirectoryIconProvider(iconPrefix, folderPath)
             );
-        }
 
         return services;
     }
@@ -55,12 +53,12 @@ public static class ServiceCollectionExtension
         return AddFolderIconProvider(
             services,
             iconConfiguration.Get<IconConfiguration>()
-                ?? throw new Exception("Icon configuration is missing")
+            ?? throw new Exception("Icon configuration is missing")
         );
     }
 
     /// <summary>
-    /// Try to add the standard icon drawer to the service collection.
+    ///     Try to add the standard icon drawer to the service collection.
     /// </summary>
     /// <param name="services">Service Collection</param>
     /// <returns>Service Collection</returns>

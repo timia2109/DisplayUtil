@@ -8,6 +8,7 @@ using DisplayUtil.Template;
 using DisplayUtil.Utils;
 using DisplayUtil.XmlModel;
 using Quartz;
+using SkiaSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -27,10 +28,7 @@ builder.Services
     .AddSingleton<XmlLayoutDeserializer>()
     .AddTransient<IIconDrawer, IconDrawer>()
     .AddQuartz()
-    .AddQuartzHostedService(options =>
-    {
-        options.WaitForJobsToComplete = true;
-    });
+    .AddQuartzHostedService(options => { options.WaitForJobsToComplete = true; });
 
 builder.Services.AddScreenProvider(o => o
     .AddScribanFiles()
@@ -42,14 +40,13 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapGet("/preview/{providerId}", async (string providerId, ScreenRepository repo) =>
-{
-    using var image = await repo.GetImageAsync(providerId);
-    using var data = image.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
-    return Results.File(data.ToArray(), "image/png");
-
-})
-.WithName("Preview Image")
-.WithOpenApi();
+    {
+        using var image = await repo.GetImageAsync(providerId);
+        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        return Results.File(data.ToArray(), "image/png");
+    })
+    .WithName("Preview Image")
+    .WithOpenApi();
 
 app.UseEspUtilities();
 app.UseStaticFiles();

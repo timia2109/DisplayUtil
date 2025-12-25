@@ -14,13 +14,15 @@ public class MediaPlayerWidget(
 ) : IWidget
 {
     /// <summary>
-    /// The min. media duration, when the remaining bar should gets displayed
-    /// </summary> 
+    ///     The min. media duration, when the remaining bar should gets displayed
+    /// </summary>
     private static readonly TimeSpan MinRemainingDuration
         = TimeSpan.FromMinutes(5);
 
-    private bool _mediaContentInitialized = false;
     private MediaContent? _mediaContent;
+
+    private bool _mediaContentInitialized;
+
     private MediaContent? MediaContent
     {
         get
@@ -41,14 +43,12 @@ public class MediaPlayerWidget(
         var content = MediaContent;
 
         if (content is null)
-        {
             return Task.FromResult(
                 elementBuilderProvider
                     .VBoxBuilder
                     .WithText("No media playing")
                     .Build()
             );
-        }
 
         var vbox = elementBuilderProvider.VBoxBuilder
             .WithGap(2)
@@ -66,7 +66,7 @@ public class MediaPlayerWidget(
         vbox
             .WithIconElement(
                 mediaAppIconHelper.GetIconForApp(content.AppName
-                    ?? string.Empty),
+                                                 ?? string.Empty),
                 content.AppName
             )
             .WithIconElement(
@@ -85,15 +85,17 @@ public class MediaPlayerWidget(
                 contentIconName,
                 content.MediaTitle
             )
-        ;
+            ;
 
         // Remaining Bar
         if (content.IsPaused)
             // Paused
+        {
             vbox.WithIconElement(
                 "fa:circle-pause",
                 "Pausiert"
             );
+        }
         else if (content.Duration is not null && content.EndTime is not null)
         {
             // Plaining

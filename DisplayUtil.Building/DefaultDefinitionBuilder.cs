@@ -25,4 +25,6 @@ public class DefaultDefinitionBuilder<TBuilder>(DefaultDefinition? template = nu
     }
 }
 
-public class DefaultDefinitionBuilder : DefaultDefinitionBuilder<DefaultDefinitionBuilder> { }
+public class DefaultDefinitionBuilder : DefaultDefinitionBuilder<DefaultDefinitionBuilder>
+{
+}

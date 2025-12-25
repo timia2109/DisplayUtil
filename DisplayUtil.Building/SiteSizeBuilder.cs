@@ -4,10 +4,10 @@ namespace DisplayUtil.Building;
 
 public sealed class SiteSizeBuilder
 {
-    private int _top = 0;
-    private int _right = 0;
-    private int _bottom = 0;
-    private int _left = 0;
+    private int _bottom;
+    private int _left;
+    private int _right;
+    private int _top;
 
     public SiteSizeBuilder WithAll(int all)
     {
@@ -61,5 +61,4 @@ public sealed class SiteSizeBuilder
             Top = _top
         };
     }
-
 }

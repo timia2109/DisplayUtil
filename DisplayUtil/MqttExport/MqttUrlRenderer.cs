@@ -1,5 +1,4 @@
 using DisplayUtil.EspUtilities;
-using DisplayUtil.Template;
 using Microsoft.Extensions.Options;
 
 namespace DisplayUtil.MqttExport;
@@ -18,7 +17,7 @@ public class MqttUrlRenderer(
         var query = providerId.IndexOf('?');
         var providerPath = query == -1
             ? providerId
-            : providerId[0..query];
+            : providerId[..query];
 
         var uriBuilder = new UriBuilder(settings.ServerHostName!)
         {
@@ -35,7 +34,7 @@ public class MqttUrlRenderer(
     }
 
     /// <summary>
-    /// Exports the Uri to MQTT
+    ///     Exports the Uri to MQTT
     /// </summary>
     /// <returns>Task</returns>
     public async Task GenerateUrlAndPublish(
@@ -46,5 +45,4 @@ public class MqttUrlRenderer(
             GetMqttTemplateUri(providerId)
         );
     }
-
 }

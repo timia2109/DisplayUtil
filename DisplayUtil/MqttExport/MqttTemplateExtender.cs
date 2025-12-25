@@ -4,7 +4,7 @@ using Scriban.Runtime;
 namespace DisplayUtil.MqttExport;
 
 /// <summary>
-/// Provides the publish_mqtt_template function to Jobs
+///     Provides the publish_mqtt_template function to Jobs
 /// </summary>
 /// <param name="setter"></param>
 public class MqttTemplateExtender(

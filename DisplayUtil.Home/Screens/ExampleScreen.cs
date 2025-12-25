@@ -16,7 +16,6 @@ public sealed class ExampleScreen(ScreenBuilder screenBuilder) : ISingleImagePro
         builder.UseFlexbox()
             .WithDirection(FlexDirection.Vertical)
             .WithJustifyContent(JustifyContent.Between)
-
             .WithIcon("fa:home", 80)
             .WithText("Hello World!")
             .WithText("This is an example screen");

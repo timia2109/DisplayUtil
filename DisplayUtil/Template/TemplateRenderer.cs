@@ -1,15 +1,11 @@
-using System.Globalization;
 using System.Text;
-using DisplayUtil.MqttExport;
-using Microsoft.Extensions.Options;
-using Scriban;
 using Scriban.Parsing;
 
 namespace DisplayUtil.Template;
 
 /// <summary>
-/// Responsible to render a Scriban Template.
-/// Scoped
+///     Responsible to render a Scriban Template.
+///     Scoped
 /// </summary>
 public class TemplateRenderer(
     TemplateContextProvider contextProvider,
@@ -21,8 +17,8 @@ public class TemplateRenderer(
         LexerOptions lexerOptions
     )
     {
-        var path = Path.IsPathFullyQualified(templateName) ?
-            templateName
+        var path = Path.IsPathFullyQualified(templateName)
+            ? templateName
             : loader.GetPath(templateName);
 
         var content = await loader.LoadAsync(path);
@@ -31,7 +27,7 @@ public class TemplateRenderer(
     }
 
     /// <summary>
-    /// Evaluates a Scriban Script
+    ///     Evaluates a Scriban Script
     /// </summary>
     /// <param name="templateName">Name of the Template</param>
     /// <returns>Task</returns>
@@ -39,7 +35,7 @@ public class TemplateRenderer(
     {
         var template = await GetTemplateAsync(
             templateName,
-            new LexerOptions() { Mode = ScriptMode.ScriptOnly }
+            new LexerOptions { Mode = ScriptMode.ScriptOnly }
         );
         var context = contextProvider.GetTemplateContext(EnrichScope.Job);
 
@@ -47,7 +43,7 @@ public class TemplateRenderer(
     }
 
     /// <summary>
-    /// Renders a Scriban Template
+    ///     Renders a Scriban Template
     /// </summary>
     /// <param name="templateName">Name of the Template</param>
     /// <param name="scope">EnrichScope</param>

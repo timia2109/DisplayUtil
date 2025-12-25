@@ -18,7 +18,7 @@ public static class HassExtension
 
         if (settings is null
             || settings.Host is null
-        ) return builder;
+           ) return builder;
 
         builder.Services
             .AddHomeAssistantClient()

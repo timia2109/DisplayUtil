@@ -4,7 +4,7 @@ using SkiaSharp;
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// An FontAwesome Icon Element
+///     An FontAwesome Icon Element
 /// </summary>
 /// <param name="iconName">Name of the Icon</param>
 /// <param name="height">Width of the Icon</param>

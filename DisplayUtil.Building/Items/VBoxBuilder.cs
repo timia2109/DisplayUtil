@@ -8,7 +8,7 @@ public class VBoxBuilder(
     IFontProvider fontProvider,
     IIconDrawer iconDrawer,
     DefaultDefinition defaultDefinition)
-: CollectionBuilder<VBoxBuilder>(fontProvider, iconDrawer, defaultDefinition)
+    : CollectionBuilder<VBoxBuilder>(fontProvider, iconDrawer, defaultDefinition)
 {
     public int Gap { get; internal set; }
 

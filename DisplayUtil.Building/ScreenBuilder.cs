@@ -6,8 +6,10 @@ using SkiaSharp;
 
 namespace DisplayUtil.Building;
 
-public class ScreenBuilder(IFontProvider fontProvider,
-    IIconDrawer iconDrawer, DefaultDefinition defaultDefinition)
+public class ScreenBuilder(
+    IFontProvider fontProvider,
+    IIconDrawer iconDrawer,
+    DefaultDefinition defaultDefinition)
     : LayoutBuilder<ScreenBuilder>(fontProvider, iconDrawer, defaultDefinition)
 {
     private ILayoutBuilder? _rootBuilder;
@@ -51,16 +53,13 @@ public class ScreenBuilder(IFontProvider fontProvider,
 
     public override Element Build()
     {
-        if (_rootBuilder == null)
-        {
-            throw new InvalidOperationException("Root element is not set");
-        }
+        if (_rootBuilder == null) throw new InvalidOperationException("Root element is not set");
 
         return _rootBuilder.Build();
     }
 
     /// <summary>
-    /// Builds the screen and returns the bitmap
+    ///     Builds the screen and returns the bitmap
     /// </summary>
     /// <returns>Bitmap of screen</returns>
     public SKBitmap Draw()

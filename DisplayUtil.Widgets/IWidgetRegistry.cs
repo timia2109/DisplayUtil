@@ -12,7 +12,7 @@ public interface IWidgetRegistry
     IEnumerable<WidgetRegistration> GetRegisteredWidgets();
 
     /// <summary>
-    ///    Get all registered widgets for a specific widget group.
+    ///     Get all registered widgets for a specific widget group.
     /// </summary>
     /// <param name="widgetGroup">Affected Widget Group</param>
     /// <returns>Enumerable with Widget Registrations</returns>

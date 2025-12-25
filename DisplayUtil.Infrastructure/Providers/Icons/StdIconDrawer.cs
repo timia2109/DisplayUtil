@@ -1,20 +1,21 @@
 using DisplayUtil.Layouting.Utils;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
+using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
 
 namespace DisplayUtil.Infrastructure.Providers.Icons;
 
 /// <summary>
-/// A standard icon drawer that uses a list of icon providers to draw icons.
-/// It caches the icons to avoid loading them multiple times.
+///     A standard icon drawer that uses a list of icon providers to draw icons.
+///     It caches the icons to avoid loading them multiple times.
 /// </summary>
 public partial class StdIconDrawer(
     IEnumerable<IIconProvider> iconProviders,
     ILogger<StdIconDrawer> logger
 ) : IIconDrawer, IDisposable
 {
+    private readonly Dictionary<CacheKey, CacheEntry> _cache = new();
     private readonly ILogger _logger = logger;
-    private Dictionary<CacheKey, CacheEntry> _cache = new();
 
     public SKSize? DrawIcon(string iconName, int height, int x, int y,
         SKCanvas canvas)
@@ -41,6 +42,13 @@ public partial class StdIconDrawer(
         if (icon == null) return null;
 
         return icon.Size;
+    }
+
+    public void Dispose()
+    {
+        foreach (var entry in _cache.Values) entry.Dispose();
+
+        _cache.Clear();
     }
 
     private CacheEntry? GetIcon(string iconName, int height)
@@ -70,7 +78,7 @@ public partial class StdIconDrawer(
 
         using var stream = iconProvider.GetSvgIcon(iconName);
 
-        var svgImage = new SkiaSharp.Extended.Svg.SKSvg();
+        var svgImage = new SKSvg();
         svgImage.Load(stream);
 
         var info = svgImage.CanvasSize;
@@ -85,7 +93,7 @@ public partial class StdIconDrawer(
         // calculate the scaling need to fit to screen
         var scaleX = desiredSize.Width / svgImage.Picture.CullRect.Width;
         var scaleY = desiredSize.Height / svgImage.Picture.CullRect.Height;
-        var matrix = SKMatrix.CreateScale((float)scaleX, (float)scaleY);
+        var matrix = SKMatrix.CreateScale(scaleX, scaleY);
 
         // draw the svg
         tempCanvas.Clear(SKColors.Transparent);
@@ -96,28 +104,19 @@ public partial class StdIconDrawer(
         return new CacheEntry(data, desiredSize);
     }
 
-    private record CacheKey(string IconId, int Height);
-    private record CacheEntry(SKImage Image, SKSize Size) : IDisposable
-    {
-        public void Dispose()
-        {
-            Image.Dispose();
-        }
-    }
-
     [LoggerMessage(LogLevel.Warning, "Icon {iconName} not found!")]
     private partial void LogFileNotFound(string iconName);
 
     [LoggerMessage(LogLevel.Debug, "Create Icon {iconName} with height {height}")]
     private partial void LogCreating(string iconName, int height);
 
-    public void Dispose()
-    {
-        foreach (var entry in _cache.Values)
-        {
-            entry.Dispose();
-        }
+    private record CacheKey(string IconId, int Height);
 
-        _cache.Clear();
+    private record CacheEntry(SKImage Image, SKSize Size) : IDisposable
+    {
+        public void Dispose()
+        {
+            Image.Dispose();
+        }
     }
 }

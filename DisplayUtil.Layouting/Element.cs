@@ -9,17 +9,21 @@ public record struct DrawContext(
 );
 
 /// <summary>
-/// Abstract base Element. Elements are designed to be used only one time!
+///     Abstract base Element. Elements are designed to be used only one time!
 /// </summary>
 public abstract class Element : IDisposable
 {
     /// <summary>
-    /// Caching calculated size
+    ///     Caching calculated size
     /// </summary>
-    private SKSize? _size = null;
+    private SKSize? _size;
+
+    public virtual void Dispose()
+    {
+    }
 
     /// <summary>
-    /// Gets the Size of the Element
+    ///     Gets the Size of the Element
     /// </summary>
     /// <param name="drawContext">Context</param>
     /// <returns>The Size of this element</returns>
@@ -32,18 +36,15 @@ public abstract class Element : IDisposable
     }
 
     /// <summary>
-    /// Calculates the Size. This value gets cached
+    ///     Calculates the Size. This value gets cached
     /// </summary>
     /// <param name="drawContext">DrawContext</param>
     /// <returns>Size of the Element</returns>
     protected abstract SKSize CalculateSize(DrawContext drawContext);
 
     /// <summary>
-    /// Draws the actual Element
+    ///     Draws the actual Element
     /// </summary>
     /// <param name="drawContext">Context</param>
     public abstract void Draw(DrawContext drawContext);
-
-    public virtual void Dispose()
-    { }
 }

@@ -3,7 +3,7 @@ using SkiaSharp;
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// A HBox (Draws content next to each other)
+///     A HBox (Draws content next to each other)
 /// </summary>
 /// <param name="gap">Gap between Items</param>
 public class HBoxElement(int gap = 0) : ElementCollection
@@ -28,7 +28,7 @@ public class HBoxElement(int gap = 0) : ElementCollection
     {
         var childrenSize = GetChildrenSizes(drawContext);
         return new SKSize(
-            childrenSize.WidthSum + (gap * (Children.Count - 1)),
+            childrenSize.WidthSum + gap * (Children.Count - 1),
             childrenSize.MaxHeight
         );
     }

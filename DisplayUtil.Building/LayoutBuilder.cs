@@ -11,23 +11,27 @@ public interface ILayoutBuilder
 }
 
 /// <summary>
-/// Helper to simplify the creation of Layouts
+///     Helper to simplify the creation of Layouts
 /// </summary>
 public abstract class LayoutBuilder<TBuilder>(
     IFontProvider fontProvider,
     IIconDrawer iconDrawer,
     DefaultDefinition defaultDefinition
 ) : DefaultDefinitionBuilder<TBuilder>(defaultDefinition), ILayoutBuilder
-where TBuilder : LayoutBuilder<TBuilder>
+    where TBuilder : LayoutBuilder<TBuilder>
 {
+    protected SiteSizeBuilder? _border;
+    protected SiteSizeBuilder? _margin;
+    protected SiteSizeBuilder? _padding;
     protected IFontProvider fontProvider = fontProvider;
     protected IIconDrawer iconDrawer = iconDrawer;
-    protected SiteSizeBuilder? _padding;
-    protected SiteSizeBuilder? _margin;
-    protected SiteSizeBuilder? _border;
+
+    public abstract Element Build();
 
     protected IconElement CreateIcon(string iconName, int? height)
-        => new(iconName, height ?? DefaultDefinition.IconHeight, iconDrawer);
+    {
+        return new IconElement(iconName, height ?? DefaultDefinition.IconHeight, iconDrawer);
+    }
 
     protected TextElement CreateText(string text, string? fontName, int? fontSize)
     {
@@ -63,6 +67,4 @@ where TBuilder : LayoutBuilder<TBuilder>
         configure(_border);
         return (TBuilder)this;
     }
-
-    public abstract Element Build();
 }

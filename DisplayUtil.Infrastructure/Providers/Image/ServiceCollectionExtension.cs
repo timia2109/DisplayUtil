@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SkiaSharp;
 
 namespace DisplayUtil.Infrastructure.Providers.Image;
 
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Adds the given type as a single image provider. The given type will also be added as scoped service
+    ///     Adds the given type as a single image provider. The given type will also be added as scoped service
     /// </summary>
     /// <typeparam name="TImageProvider">Type of ImageProvider</typeparam>
     /// <param name="services">Services</param>
@@ -26,8 +27,8 @@ public static class ServiceCollectionExtension
     }
 
     /// <summary>
-    /// Adds the <see cref="KeyedImageRegistryProvider"/> as <see cref="IImageProvider"/>
-    /// if its not already added
+    ///     Adds the <see cref="KeyedImageRegistryProvider" /> as <see cref="IImageProvider" />
+    ///     if its not already added
     /// </summary>
     /// <param name="services">Services</param>
     /// <returns>Service Collection</returns>
@@ -37,9 +38,7 @@ public static class ServiceCollectionExtension
     {
         if (services
             .Any(e => e.ImplementationType == typeof(KeyedImageRegistryProvider)))
-        {
             return services;
-        }
 
         services.AddScoped<IImageProvider, KeyedImageRegistryProvider>();
         services.TryAddScoped<ImageResolver>();
@@ -47,7 +46,7 @@ public static class ServiceCollectionExtension
     }
 
     /// <summary>
-    /// Maps a route to get the image preview
+    ///     Maps a route to get the image preview
     /// </summary>
     /// <param name="app">WebApp</param>
     /// <param name="route">URI to preview page</param>
@@ -58,32 +57,27 @@ public static class ServiceCollectionExtension
     )
     {
         app.MapGet(route, async (string imageId, ImageResolver imageResolver,
-            HttpRequest request) =>
-        {
-            var image = await imageResolver.GetImageAsync(imageId);
-            if (image == null)
+                HttpRequest request) =>
             {
-                return Results.NotFound();
-            }
+                var image = await imageResolver.GetImageAsync(imageId);
+                if (image == null) return Results.NotFound();
 
-            var acceptHeader = request.Headers.Accept;
-            var format = SkiaSharp.SKEncodedImageFormat.Png;
-            var mimeType = "image/png";
+                var acceptHeader = request.Headers.Accept;
+                var format = SKEncodedImageFormat.Png;
+                var mimeType = "image/png";
 
-            if (acceptHeader.Any(a => a?.Contains("image/jpeg") ?? false))
-            {
-                format = SkiaSharp.SKEncodedImageFormat.Jpeg;
-                mimeType = "image/jpeg";
-            }
+                if (acceptHeader.Any(a => a?.Contains("image/jpeg") ?? false))
+                {
+                    format = SKEncodedImageFormat.Jpeg;
+                    mimeType = "image/jpeg";
+                }
 
-            var data = image.Encode(format, 100);
-            return Results.File(data.ToArray(), mimeType);
-        })
-        .WithName("Preview Image")
-        .WithOpenApi();
+                var data = image.Encode(format, 100);
+                return Results.File(data.ToArray(), mimeType);
+            })
+            .WithName("Preview Image")
+            .WithOpenApi();
 
         return app;
     }
-
-
 }

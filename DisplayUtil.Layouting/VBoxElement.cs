@@ -3,7 +3,7 @@ using SkiaSharp;
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// A VBox (Draws content under each other)
+///     A VBox (Draws content under each other)
 /// </summary>
 /// <param name="gap">Gap between Items</param>
 public class VBoxElement(int gap = 0) : ElementCollection
@@ -29,7 +29,7 @@ public class VBoxElement(int gap = 0) : ElementCollection
         var childrenSize = GetChildrenSizes(drawContext);
         return new SKSize(
             childrenSize.MaxWidth,
-            childrenSize.HeightSum + (gap * (Children.Count - 1))
+            childrenSize.HeightSum + gap * (Children.Count - 1)
         );
     }
 }

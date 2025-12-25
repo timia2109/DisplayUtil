@@ -5,22 +5,19 @@ using SkiaSharp;
 namespace DisplayUtil.Providers;
 
 /// <summary>
-/// Holds the Fonts
+///     Holds the Fonts
 /// </summary>
 public class FontProvider(IReadOnlyDictionary<string, string> fontPathes)
 {
     /// <summary>
-    /// Returns the font by the internal name
+    ///     Returns the font by the internal name
     /// </summary>
     /// <param name="fontName">Name of the font</param>
     /// <returns>The Font</returns>
     /// <exception cref="Exception">Font not defined</exception>
     public SKTypeface GetFont(string fontName)
     {
-        if (!fontPathes.TryGetValue(fontName, out var font))
-        {
-            throw new Exception($"Font {fontName} not defined!");
-        }
+        if (!fontPathes.TryGetValue(fontName, out var font)) throw new Exception($"Font {fontName} not defined!");
 
         return SKTypeface.FromFile(font);
     }
@@ -52,9 +49,8 @@ public class FontProvider(IReadOnlyDictionary<string, string> fontPathes)
             .ToArray();
 
         if (missingFiles.Length != 0)
-        {
-            throw new Exception($"Missing fonts detected. Please check existence of: {string.Join(", ", missingFiles)}");
-        }
+            throw new Exception(
+                $"Missing fonts detected. Please check existence of: {string.Join(", ", missingFiles)}");
 
         return new FontProvider(fonts.ToFrozenDictionary());
     }

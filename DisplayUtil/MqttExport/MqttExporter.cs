@@ -1,8 +1,8 @@
 namespace DisplayUtil.MqttExport;
 
 /// <summary>
-/// Responsible to export the image to Mqtt.
-/// Scoped
+///     Responsible to export the image to Mqtt.
+///     Scoped
 /// </summary>
 public class MqttExporter(
     ExportingMqttClient exportingMqttClient

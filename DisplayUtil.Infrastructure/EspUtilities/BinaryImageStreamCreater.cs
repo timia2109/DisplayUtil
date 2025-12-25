@@ -3,11 +3,10 @@ using SkiaSharp;
 namespace DisplayUtil.Infrastructure.EspUtilities;
 
 /// <summary>
-/// Responsible to render the Bitmap to the two color stream
+///     Responsible to render the Bitmap to the two color stream
 /// </summary>
 public static class BinaryImageStreamCreator
 {
-
     public static byte[] GetImageStream(SKBitmap bitmap)
     {
         var pixelWriter = new PixelWriter();
@@ -17,12 +16,10 @@ public static class BinaryImageStreamCreator
 
         // The stream is width -> height
         for (var y = 1; y <= height; y++)
+        for (var x = 1; x <= width; x++)
         {
-            for (var x = 1; x <= width; x++)
-            {
-                var pixel = bitmap.GetPixel(x, y);
-                pixelWriter.WritePixel(pixel);
-            }
+            var pixel = bitmap.GetPixel(x, y);
+            pixelWriter.WritePixel(pixel);
         }
 
         return pixelWriter.ToArray();
@@ -30,24 +27,24 @@ public static class BinaryImageStreamCreator
 
     private class PixelWriter
     {
-        public void WritePixel(SKColor color)
-        {
-            var luma = 0.2126 * color.Red
-                + 0.7152 * color.Green
-                + 0.0722 * color.Blue;
-
-            WriteBit(luma < 40);
-        }
-
         private readonly MemoryStream _stream;
-        private byte _currentByte;
         private int _bitsFilled;
+        private byte _currentByte;
 
         public PixelWriter()
         {
             _stream = new MemoryStream();
             _currentByte = 0;
             _bitsFilled = 0;
+        }
+
+        public void WritePixel(SKColor color)
+        {
+            var luma = 0.2126 * color.Red
+                       + 0.7152 * color.Green
+                       + 0.0722 * color.Blue;
+
+            WriteBit(luma < 40);
         }
 
         public void WriteBit(bool bit)
@@ -81,5 +78,4 @@ public static class BinaryImageStreamCreator
             return _stream.ToArray();
         }
     }
-
 }

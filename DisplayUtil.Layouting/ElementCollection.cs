@@ -3,40 +3,40 @@ using SkiaSharp;
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// Baseclass for an ElementCollection. 
-/// Adds support for Borders, Margins and Paddings
+///     Baseclass for an ElementCollection.
+///     Adds support for Borders, Margins and Paddings
 /// </summary>
 public abstract class ElementCollection : Element
 {
-    /// <summary>
-    /// Children of this collection
-    /// </summary>
-    public List<Element> Children { get; set; } = [];
-
-    /// <summary>
-    /// Sizes of Borders
-    /// </summary>
-    public SiteSize Border { get; set; } = new();
-
-    /// <summary>
-    /// Sizes of Margin
-    /// </summary>
-    public SiteSize Margin { get; set; } = new();
-
-    /// <summary>
-    /// Sizes of Padding
-    /// </summary>
-    public SiteSize Padding { get; set; } = new();
-
     private readonly Lazy<ContainerSizes> _containerSizes;
 
     protected ElementCollection()
     {
-        _containerSizes = new(CalculateContainerSizes);
+        _containerSizes = new Lazy<ContainerSizes>(CalculateContainerSizes);
     }
 
     /// <summary>
-    /// Adds a new Element to this Collection
+    ///     Children of this collection
+    /// </summary>
+    public List<Element> Children { get; set; } = [];
+
+    /// <summary>
+    ///     Sizes of Borders
+    /// </summary>
+    public SiteSize Border { get; set; } = new();
+
+    /// <summary>
+    ///     Sizes of Margin
+    /// </summary>
+    public SiteSize Margin { get; set; } = new();
+
+    /// <summary>
+    ///     Sizes of Padding
+    /// </summary>
+    public SiteSize Padding { get; set; } = new();
+
+    /// <summary>
+    ///     Adds a new Element to this Collection
     /// </summary>
     /// <param name="element">The element</param>
     public ElementCollection Append(Element element)
@@ -46,7 +46,7 @@ public abstract class ElementCollection : Element
     }
 
     /// <summary>
-    /// Add all Elements to this Collection
+    ///     Add all Elements to this Collection
     /// </summary>
     /// <param name="elements">The elements</param>
     public ElementCollection Append(IEnumerable<Element> elements)
@@ -103,7 +103,7 @@ public abstract class ElementCollection : Element
     protected abstract SKSize CalculateCollectionSize(DrawContext drawContext);
 
     /// <summary>
-    /// Calculates the sizes of the children
+    ///     Calculates the sizes of the children
     /// </summary>
     /// <param name="drawContext">Draw Context</param>
     /// <returns>Children Size Information</returns>
@@ -114,32 +114,10 @@ public abstract class ElementCollection : Element
         );
     }
 
-    protected record struct ChildrenSizes
-    {
-        public float WidthSum { get; init; }
-        public float HeightSum { get; init; }
-        public float MaxHeight { get; init; }
-        public float MaxWidth { get; init; }
-
-        public static ChildrenSizes operator +(ChildrenSizes sizes, SKSize elementSize)
-        {
-            return new ChildrenSizes
-            {
-                HeightSum = sizes.HeightSum + elementSize.Height,
-                WidthSum = sizes.WidthSum + elementSize.Width,
-                MaxHeight = Math.Max(sizes.MaxHeight, elementSize.Height),
-                MaxWidth = Math.Max(sizes.MaxWidth, elementSize.Width)
-            };
-        }
-    }
-
     public override void Dispose()
     {
         base.Dispose();
-        foreach (var child in Children)
-        {
-            child.Dispose();
-        }
+        foreach (var child in Children) child.Dispose();
     }
 
     private void DrawBorder(DrawContext drawContext)
@@ -187,6 +165,25 @@ public abstract class ElementCollection : Element
         drawContext.Canvas.DrawLine(
             startPoint, endPoint, paint
         );
+    }
+
+    protected record struct ChildrenSizes
+    {
+        public float WidthSum { get; init; }
+        public float HeightSum { get; init; }
+        public float MaxHeight { get; init; }
+        public float MaxWidth { get; init; }
+
+        public static ChildrenSizes operator +(ChildrenSizes sizes, SKSize elementSize)
+        {
+            return new ChildrenSizes
+            {
+                HeightSum = sizes.HeightSum + elementSize.Height,
+                WidthSum = sizes.WidthSum + elementSize.Width,
+                MaxHeight = Math.Max(sizes.MaxHeight, elementSize.Height),
+                MaxWidth = Math.Max(sizes.MaxWidth, elementSize.Width)
+            };
+        }
     }
 
     private record ContainerSizes(

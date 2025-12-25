@@ -7,18 +7,13 @@ namespace DisplayUtil.XmlModel.Models;
 
 public class Flexbox : ICollectionXmlModel
 {
+    [XmlAttribute] public AlignItems AlignItems = AlignItems.Start;
 
-    [XmlAttribute]
-    public FlexDirection Direction = FlexDirection.Horizontal;
+    [XmlAttribute] public FlexDirection Direction = FlexDirection.Horizontal;
 
-    [XmlAttribute]
-    public JustifyContent JustifyContent = JustifyContent.Between;
+    [XmlAttribute] public int Gap;
 
-    [XmlAttribute]
-    public AlignItems AlignItems = AlignItems.Start;
-
-    [XmlAttribute]
-    public int Gap = 0;
+    [XmlAttribute] public JustifyContent JustifyContent = JustifyContent.Between;
 
     public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)

@@ -4,8 +4,10 @@ namespace DisplayUtil.Widgets;
 
 public record WidgetEntity(string Name, IWidget Widget, int Priority, string WidgetGroup)
 {
-    public Task<Element> RenderAsync(CancellationToken cancellationToken = default) =>
-        Widget.RenderAsync(cancellationToken);
+    public Task<Element> RenderAsync(CancellationToken cancellationToken = default)
+    {
+        return Widget.RenderAsync(cancellationToken);
+    }
 }
 
 public interface IWidgetService
@@ -23,7 +25,7 @@ public interface IWidgetService
     IEnumerable<WidgetEntity> GetActiveWidgets();
 
     /// <summary>
-    /// Get Active Widgets for a specific widget group.
+    ///     Get Active Widgets for a specific widget group.
     /// </summary>
     /// <param name="widgetGroup">Affected Widget Group</param>
     /// <returns>Widget Entities</returns>

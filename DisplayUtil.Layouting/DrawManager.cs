@@ -5,7 +5,7 @@ namespace DisplayUtil.Layouting;
 public static class DrawManager
 {
     /// <summary>
-    /// Draws the element on the given Bitmap
+    ///     Draws the element on the given Bitmap
     /// </summary>
     /// <param name="bitmap">Bitmap</param>
     /// <param name="element">Element</param>
@@ -22,7 +22,7 @@ public static class DrawManager
     }
 
     /// <summary>
-    /// Draws the element on a new Bitmap with the given Size
+    ///     Draws the element on a new Bitmap with the given Size
     /// </summary>
     /// <param name="size">Expected Size</param>
     /// <param name="element">Current Element</param>
@@ -33,5 +33,4 @@ public static class DrawManager
         Draw(bitmap, element);
         return bitmap;
     }
-
 }

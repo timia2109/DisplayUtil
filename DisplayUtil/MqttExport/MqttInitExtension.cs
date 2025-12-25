@@ -33,7 +33,7 @@ public static class MqttInitExtension
         if (settings is null
             || settings.Uri is null
             || settings.ServerHostName is null
-            )
+           )
             return false;
 
         var factory = new MqttFactory();
@@ -41,10 +41,10 @@ public static class MqttInitExtension
         var client = factory.CreateMqttClient();
 
         var clientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer(settings.Uri)
-                .WithClientId("displayutil_" + builder.Environment.EnvironmentName)
-                .WithCredentials(settings.User, settings.Password)
-                .Build();
+            .WithTcpServer(settings.Uri)
+            .WithClientId("displayutil_" + builder.Environment.EnvironmentName)
+            .WithCredentials(settings.User, settings.Password)
+            .Build();
 
         if (client is null || clientOptions is null)
             throw new Exception("Error creating MQTT instances");

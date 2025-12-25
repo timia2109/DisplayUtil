@@ -12,7 +12,7 @@ internal class HassHostedService(
     ILogger<HassHostedService> logger
 ) : IHostedService
 {
-    private CancellationTokenSource _cancellationTokenSource = new();
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -21,14 +21,20 @@ internal class HassHostedService(
         haRunner.OnConnect.SubscribeAsync(OnConnection);
 
         _ = haRunner.RunAsync(
-             haSettings.Host,
-             haSettings.Port,
-             haSettings.Ssl,
-             haSettings.Token,
-             TimeSpan.FromSeconds(10),
-             _cancellationTokenSource.Token
+            haSettings.Host,
+            haSettings.Port,
+            haSettings.Ssl,
+            haSettings.Token,
+            TimeSpan.FromSeconds(10),
+            _cancellationTokenSource.Token
         );
 
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _cancellationTokenSource.Cancel();
         return Task.CompletedTask;
     }
 
@@ -36,11 +42,5 @@ internal class HassHostedService(
     {
         await cacheManager.InitializeAsync(_cancellationTokenSource.Token);
         logger.LogInformation("Hass Connection initialized");
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _cancellationTokenSource.Cancel();
-        return Task.CompletedTask;
     }
 }

@@ -8,23 +8,10 @@ namespace DisplayUtil.Template;
 
 public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoader
 {
-    private static readonly string[] _allowedExtensions = [
+    private static readonly string[] _allowedExtensions =
+    [
         "sbntxt", "sbnxml", "sbn"
     ];
-
-    public string GetPath(string templateName)
-    {
-        var (domain, item) = templateName.SpiltDomain(null);
-
-        var directory = options.Value.Paths[domain];
-
-        var path = _allowedExtensions
-            .Select(e => $"{item}.{e}")
-            .Select(f => Path.Combine(directory, f))
-            .First(File.Exists);
-
-        return Path.GetFullPath(path);
-    }
 
     public string GetPath(
         TemplateContext context,
@@ -45,6 +32,20 @@ public class TemplateLoader(IOptions<TemplateSettings> options) : ITemplateLoade
         SourceSpan callerSpan, string templatePath)
     {
         return await LoadAsync(templatePath);
+    }
+
+    public string GetPath(string templateName)
+    {
+        var (domain, item) = templateName.SpiltDomain(null);
+
+        var directory = options.Value.Paths[domain];
+
+        var path = _allowedExtensions
+            .Select(e => $"{item}.{e}")
+            .Select(f => Path.Combine(directory, f))
+            .First(File.Exists);
+
+        return Path.GetFullPath(path);
     }
 
     public Task<string> LoadAsync(string templatePath)

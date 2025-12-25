@@ -7,7 +7,7 @@ public class ScreenRepository(
 )
 {
     /// <summary>
-    /// Search the <see cref="IScreenProvider"/> with it's Id
+    ///     Search the <see cref="IScreenProvider" /> with it's Id
     /// </summary>
     /// <param name="screenProviderId">Id of the screen provider</param>
     /// <returns>ScreenProvider</returns>

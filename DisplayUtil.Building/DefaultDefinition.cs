@@ -1,29 +1,39 @@
-using System.Xml.Serialization;
-
 namespace DisplayUtil.Building;
 
 /// <summary>
-/// Setting defaults for the child elements
+///     Setting defaults for the child elements
 /// </summary>
 public record struct DefaultDefinition
 {
     /// <summary>
-    /// Textsize
-    /// </summary>
-    public int TextSize;
-
-    /// <summary>
-    /// Font
+    ///     Font
     /// </summary>
     public string Font;
 
     /// <summary>
-    /// Icon Height
+    ///     Icon Height
     /// </summary>
     public int IconHeight;
 
     /// <summary>
-    /// Overrides the defaults
+    ///     Textsize
+    /// </summary>
+    public int TextSize;
+
+    /// <summary>
+    ///     The default set
+    ///     TODO: Use config
+    /// </summary>
+    public static DefaultDefinition Default =>
+        new()
+        {
+            TextSize = 20,
+            Font = "Roboto-Medium",
+            IconHeight = 20
+        };
+
+    /// <summary>
+    ///     Overrides the defaults
     /// </summary>
     /// <param name="other">Defined defaults on that Element</param>
     /// <returns>The merged</returns>
@@ -39,18 +49,4 @@ public record struct DefaultDefinition
             IconHeight = o.IconHeight != 0 ? o.IconHeight : IconHeight
         };
     }
-
-    /// <summary>
-    /// The default set
-    /// TODO: Use config
-    /// </summary>
-    public static DefaultDefinition Default =>
-         new()
-         {
-             TextSize = 20,
-             Font = "Roboto-Medium",
-             IconHeight = 20
-         };
-
-
 }

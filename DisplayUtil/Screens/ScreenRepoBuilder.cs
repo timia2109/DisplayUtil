@@ -42,15 +42,12 @@ public static class ScreenRepoBuilderExtension
 
         // Add static
         if (dictionary.Count != 0)
-        {
             services.AddSingleton<IScreenProviderSource>(s => new StaticScreenProviderSource(
                 s, dictionary.ToFrozenDictionary()
             ));
-        }
 
         services.AddScoped<ScreenRepository>();
 
         return services;
     }
-
 }

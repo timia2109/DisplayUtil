@@ -17,11 +17,11 @@ public record MappedIcons
 
 public sealed class MediaAppIconHelper(IOptions<MappedIcons> options)
 {
+    private readonly string _fallbackIcon = options.Value.FallbackIcon;
+
     private readonly IReadOnlyDictionary<string, string> _iconDict
         = options.Value.Icons.ToFrozenDictionary(
             i => i.AppName.ToLower(), i => i.Icon);
-
-    private readonly string _fallbackIcon = options.Value.FallbackIcon;
 
     public string GetIconForApp(string app)
     {
@@ -40,9 +40,9 @@ public static class MediaAppIconHelperExtensions
     )
     {
         builder.Services.Configure<MappedIcons>(
-            builder.Configuration.GetSection("MediaAppIcons")
-        )
-        .AddSingleton<MediaAppIconHelper>();
+                builder.Configuration.GetSection("MediaAppIcons")
+            )
+            .AddSingleton<MediaAppIconHelper>();
 
         return builder;
     }

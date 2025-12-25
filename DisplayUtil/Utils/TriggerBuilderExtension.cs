@@ -4,8 +4,7 @@ namespace DisplayUtil.Utils;
 
 public static class TriggerBuilderExtension
 {
-
-    private static TimeSpan _securityTimeout = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan _securityTimeout = TimeSpan.FromSeconds(30);
 
     public static TriggerBuilder WithSecurityTimeout(this TriggerBuilder builder)
     {
@@ -13,5 +12,4 @@ public static class TriggerBuilderExtension
             DateTimeOffset.Now + _securityTimeout
         );
     }
-
 }

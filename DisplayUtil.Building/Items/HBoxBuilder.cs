@@ -8,7 +8,7 @@ public class HBoxBuilder(
     IFontProvider fontProvider,
     IIconDrawer iconDrawer,
     DefaultDefinition defaultDefinition)
-: CollectionBuilder<HBoxBuilder>(fontProvider, iconDrawer, defaultDefinition)
+    : CollectionBuilder<HBoxBuilder>(fontProvider, iconDrawer, defaultDefinition)
 {
     public int Gap { get; internal set; }
 

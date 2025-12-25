@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9" />
-    <ProjectReference Include="..\DisplayUtil.Building\DisplayUtil.Building.csproj" />
-    <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj" />
-    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9"/>
+        <ProjectReference Include="..\DisplayUtil.Building\DisplayUtil.Building.csproj"/>
+        <ProjectReference Include="..\DisplayUtil.Layouting\DisplayUtil.Layouting.csproj"/>
+        <PackageReference Include="SkiaSharp.Svg" Version="1.60.0"/>
+    </ItemGroup>
 
 </Project>

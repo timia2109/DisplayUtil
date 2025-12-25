@@ -8,10 +8,7 @@ public class StaticFileFontProvider(
 {
     public SKTypeface GetFont(string fontName)
     {
-        if (!fontPaths.TryGetValue(fontName, out var path))
-        {
-            throw new FontNotFoundException(fontName);
-        }
+        if (!fontPaths.TryGetValue(fontName, out var path)) throw new FontNotFoundException(fontName);
 
         return SKTypeface.FromFile(path);
     }

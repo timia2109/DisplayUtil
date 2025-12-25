@@ -5,8 +5,8 @@ using SkiaSharp;
 namespace DisplayUtil.EspUtilities;
 
 /// <summary>
-/// Responsible to provide the images in a form for the ESP.
-/// Scoped
+///     Responsible to provide the images in a form for the ESP.
+///     Scoped
 /// </summary>
 public partial class EspImageProvider(
     ILogger<EspImageProvider> logger,
@@ -16,7 +16,7 @@ public partial class EspImageProvider(
     private readonly ILogger _logger = logger;
 
     /// <summary>
-    /// Gets the image as plain true / false Bytes
+    ///     Gets the image as plain true / false Bytes
     /// </summary>
     /// <param name="providerId">Id of the provider</param>
     /// <returns>Byte Array</returns>
@@ -38,7 +38,7 @@ public partial class EspImageProvider(
     }
 
     /// <summary>
-    /// Gets the Image as RunLength Compressed
+    ///     Gets the Image as RunLength Compressed
     /// </summary>
     /// <param name="providerId">Id of the provider</param>
     /// <returns>Compressed Data</returns>

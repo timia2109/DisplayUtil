@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 namespace DisplayUtil.Providers;
 
 /// <summary>
-/// Provides the path to an icon
+///     Provides the path to an icon
 /// </summary>
 public class IconPathProvider(IOptions<ProviderSettings> options)
 {

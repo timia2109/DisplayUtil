@@ -18,10 +18,7 @@ internal class UtilTemplateExtender : ITemplateExtender
     public static float ToFloat(string? content)
     {
         if (content == null) return 0;
-        if (float.TryParse(content, CultureInfo.InvariantCulture, out var value))
-        {
-            return value;
-        }
+        if (float.TryParse(content, CultureInfo.InvariantCulture, out var value)) return value;
         return 0;
     }
 

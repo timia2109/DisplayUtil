@@ -1,7 +1,7 @@
 namespace DisplayUtil.Layouting;
 
 /// <summary>
-/// Represents Padding Information
+///     Represents Padding Information
 /// </summary>
 /// <param name="Top">Top Padding</param>
 /// <param name="Right">Right Padding</param>
@@ -14,7 +14,11 @@ public record struct SiteSize(
     int Left = 0
 )
 {
-    public SiteSize(int allSizes) : this(allSizes, allSizes, allSizes, allSizes) { }
+    public SiteSize(int allSizes) : this(allSizes, allSizes, allSizes, allSizes)
+    {
+    }
 
-    public SiteSize(int x, int y) : this(y, x, y, x) { }
+    public SiteSize(int x, int y) : this(y, x, y, x)
+    {
+    }
 }

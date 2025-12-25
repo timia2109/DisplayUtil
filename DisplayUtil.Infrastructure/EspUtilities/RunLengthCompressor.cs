@@ -1,9 +1,7 @@
-using System.IO.Pipelines;
-
 namespace DisplayUtil.Infrastructure.EspUtilities;
 
 /// <summary>
-/// Compresses the stream
+///     Compresses the stream
 /// </summary>
 public class RunLengthCompressor
 {
@@ -12,20 +10,17 @@ public class RunLengthCompressor
     private const ushort TrueCounter = 0b_1000_0000_0000_0000;
     private const ushort FalseCounter = 0b_0100_0000_0000_0000;
     private const ushort MaxBufferLength = MinCountSequence;
-
-    private ushort _buffer = 0;
-    private int _bufferBitsFilled = 0;
-
-    private ushort _sequenceCount = 0;
-    private bool? _sequenceType;
     private readonly MemoryStream _stream = new();
+
+    private ushort _buffer;
+    private int _bufferBitsFilled;
+
+    private ushort _sequenceCount;
+    private bool? _sequenceType;
 
     public byte[] WriteStream(byte[] data)
     {
-        for (var i = 0; i < data.Length; i++)
-        {
-            HandleByte(data[i]);
-        }
+        for (var i = 0; i < data.Length; i++) HandleByte(data[i]);
         Flush();
 
         return _stream.ToArray();
@@ -45,7 +40,7 @@ public class RunLengthCompressor
                 _sequenceType = isTrue;
             }
             else if (_sequenceType == isTrue
-                && _sequenceCount < MaxSequence)
+                     && _sequenceCount < MaxSequence)
             {
                 // Continue sequence 
                 _sequenceCount++;
@@ -116,7 +111,7 @@ public class RunLengthCompressor
     private void WriteShort(ushort data)
     {
         byte a = (byte)(data >> 8),
-             b = (byte)data;
+            b = (byte)data;
 
         _stream.WriteByte(b);
         _stream.WriteByte(a);

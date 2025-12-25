@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using DisplayUtil.Layouting;
@@ -9,12 +8,9 @@ namespace DisplayUtil.XmlModel.Models;
 
 public class Icon : IXmlModel
 {
-    [Required]
-    [XmlAttribute]
-    public string IconName = null!;
+    [XmlAttribute] public int Height;
 
-    [XmlAttribute]
-    public int Height;
+    [Required] [XmlAttribute] public string IconName = null!;
 
     public override Element AsElement(IconDrawer iconDrawer,
         FontProvider fontProvider, DefaultDefinition defaults)

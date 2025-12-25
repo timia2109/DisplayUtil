@@ -1,4 +1,3 @@
-using System.Xml.Serialization;
 using DisplayUtil.Layouting;
 using DisplayUtil.Providers;
 using DisplayUtil.Utils;
@@ -10,12 +9,12 @@ public abstract class IXmlModel
     public IXmlModel[] Children = null!;
 
     /// <summary>
-    /// Defaults
+    ///     Defaults
     /// </summary>
     public DefaultDefinition? Defaults = null;
 
     /// <summary>
-    /// Returns the corrosponding Element
+    ///     Returns the corrosponding Element
     /// </summary>
     /// <param name="iconDrawer">Icon Drawer</param>
     /// <param name="fontProvider">Font Provider</param>
@@ -27,7 +26,7 @@ public abstract class IXmlModel
     );
 
     /// <summary>
-    /// Fills the <see cref="ElementCollection"/> with the children of this Model
+    ///     Fills the <see cref="ElementCollection" /> with the children of this Model
     /// </summary>
     /// <param name="collection">ELement Collection</param>
     /// <param name="iconDrawer">Icon Drawer</param>

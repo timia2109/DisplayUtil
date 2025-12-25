@@ -6,8 +6,8 @@ namespace DisplayUtil.Infrastructure.Providers.Font;
 
 public class FontProviderBuilder
 {
-    private List<Font> _googleFonts = [];
-    private List<Font> _localFonts = [];
+    private readonly List<Font> _googleFonts = [];
+    private readonly List<Font> _localFonts = [];
     private string? _googleFontDirectory;
 
     public FontProviderBuilder AddGoogleFont(string name, string path)
@@ -32,18 +32,14 @@ public class FontProviderBuilder
     {
         // Only local fonts. We are done
         if (_googleFonts.Count == 0)
-        {
             return new StaticFileFontProvider(
                 _localFonts
                     .ToFrozenDictionary(f => f.Name, f => f.Path)
             );
-        }
 
         // Guard if google font directory is not set
         if (string.IsNullOrEmpty(_googleFontDirectory))
-        {
             throw new InvalidOperationException("Google font directory is not set");
-        }
 
         var downloader = ActivatorUtilities.CreateInstance<GFontDownloader>(
             serviceProvider,
