@@ -1,3 +1,4 @@
+using DisplayUtil.Home.Awtrix;
 using DisplayUtil.Home.HomeAssistant;
 using DisplayUtil.Home.Screens;
 using DisplayUtil.Home.Utils;
@@ -15,6 +16,7 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 builder.AddHassSupport();
 builder.AddMediaAppIcons();
+await builder.AddAwtrixAppAsync();
 
 builder.Services
     .AddOpenApi()
