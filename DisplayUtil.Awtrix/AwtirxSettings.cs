@@ -23,7 +23,7 @@ public record AwtirxSettings
     ///     Default: 1
     /// </summary>
     [JsonPropertyName("TEFF")]
-    public AwtirxTransitionEffect TransitionEffect { get; init; } = AwtirxTransitionEffect.Effect1;
+    public AwtirxTransitionEffect TransitionEffect { get; init; } = AwtirxTransitionEffect.Slide;
 
     /// <summary>
     ///     Time taken for the transition to the next app in milliseconds.
